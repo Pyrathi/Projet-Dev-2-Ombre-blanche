@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import font
+import json
+import os
 
 
 class Jeu:
@@ -13,6 +15,47 @@ class Jeu:
         self.inventaire=[]
         self.mana=0
         self.monde = None
+    
+    # ------------------------------
+    # Sauvegarde / Chargement
+    # ------------------------------
+    def sauvegarder(self):
+        data = {
+            "nom": self.nom,
+            "inventaire": self.inventaire,
+            "mana": self.mana,
+            "monde": self.monde
+        }
+        with open(self.fichier_save, "w") as f:
+            json.dump(data, f)
+        self.interface.afficher("💾 Partie sauvegardée !")
+
+    def charger_partie(self):
+        if not os.path.exists(self.fichier_save):
+            self.interface.afficher("❌ Aucune sauvegarde trouvée.")
+            return self.lancement()
+
+        with open(self.fichier_save, "r") as f:
+            data = json.load(f)
+
+        self.nom = data.get("nom", "")
+        self.inventaire = data.get("inventaire", [])
+        self.mana = data.get("mana", 0)
+        self.monde = data.get("monde", None)
+        self.interface.afficher(f"🔁 Partie chargée de {self.nom} dans le monde {self.monde} !")
+
+        # Reprendre selon le monde
+        if self.monde == "medieval":
+            self.medieval1()
+        elif self.monde == "fantastique":
+            self.fantastique1()
+        else:
+            self.interface.afficher("⚠️ Monde inconnu dans la sauvegarde.")
+            self.lancement()
+
+    # ------------------------------
+    # Lancement
+    # ------------------------------
 
     def lancement(self):
         self.interface.afficher("Bonjour aventurier, quel est ton nom ?")
@@ -42,6 +85,7 @@ class Jeu:
     # ------------------------------
     # MONDE médiéval
     # ------------------------------
+    
     def medieval1(self):
         #début de l'aventure médiévale
         self.interface.afficher("Bienvenu dans ce monde médiéval")
@@ -56,12 +100,18 @@ class Jeu:
         self.interface.attendre_reponse(self.reponse_garde)
         
     def reponse_garde(self,choix):
+        try:
+            choix =int(choix)
+        except ValueError:
+            self.interface.afficher("Entrée invalide.")
+            return self.medieval1()
+        
         if int(choix)==1:
             self.medievalmarchand1()
         elif int(choix)==2:
             self.finm1()
         else:
-            self.medieval1()
+            self.interface.afficher("Choix invalide.")
 
     def finm1(self):
         #première fin possible pour l'aventure médiévale
@@ -77,6 +127,7 @@ class Jeu:
             self.lancement()
         else:
             exit
+
     def medievalmarchand1(self):
         #suite de l'aventure médiévale avec la rencontre d'un marchand
         self.interface.afficher("tu entres en ville et te dirige vers la place centrale")
