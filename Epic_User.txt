@@ -1,15 +1,24 @@
 Epic 1: Système de base 
-user story: Choisir son nom --> En tant que joueur, je veux choisir mon nom afin de jouer 
-user story: Choisir le monde --> En tant que joueur, je veux choisir le monde afin de lancer mon aventure 
-user story: Sauvegarder la partie --> En tant que joueur, je veux pouvoir sauvegarder ma partie afin de la reprendre plus tard 
-user story: Charger une partie --> En tant que joueur, je veux pouvoir charger une partie afin de reprendre là où j'en étais 
-user story: Choisir le support --> En tant que joueur, je veux pouvoir choisir sur quel support jouer afin de me sentir plus en immersion 
+US1.1 : En tant que joueur, je veux choisir mon nom pour persnnaliser mon aventure.
+US1.2 : En tant que joueur, je veux choisir le monde afin de lancer mon aventure.
+US1.3 : En tant que joueur, je veux pouvoir sauvegarder ma partie afin de la reprendre plus tard.
+US1.4 : En tant que joueur, je veux pouvoir charger une partie afin de reprendre là où j'en étais.
+US1.5 : En tant que joueur, je veux pouvoir choisir sur quel support jouer afin de me sentir plus en immersion.
 
 Epic 2: Monde médiéval
- user story: Choisir des dialogues --> En tant que joueur, je veux pouvoir choisir le dialogue afin de diversifier mes aventures 
- user story: Utiliser des objets --> En tant que joueur, je veux pouvoir utiliser des objets afin de résoudre des énigmes ou combattre des monstres 
+US2.1 : En tant que joueur, je veux pouvoir choisir le dialogue afin de diversifier mes aventures.
+US2.2 : En tant que joueur, je veux pouvoir utiliser des objets afin de résoudre des énigmes ou combattre des monstres. 
  
- Epic 3: Monde fantastique 
- user story: Choisir des dialogues --> En tant que joueur, je veux pouvoir choisir le dialogue afin de diversifier mes aventures 
- user story: Utiliser des objets --> En tant que joueur, je veux pouvoir utiliser des objets afin de résoudre des énigmes ou combattre des monstres 
- user story: Utiliser la magie --> En tant que joueur, je veux pouvoir utiliser de la magie afin de résoudre des énigmes ou me défendre
+Epic 3: Monde fantastique 
+US3.1 : En tant que joueur, je veux pouvoir choisir le dialogue afin de diversifier mes aventures.
+US3.2 : En tant que joueur, je veux pouvoir utiliser des objets afin de résoudre des énigmes ou combattre des monstres. 
+US3.3 : En tant que joueur, je veux pouvoir utiliser de la magie afin de résoudre des énigmes ou me défendre.
+
+EPIC 4: Sauvegarde et reprise
+US4.1 : En tant que joueur, je veux que le jeu sauvegarde automatiquement ma progression.
+US4.2 : En tant que joueur, je veux pouvoir reprendre ma partie là où je m’étais arrêté.
+US4.3 : En tant que joueur, je veux être averti quand ma partie est bien sauvegardée ou chargée.
+
+Epic 5: Interface utilisateur
+US5.1 : En tant que joueur, je veux choisir si je joue dans le terminal ou dans une fenêtre Tkinter.
+US5.2 : En tant que joueur, je veux voir le texte de l’histoire s’afficher de manière lisible.
