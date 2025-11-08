@@ -93,7 +93,7 @@ class Jeu:
         self.interface.afficher("En ouvrant les yeux, tu remarques que tu te trouves au bord d'un chemin.")
         self.interface.afficher("tu décides de regarder autour de toi pour comprendre où tu es et tu finis par apercevoir un château au loin.")
         self.interface.afficher("Après une courte reflexion,tu décide de t'y rendre")
-        self.interface.afficherItalique("\x1B[3m"+"1 heure de marche plus tard"+ "\x1B[0m")
+        self.interface.afficherItalique("1 heure de marche plus tard")
         self.interface.afficher("Tu arrives devant les murailles du chateau \n en t'avançant, tu rencontres un garde:")
         self.interface.afficher("1) Salue le poliment")
         self.interface.afficher("2) ignore le et entre dans la ville")

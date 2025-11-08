@@ -1,0 +1,52 @@
+@startuml
+title Diagramme UML du jeu d'aventure textuel
+
+' ======================
+' Définition des classes
+' ======================
+
+class Jeu {
+    - interface : InterfaceConsole | InterfaceTk
+    - nom : str
+    - inventaire : list
+    - mana : int
+    - monde : str
+
+    + __init__(interface)
+    + sauvergarder()
+    + charger_partie()
+    + lancement()
+    + set_nom(nom)
+    + choisir_monde(choix)
+    + histoire_medieval()
+    + histoire_fantastique1()
+}
+
+class InterfaceConsole {
+    + afficher(texte)
+    + afficherItalique(texte)
+    + attendre_reponse(callback)
+}
+
+class InterfaceTk {
+    - root : Tk
+    - zone : Text
+    - entree : Entry
+    - callback : function
+
+    + __init__()
+    + afficher(message)
+    + afficherItalique(message)
+    + attendre_reponse(callback)
+    + envoyer(event=None)
+    + lancer()
+}
+
+' ======================
+' Relations
+' ======================
+
+Jeu --> InterfaceConsole : utilise
+Jeu --> InterfaceTk : utilise
+
+@enduml

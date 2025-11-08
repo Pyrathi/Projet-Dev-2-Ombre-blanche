@@ -1,0 +1,15 @@
+Epic 1: Système de base 
+user story: Choisir son nom --> En tant que joueur, je veux choisir mon nom afin de jouer 
+user story: Choisir le monde --> En tant que joueur, je veux choisir le monde afin de lancer mon aventure 
+user story: Sauvegarder la partie --> En tant que joueur, je veux pouvoir sauvegarder ma partie afin de la reprendre plus tard 
+user story: Charger une partie --> En tant que joueur, je veux pouvoir charger une partie afin de reprendre là où j'en étais 
+user story: Choisir le support --> En tant que joueur, je veux pouvoir choisir sur quel support jouer afin de me sentir plus en immersion 
+
+Epic 2: Monde médiéval
+ user story: Choisir des dialogues --> En tant que joueur, je veux pouvoir choisir le dialogue afin de diversifier mes aventures 
+ user story: Utiliser des objets --> En tant que joueur, je veux pouvoir utiliser des objets afin de résoudre des énigmes ou combattre des monstres 
+ 
+ Epic 3: Monde fantastique 
+ user story: Choisir des dialogues --> En tant que joueur, je veux pouvoir choisir le dialogue afin de diversifier mes aventures 
+ user story: Utiliser des objets --> En tant que joueur, je veux pouvoir utiliser des objets afin de résoudre des énigmes ou combattre des monstres 
+ user story: Utiliser la magie --> En tant que joueur, je veux pouvoir utiliser de la magie afin de résoudre des énigmes ou me défendre
