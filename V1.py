@@ -88,13 +88,13 @@ class Jeu:
     
     def medieval1(self):
         #début de l'aventure médiévale
-        self.interface.afficher("Bienvenu dans ce monde médiéval")
+        self.interface.afficher("Bienvenue dans ce monde médiéval")
         self.interface.afficher("\n")
         self.interface.afficher("En ouvrant les yeux, tu remarques que tu te trouves au bord d'un chemin.")
-        self.interface.afficher("tu décides de regarder autour de toi pour comprendre où tu es et tu finis par apercevoir un château au loin.")
-        self.interface.afficher("Après une courte reflexion,tu décide de t'y rendre")
+        self.interface.afficher("tu décides de regarder autour de toi pour comprendre où tu es et finis par apercevoir un château au loin.")
+        self.interface.afficher("Après une courte réflexion,tu décides de t'y rendre")
         self.interface.afficherItalique("1 heure de marche plus tard")
-        self.interface.afficher("Tu arrives devant les murailles du chateau \n en t'avançant, tu rencontres un garde:")
+        self.interface.afficher("Tu arrives devant les murailles du château \n en t'avançant, tu rencontres un garde :")
         self.interface.afficher("1) Salue le poliment")
         self.interface.afficher("2) ignore le et entre dans la ville")
         self.interface.attendre_reponse(self.reponse_garde)
@@ -115,9 +115,9 @@ class Jeu:
 
     def finm1(self):
         #première fin possible pour l'aventure médiévale
-        self.interface.afficher("Le garde t'a arreté et jeté aux cachots. Il ne supporte pas le manque de politesse")
-        self.interface.afficher("Après avoir chercher une issue desespoir,tu te rends compte que tu n'es plus maitre de ton destin")
-        self.interface.afficher("Malheureusement c'est ici que ton aventure se termine")
+        self.interface.afficher("Le garde t'a arrêté et jeté aux cachots. Il ne supporte pas le manque de politesse")
+        self.interface.afficher("Après avoir cherché une issue désespéremment,tu te rends compte que tu n'es plus maître de ton destin")
+        self.interface.afficher("Malheureusement, c'est ici que ton aventure se termine")
         self.interface.afficher("1) Rejouer")
         self.interface.afficher("2) Quitter") 
         self.interface.attendre_reponse(self.finjeu)
@@ -130,10 +130,10 @@ class Jeu:
 
     def medievalmarchand1(self):
         #suite de l'aventure médiévale avec la rencontre d'un marchand
-        self.interface.afficher("tu entres en ville et te dirige vers la place centrale")
-        self.interface.afficher(f"Tout à coup ,tu entends quelqu'un crier :'{self.nom}!!'")
+        self.interface.afficher("Tu entres en ville et te diriges vers la place centrale")
+        self.interface.afficher(f"Tout à coup, tu entends quelqu'un crier : '{self.nom}!!'")
         self.interface.afficher("Tu te retournes et aperçois un marchand en train de te faire signe")
-        self.interface.afficher("tu t'approches et celui-ci te demande si tu es prêt à l'aider en échange d'un récompense")
+        self.interface.afficher("tu t'approches et celui-ci te demande si tu es prêt à l'aider en échange d'une récompense")
         self.interface.afficher("Tu lui demandes ce qu'il veut mais il refuse de répondre avant que tu n'acceptes")
         self.interface.afficher("1) Accepter d'aider le marchand")
         self.interface.afficher("2) Refuser de l'aider")
@@ -148,8 +148,8 @@ class Jeu:
     def queteloup(self):
         #1 ère quête - obtention de l'épée
         self.interface.afficher("Le marchand te remercie et te demande d'aller tuer un loup qui embête son troupeau de mouton")
-        self.interface.afficher("tu lui réponds que tu n'as pas d'armes et que donc c'est trop dangereux")
-        self.interface.afficher("le marchand te donne une épée et te souhaite bon chance")
+        self.interface.afficher("Tu lui réponds que tu n'as pas d'armes et que donc c'est trop dangereux")
+        self.interface.afficher("Le marchand te donne une épée et te souhaite bonne chance")
         self.inventaire.append("epee")
         self.interface.afficher(f"ton inventaire est composé de {self.inventaire}")
     
@@ -157,10 +157,10 @@ class Jeu:
     # MONDE FANTASTIQUE
     # ------------------------------
     def fantastique1(self):
-        self.interface.afficher("En ouvrant les yeux, tu remarques que tu te trouves au milieu d'une étrange fôret composée d'abres luminescents")
+        self.interface.afficher("En ouvrant les yeux, tu remarques que tu te trouves au milieu d'une étrange forêt composée d'arbres luminescents")
         self.interface.afficher("Avant même d'avoir le temps de te relever,tu entends une voix derrière toi")
-        self.interface.afficher("tu veux te retourner mais tu sens un objet pointu dans ton dos.")
-        self.interface.afficher("ton mystérieux agresseur te dis alors:")
+        self.interface.afficher("Tu veux te retourner, mais tu sens un objet pointu dans ton dos.")
+        self.interface.afficher("ton mystérieux agresseur te dit alors :")
         self.interface.afficher("\n")
         self.interface.afficherItalique("Qui es-tu et que fais tu dans ma fôret?")
 
@@ -242,4 +242,5 @@ if __name__ == "__main__":
     else:
         interface = InterfaceConsole()
         jeu = Jeu(interface)
+
         jeu.lancement()
