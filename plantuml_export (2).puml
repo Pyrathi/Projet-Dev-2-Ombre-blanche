@@ -1,0 +1,83 @@
+@startuml
+title 🎮 Diagramme de classes - Architecture du Jeu
+
+' --- Définition des classes ---
+
+class Jeu {
+    - listeJoueurs : List<Joueur>
+    - listeLieux : List<Lieu>
+    - etatGlobal : EtatJeu
+    --
+    + demarrer()
+    + mettreAJour()
+    + traiterAction(joueur : Joueur, action : Action)
+    + changerLieu(joueur : Joueur, nouveauLieu : Lieu)
+}
+
+class Joueur {
+    - nom : String
+    - inventaire : List<Objet>
+    - position : Lieu
+    - etat : EtatJoueur
+    --
+    + agir(action : Action)
+    + utiliserObjet(objet : Objet)
+    + parler(pnj : PNJ)
+}
+
+class Lieu {
+    - nom : String
+    - description : String
+    - pnjs : List<PNJ>
+    - objets : List<Objet>
+    --
+    + reagir(action : Action)
+    + ajouterPNJ(pnj : PNJ)
+    + retirerPNJ(pnj : PNJ)
+    + decrire()
+}
+
+class PNJ {
+    - nom : String
+    - humeur : String
+    - dialogues : List<Dialogue>
+    --
+    + reagir(action : Action)
+    + changerHumeur(nouvelleHumeur : String)
+    + parler()
+}
+
+class Objet {
+    - nom : String
+    - description : String
+    - utilisable : Boolean
+    --
+    + utiliser(cible : Cible)
+    + combiner(objet : Objet)
+}
+
+class Action {
+    - type : String
+    - cible : Entite
+    --
+    + executer()
+}
+
+' --- Relations entre les classes ---
+
+Jeu "1" --> "*" Lieu
+Jeu "1" --> "*" Joueur
+Lieu "1" --> "*" PNJ
+Lieu "1" --> "*" Objet
+Joueur "1" --> "*" Objet
+Joueur "1" --> "1" Lieu
+PNJ "1" --> "1" Lieu
+Action --> Entite
+
+
+}
+skinparam titleFontSize 18
+skinparam classFontSize 14
+skinparam shadowing true
+
+@enduml
