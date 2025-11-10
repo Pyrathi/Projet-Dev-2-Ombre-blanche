@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import font
+from tkinter import font, messagebox
 import json
 import os
 
@@ -15,6 +15,8 @@ class Jeu:
         self.interface=interface
         self.nom=""
         self.inventaire=[]
+        self.pnj_allie=[]
+        self.pnj_ennemi=[]
         self.mana=0
         self.monde = None
     
@@ -181,7 +183,7 @@ class Jeu:
         if int(choix)==1:
             self.quete_loup()
         elif int(choix)==2:
-            self.medieval_place
+            self.medieval_place()
         else:
             self.medieval_marchand1()
 
@@ -191,9 +193,128 @@ class Jeu:
         #
         self.interface.afficher("Le marchand te remercie et te demande d'aller tuer un loup qui embête son troupeau de mouton")
         self.interface.afficher("Tu lui réponds que tu n'as pas d'armes et que donc c'est trop dangereux")
-        self.interface.afficher("Le marchand te donne une épée et te souhaite bonne chance")
+        self.interface.afficher("Le marchand te donne une épée et te dis:")
+        self.interface.afficherItalique("Le loup se trouve dans la prairie à l'ouest du château")
+        self.interface.afficherItalique("Fais attention à toi, il à l'air plus féroce qu'un loup normal")
+        self.interface.afficherItalique(f"Bonne chance {self.nom}")
         self.inventaire.append("epee")
+        self.interface.afficher("")
         self.interface.afficher(f"ton inventaire est composé de {self.inventaire}")
+        self.interface.afficher("")
+        self.interface.afficher("tu te rends dans la prairie et en arrivant, tu remarques un cadavre de mouton violement déchiqueter")
+        self.interface.afficher("tu trouves ça étrange mais il est trop tard pour faire demi-tour donc tu continues d'avancer à la recherche du loup")
+        self.interface.afficher("")
+        self.interface.afficherItalique("3 heures plus tard")
+        self.interface.afficher("Tu remarques que la nuit tombre et tu n'as toujours pas trouver le loup ni même ses traces")
+        self.interface.afficher("pour éviter tout risque, tu décides de rentrer au château et au moment de te retourner, tu vois 2 yeux rouges sang te fixer")
+        self.interface.afficher("Tu paniques et 2 choix s'offrent à toi:")
+        self.interface.afficher("1) tu te retournes et cours le plus vite possible vers la forêt")
+        self.interface.afficher("2) Tu dégaines ton épée et te prépares au combat")
+        self.interface.attendre_reponse(self.reponse_loup1)
+
+    def reponse_loup1(self,choix):
+        #
+        # Séparation des chemins de quête selon la réponse de l'utilisateur
+        #
+        try:
+            choix =int(choix)
+        except ValueError:
+            self.interface.afficher("Entrée invalide.")
+            return self.quete_loup()
+        if int(choix)==1:
+            self.fuite_foret()
+        elif int(choix)==2:
+            self.combat_loup()
+        else:
+            self.quete_loup()
+        
+    def fuite_foret(self):
+        #
+        # Fuite et perte d'un objet de l'inventaire
+        #
+        self.interface.afficher("En fuyant, tu reçois un coup de griffes dans le dos, malgré la douleur tu ne t'arrête pas et fonce vers la forêt")
+        self.interface.afficher("tu entends le loup juste derrière toi et au moment ou tu sens son souffle dans ton dos,")
+        self.interface.afficher("tu t'accroches à une branche et escalde un arbre.")
+        self.interface.afficher("")
+        self.interface.afficher("Bien que sauver d'affaire pour le moment, une douleur atroce t'empêche de poser ton dos contre le tronc")
+        self.interface.afficher("et en voulant l'attraper, tu remarques que ton épée n'est plus dans son fourreau.")
+        self.inventaire.remove("epee")
+        self.interface.afficher("")
+        self.interface.afficher("Ne pouvant plus rien faire, tu décides d'attendre que le loup s'éloigne en espérant avoir la force de rentrer au château")
+        self.interface.afficher("")
+        self.interface.afficherItalique("Le soleil se lève")
+        self.interface.afficher("tu ouvres les yeux et remarque que le soleil est levé et que le loup a disparu.")
+        self.interface.afficher("tu saisis cette oportunité, descend de l'arbre et te rends au château ")
+        self.interface.afficher("tu fonces te faire soigner avant que toutes tes forces te quittent.")
+        self.interface.afficher("Une fois traité, la personne qui t'a soigné te dis que tu as eu de la chance, quelques heures de plus et tu aurais pu finir handicapé.")
+        self.interface.afficher("Tu le remercies et te rends chez le marchand")
+        self.interface.afficher("En te voyant il se réjoui déjà de ta réussite mais en voyant ta mine sombre, il comprend que ça s'est mal passé.")
+        self.interface.afficher("tu lui explique ce qu'il t'es arrivé et le marchand te dis qu'il est désolé de t'avoir envoyé là-bas.")
+        self.interface.afficher("tu le rassure et lui dis qu'il devra trouver un autre aventurier pour l'aider car tu n'as plus d'armes")
+        self.interface.afficher("il te remercies d'avoir essayer et te souhaite bon courage pour la suite")
+        self.pnj_allie.append("marchand")
+        self.interface.afficher("N'ayant plus rien à faire ici, tu te diriges vers la place du village")
+        self.medieval_place()
+
+    def combat_loup(self):
+        self.interface.afficher("tu te rues en avant et donne un coup d'épee en espérant le trancher")
+        self.interface.afficher("tu entends un grognement lorsque ton épée atteint le loup, tu as réussi à le blesser mais il se tient toujours aux aguets, prêt à bondir")
+        self.interface.afficher("Mais après quelques secondes, tu remarques qu'il ne bouge pas et semble attendre")
+        self.interface.afficher("Que fais-tu dans cette situation:")
+        self.interface.afficher("1) Te retourner et fuir car tu sens que quelque chose ne tourne pas rond")
+        self.interface.afficher("2) Lui foncer dessus pour en finir une bonne fois pour toute")
+        self.interface.afficher("3) Attendre de voir ce qu'il fait")
+        self.interface.attendre_reponse(self.reponse_loup2)
+
+    def reponse_loup2(self,choix):
+        #
+        # Séparation des chemins de quête selon la réponse de l'utilisateur
+        #
+        try:
+            choix =int(choix)
+        except ValueError:
+            self.interface.afficher("Entrée invalide.")
+            return self.quete_loup()
+        if int(choix)==1:
+            self.fuite_foret()
+        elif int(choix)==2:
+            self.fin2_mort_loup()
+        elif int(choix)==3:
+            self.combat_loup2()
+        else:
+            self.quete_loup()
+
+    def fin2_mort_loup(self):
+        self.interface.afficher("Tu fonces sur lui, il ne réagi toujours pas donc tu lances ton épée vers sa tête")
+        self.interface.afficher("au moment où tu ne peux plus t'arrêter, il bondi sur le côté, là ou ta garde n'est pas protégé et tu comprends que ce n'ets pas un simple loup")
+        self.interface.afficher("Tu comprends que celui-ci t'as leuré et qu'il s'apprête a frapper là où tu ne peux pas te défendre")
+        self.interface.afficher("Tu te rappelles que le marchand t'avais prévenu que ce n'était pas qu'un simple loup mais il est trop tard pour quoi que ce soit")
+        self.interface.afficher("Tu essaies désespérément d'esquiver mais tu sens ses griffes te lacérer les côtes")
+        self.interface.afficher("Tu t'effondre et te vide de ton sang, plus rien ne pourra te sauver, tu regrettes d'avoir accepter cette quête et rends ton dernier soupir")
+        self.interface.afficher("Malheureusement, c'est ici que ton aventure se termine")
+        self.interface.afficher("1) Rejouer")
+        self.interface.afficher("2) Quitter") 
+        self.interface.attendre_reponse(self.finjeu)
+
+    def combat_loup2(self):
+        self.interface.afficher("Tu attends et le loup finit par perdre patiente, il décide de passer à l'ofensive")
+        self.interface.afficher("tu pares son attaque et riposte avec des coups simples mais précis.")
+        self.interface.afficher("Tu fais mouche et le loup commence à reculer, il est couvert de sang et semble chercher une opportunité pour fuire")
+        self.interface.afficher("Sachant qu'il est pris au piège, tu décides de lancer une attaque pour l'achever")
+        self.interface.afficher("tu parviens à le tuer et récupère sa fourure en guise de preuve")
+        self.interface.afficher("")
+        self.interface.afficher("tu rentres au château et retourne voir le marchand")
+        self.interface.afficher("celui-ci te vois arriver avec la fourure sur le dos et s'exclame:")
+        self.interface.afficher("")
+        self.interface.afficherItalique("Je savais que tu réussirait! Pour te remercier, prend cette clé, elle pourra peut être t'aider quand tu auras besoin,sâche que je te suis redevable")
+        self.inventaire.append("cle")
+        self.interface.afficher("Tu le remercies pour ce cadeau et prends congé")
+        self.interface.afficher("tu décides finalement de te diriger vers la place du village")
+        self.medieval_place()
+
+    def medieval_place(self):
+        self.interface.afficher("tu arrives devant la place du village")
+        
     
     # ------------------------------
     # MONDE FANTASTIQUE
@@ -239,14 +360,31 @@ class InterfaceTk:
     # ------------------------------
     # affichage interface
     # ------------------------------
-    def __init__(self):
+    def __init__(self,jeu):
+        self.jeu = jeu
         self.root = tk.Tk()
+        self.root.attributes("-fullscreen", True)
+        self.root.update_idletasks()
+
+        self.root.bind("<Escape>", lambda e: self.root.attributes("-fullscreen", False))
         self.root.title("Aventure Textuelle")
-        self.zone = tk.Text(self.root, wrap="word", state="disabled", width=60, height=20, bg="#111", fg="#eee")
-        self.zone.pack(padx=10, pady=10)
-        self.entree = tk.Entry(self.root, width=40)
-        self.entree.pack(padx=10, pady=5)
+        self.zone = tk.Text(self.root, wrap="word", state="disabled", bg="#111", fg="#eee")
+        self.zone.pack(fill="both", expand=True, padx=40, pady=20)
+
+        self.root.bind("<Escape>", lambda e: self.root.attributes("-fullscreen", False))
+        frame = tk.Frame(self.root, bg="#1e1e1e")
+        frame.pack(side="bottom", pady=15)
+
+        self.entree = tk.Entry(frame, width=40)
+        self.entree.pack(side="left", padx=(0, 5))
         self.entree.bind("<Return>", self.envoyer)
+
+        self.bouton_envoyer = tk.Button(frame, text="Envoyer", command=self.envoyer)
+        self.bouton_envoyer.pack(side="left", padx=(0, 5))
+        self.bouton_inventaire = tk.Button(frame, text="Inventaire", command=self.afficher_inventaire, bg="#4a90e2", fg="white")
+        self.bouton_inventaire.pack(side="left")
+
+        
         self.callback = None
 
     def afficher(self, message):
@@ -279,6 +417,12 @@ class InterfaceTk:
         self.afficher(f"> {texte}")
         if self.callback:
             self.callback(texte)
+    
+    def afficher_inventaire(self):
+        """Affiche une fenêtre listant les objets du joueur."""
+        objets = self.jeu.inventaire
+        contenu = "\n".join(f"- {obj}" for obj in objets) if objets else "Ton inventaire est vide."
+        messagebox.showinfo("Inventaire", contenu)
 
     def lancer(self):
         self.root.mainloop()
@@ -291,8 +435,9 @@ if __name__ == "__main__":
     choix = input("> ")
 
     if choix == "2":
-        interface = InterfaceTk()
-        jeu = Jeu(interface)
+        jeu = Jeu(None)
+        interface = InterfaceTk(jeu)
+        jeu.interface = interface 
         jeu.lancement()
         interface.lancer()
     else:
