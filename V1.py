@@ -9,7 +9,9 @@ class Jeu:
     # Paramêtre globale
     # ------------------------------
     def __init__(self,interface):
+        #
         # Pseudo de l'aventurier et inventaire de celui-ci
+        #
         self.interface=interface
         self.nom=""
         self.inventaire=[]
@@ -20,6 +22,9 @@ class Jeu:
     # Sauvegarde / Chargement
     # ------------------------------
     def sauvegarder(self):
+        #
+        # Permet la sauvegarder la partie dans un fichier
+        #
         data = {
             "nom": self.nom,
             "inventaire": self.inventaire,
@@ -31,6 +36,9 @@ class Jeu:
         self.interface.afficher("💾 Partie sauvegardée !")
 
     def charger_partie(self):
+        #
+        # Permet de charger une partie sauvegarder précédement
+        #
         if not os.path.exists(self.fichier_save):
             self.interface.afficher("❌ Aucune sauvegarde trouvée.")
             return self.lancement()
@@ -58,18 +66,27 @@ class Jeu:
     # ------------------------------
 
     def lancement(self):
+        #
+        # Lance la partie et attends que l'utilisateur donne son nom
+        #
         self.interface.afficher("Bonjour aventurier, quel est ton nom ?")
         self.interface.attendre_reponse(self.set_nom)
     
     
 
     def set_nom(self, nom):
+        #
+        #Reçoit le nom de l'utilisateur et donne le choix du monde
+        #
         self.nom = nom
         self.interface.afficher(f"Bienvenue, {self.nom}.")
         self.interface.afficher("Choisis ton monde :\n1) Monde médiéval\n2) Monde fantastique")
         self.interface.attendre_reponse(self.choisir_monde)
 
     def choisir_monde(self, choix):
+        #
+        # Lance le monde selon le choix de l'utilisateur
+        #
         if choix == "1":
             self.monde = "medieval"
             self.interface.afficher("Tu as choisi le monde médiéval...")
@@ -87,7 +104,9 @@ class Jeu:
     # ------------------------------
     
     def medieval1(self):
+        #
         #début de l'aventure médiévale
+        #
         self.interface.afficher("Bienvenue dans ce monde médiéval")
         self.interface.afficher("\n")
         self.interface.afficher("En ouvrant les yeux, tu remarques que tu te trouves au bord d'un chemin.")
@@ -100,6 +119,9 @@ class Jeu:
         self.interface.attendre_reponse(self.reponse_garde)
         
     def reponse_garde(self,choix):
+        #
+        # Choix entre poursuivre l'aventure ou 1ère fin
+        #
         try:
             choix =int(choix)
         except ValueError:
@@ -107,14 +129,17 @@ class Jeu:
             return self.medieval1()
         
         if int(choix)==1:
-            self.medievalmarchand1()
+            self.medieval_marchand1()
         elif int(choix)==2:
             self.finm1()
         else:
             self.interface.afficher("Choix invalide.")
+            self.medieval1()
 
     def finm1(self):
+        #
         #première fin possible pour l'aventure médiévale
+        #
         self.interface.afficher("Le garde t'a arrêté et jeté aux cachots. Il ne supporte pas le manque de politesse")
         self.interface.afficher("Après avoir cherché une issue désespéremment,tu te rends compte que tu n'es plus maître de ton destin")
         self.interface.afficher("Malheureusement, c'est ici que ton aventure se termine")
@@ -123,13 +148,18 @@ class Jeu:
         self.interface.attendre_reponse(self.finjeu)
 
     def finjeu(self,choix):
+        #
+        # Choix de relancer ou non une partie
+        #
         if int(choix)==1:
             self.lancement()
         else:
             exit
 
-    def medievalmarchand1(self):
-        #suite de l'aventure médiévale avec la rencontre d'un marchand
+    def medieval_marchand1(self):
+        #
+        # Suite de l'aventure médiévale avec la rencontre d'un marchand
+        #
         self.interface.afficher("Tu entres en ville et te diriges vers la place centrale")
         self.interface.afficher(f"Tout à coup, tu entends quelqu'un crier : '{self.nom}!!'")
         self.interface.afficher("Tu te retournes et aperçois un marchand en train de te faire signe")
@@ -140,13 +170,25 @@ class Jeu:
         self.interface.attendre_reponse(self.reponse_marchand)
 
     def reponse_marchand(self,choix):
+        #
+        # Séparation des chemins de quête selon la réponse de l'utilisateur
+        #
+        try:
+            choix =int(choix)
+        except ValueError:
+            self.interface.afficher("Entrée invalide.")
+            return self.medieval_marchand1()
         if int(choix)==1:
-            self.queteloup()
+            self.quete_loup()
+        elif int(choix)==2:
+            self.medieval_place
         else:
-            self.medievalplace()
+            self.medieval_marchand1()
 
-    def queteloup(self):
-        #1 ère quête - obtention de l'épée
+    def quete_loup(self):
+        #
+        # 1ère quête - obtention de l'épée
+        #
         self.interface.afficher("Le marchand te remercie et te demande d'aller tuer un loup qui embête son troupeau de mouton")
         self.interface.afficher("Tu lui réponds que tu n'as pas d'armes et que donc c'est trop dangereux")
         self.interface.afficher("Le marchand te donne une épée et te souhaite bonne chance")
@@ -157,6 +199,9 @@ class Jeu:
     # MONDE FANTASTIQUE
     # ------------------------------
     def fantastique1(self):
+        #
+        # Début de l'aventure fantastique
+        #
         self.interface.afficher("En ouvrant les yeux, tu remarques que tu te trouves au milieu d'une étrange forêt composée d'arbres luminescents")
         self.interface.afficher("Avant même d'avoir le temps de te relever,tu entends une voix derrière toi")
         self.interface.afficher("Tu veux te retourner, mais tu sens un objet pointu dans ton dos.")
@@ -179,8 +224,13 @@ class InterfaceConsole:
     # ------------------------------
     def afficher(self, texte):
         print(texte)
+
     def afficherItalique(self, texte):
+        #
+        # Affichage en italique
+        #
         print("\x1B[3m"+texte+"\x1B[0m")
+
     def attendre_reponse(self, callback):
         reponse = input("> ")
         callback(reponse)
@@ -200,12 +250,18 @@ class InterfaceTk:
         self.callback = None
 
     def afficher(self, message):
+        #
+        # Affiche les messages
+        #
         self.zone.config(state="normal")
         self.zone.insert(tk.END, message + "\n")
         self.zone.config(state="disabled")
         self.zone.see(tk.END)
 
     def afficherItalique(self,message):
+        #
+        # Affichage en italique
+        #
         self.italique_font = font.Font(self.zone, self.zone.cget("font"))
         self.italique_font.configure(slant="italic")
         self.zone.config(state="normal")
