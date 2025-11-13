@@ -1,0 +1,141 @@
+@startuml
+title 🎮 Diagramme UML global - Jeu d'aventure textuel
+
+' ======================
+' 1️⃣ Architecture générale du jeu
+' ======================
+
+class Jeu {
+    - interface : InterfaceConsole | InterfaceTk
+    - listeJoueurs : List<Joueur>
+    - listeLieux : List<Lieu>
+    - etatGlobal : EtatJeu
+    --
+    + demarrer()
+    + mettreAJour()
+    + traiterAction(joueur : Joueur, action : Action)
+    + changerLieu(joueur : Joueur, nouveauLieu : Lieu)
+    + sauvegarder()
+    + chargerPartie()
+    + lancement()
+    + setNom(nom)
+    + choisirMonde(choix)
+}
+
+class Joueur {
+    - nom : String
+    - inventaire : List<Objet>
+    - position : Lieu
+    - etat : EtatJoueur
+    --
+    + agir(action : Action)
+    + utiliserObjet(objet : Objet)
+    + parler(pnj : PNJ)
+}
+
+class Lieu {
+    - nom : String
+    - description : String
+    - pnjs : List<PNJ>
+    - objets : List<Objet>
+    --
+    + reagir(action : Action)
+    + ajouterPNJ(pnj : PNJ)
+    + retirerPNJ(pnj : PNJ)
+    + decrire()
+}
+
+class PNJ {
+    - nom : String
+    - humeur : String
+    - dialogues : List<Dialogue>
+    --
+    + reagir(action : Action)
+    + changerHumeur(nouvelleHumeur : String)
+    + parler()
+}
+
+class Objet {
+    - nom : String
+    - description : String
+    - utilisable : Boolean
+    --
+    + utiliser(cible : Cible)
+    + combiner(objet : Objet)
+}
+
+class Action {
+    - type : String
+    - cible : Entite
+    --
+    + executer()
+}
+
+class Dialogue {
+    - texte : String
+    - choixSuivants : List<Dialogue>
+    --
+    + afficher()
+}
+
+class Sauvegarde {
+    - fichier : String
+    --
+    + ecrireDonnees(jeu : Jeu)
+    + chargerDonnees() : Jeu
+}
+
+' ======================
+' 2️⃣ Interface utilisateur
+' ======================
+
+class InterfaceConsole {
+    + afficher(texte)
+    + afficherItalique(texte)
+    + attendreReponse(callback)
+}
+
+class InterfaceTk {
+    - root : Tk
+    - zone : Text
+    - entree : Entry
+    - callback : function
+    --
+    + __init__()
+    + afficher(message)
+    + afficherItalique(message)
+    + attendreReponse(callback)
+    + envoyer(event=None)
+    + lancer()
+}
+
+' ======================
+' 3️⃣ Relations entre classes
+' ======================
+
+Jeu "1" --> "*" Joueur
+Jeu "1" --> "*" Lieu
+Jeu --> Sauvegarde
+Jeu --> InterfaceConsole : "peut utiliser"
+Jeu --> InterfaceTk : "peut utiliser"
+
+Lieu "1" --> "*" PNJ
+Lieu "1" --> "*" Objet
+Joueur "1" --> "*" Objet
+Joueur "1" --> "1" Lieu
+PNJ "1" --> "1" Lieu
+PNJ --> Dialogue
+Action --> Entite
+
+' ======================
+' 4️⃣ Esthétique
+' ======================
+skinparam class {
+    BackgroundColor #fefefe
+    ArrowColor #555555
+    BorderColor #777777
+}
+skinparam titleFontSize 18
+skinparam classFontSize 14
+skinparam shadowing true
+@enduml
