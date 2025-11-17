@@ -19,6 +19,7 @@ class Jeu:
         self.pnj_ennemi=[]
         self.mana=0
         self.monde = None
+        self.prctaffect=0
     
     # ------------------------------
     # Sauvegarde / Chargement
@@ -59,6 +60,8 @@ class Jeu:
             self.medieval1()
         elif self.monde == "fantastique":
             self.fantastique1()
+        elif self.monde == "romance":
+            self.romance1()
         else:
             self.interface.afficher("⚠️ Monde inconnu dans la sauvegarde.")
             self.lancement()
@@ -82,7 +85,7 @@ class Jeu:
         #
         self.nom = nom
         self.interface.afficher(f"Bienvenue, {self.nom}.")
-        self.interface.afficher("Choisis ton monde :\n1) Monde médiéval\n2) Monde fantastique")
+        self.interface.afficher("Choisis ton monde :\n1) Monde médiéval\n2) Monde fantastique\n3) Romance")
         self.interface.attendre_reponse(self.choisir_monde)
 
     def choisir_monde(self, choix):
@@ -97,6 +100,10 @@ class Jeu:
             self.monde = "fantastique"
             self.interface.afficher("Tu as choisi le monde fantastique...")
             self.fantastique1()
+        elif choix == "3":
+            self.monde = "romance"
+            self.interface.afficher("Tu as choisi la romance")
+            self.romance1()
         else:
             self.interface.afficher("Choix invalide, essaie encore.")
             self.interface.attendre_reponse(self.choisir_monde)
@@ -330,13 +337,81 @@ class Jeu:
         self.interface.afficher("\n")
         self.interface.afficherItalique("Qui es-tu et que fais tu dans ma fôret?")
 
+    # ------------------------------
+    # Romance
+    # ------------------------------
+    def romance1(self):
+        #
+        # Début de la romance
+        #
+        self.interface.afficher("Bienvenue dans la romance")
+        self.interface.afficher("Vous êtes un lycéen de vingt ans encore dans ses études")
+        self.interface.afficher("Dans votre classe, il y a une fille du nom de Aube qui a retenu votre attention")
+        self.interface.afficher("Aube est une fille calme et réservée qui ne se fait jamais remarquer ")
+        self.interface.afficher("À la fin des cours, alors que vous trainez à ranger votre sac, étant encore une fois le dernier dans la classe")
+        self.interface.afficher("Mais vous remarquez qu'Aube est encore assise à sa place au fond de la classe")
+        self.interface.afficher("1) Vous partez de la classe sans dire un mot")
+        self.interface.afficher("2) Vous prenez votre courage à deux mains et vous vous approchez d'elle")
+        self.interface.attendre_reponse(self.premierchoix)
 
 
-    
-    
-        
-    
-            
+    def premierchoix(self, choix):
+        try:
+            choix = int(choix)
+        except ValueError:
+            self.interface.afficher("Entrée invalide.")
+            return self.romance1()
+        if int(choix) == 1:
+            self.romfin1()
+        elif int(choix) == 2:
+            self.rompremiermot()
+        else:
+            self.romance1()
+
+
+    def romfin1(self):
+        self.interface.afficher("Vous partez sans lui addresser la parole et laissez passer cette oportunité en or")
+        self.interface.afficher("Vous n'aurez plus jamais une occasion comme celle-ci")
+        self.interface.afficher("Vous continuerez à regarder Aube du coin de l'oeil en vous demandant pourquoi vous n'aviez pas agis ce jour là")
+        self.interface.afficher("Peut-être aurait-il fallu que vous preniez votre courage à deux mains")
+        self.interface.afficher("Fin.")
+        self.interface.afficher("1) Rejouer")
+        self.interface.afficher("2) Quitter")
+        self.interface.attendre_reponse(self.finjeu)
+
+
+    def rompremiermot(self):
+        self.interface.afficher("Vous décidez de vous approchez du banc derrière lequel elle est assise")
+        self.interface.afficher("1) Vous êtes debout en face de la où elle est assise et resté silencieux ")
+        self.interface.afficher("2) Vous décidez d'entamer la dicussion  " + "\n\x1B[3m-Vous : Hello\x1B[0m")
+        self.interface.attendre_reponse(self.choixabordage)
+
+
+    def choixabordage(self, choix):
+        try:
+            choix = int(choix)
+        except ValueError:
+            self.interface.afficher("Entrée invalide.")
+            return self.romance1()
+        if int(choix) == 1:
+            self.prctaffect -= 2
+            self.approcheSilence()
+        elif int(choix) == 2:
+            self.prctaffect += 2
+            self.approcheToi()
+        else:
+            self.rompremiermot()
+
+
+    def approcheSilence(self):
+        self.interface.afficher("Aube lève les yeux vers vous, un malaise s'installe, elle vous dit d'un ton froid" + "\n\x1B[3m-Aube : Tu comptes me regarder comme ça pendant combien de temps?\x1B[0m")
+        self.interface.afficher(f"Affection : {self.prctaffect}")
+
+
+    def approcheToi(self):
+        self.interface.afficher("Aube lève les yeux vers vous, étonné que quelqu'un vienne lui parler")
+        self.interface.afficher("Elle vous dit froidement" + "\n\x1B[3m-Aube : Salut\x1B[0m")
+        self.interface.afficher(f"Affection : {self.prctaffect}")
 
 
 class InterfaceConsole:
@@ -445,3 +520,4 @@ if __name__ == "__main__":
         jeu = Jeu(interface)
 
         jeu.lancement()
+
