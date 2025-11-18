@@ -20,6 +20,7 @@ class Jeu:
         self.mana=0
         self.monde = None
         self.prctaffect=0
+        self.faim = None
     
     # ------------------------------
     # Sauvegarde / Chargement
@@ -32,7 +33,8 @@ class Jeu:
             "nom": self.nom,
             "inventaire": self.inventaire,
             "mana": self.mana,
-            "monde": self.monde
+            "monde": self.monde,
+            "faim": self.faim
         }
         with open(self.fichier_save, "w") as f:
             json.dump(data, f)
@@ -62,6 +64,8 @@ class Jeu:
             self.fantastique1()
         elif self.monde == "romance":
             self.romance1()
+        elif self.monde == "prehistorique":
+            self.prehistoire1()
         else:
             self.interface.afficher("⚠️ Monde inconnu dans la sauvegarde.")
             self.lancement()
@@ -85,7 +89,7 @@ class Jeu:
         #
         self.nom = nom
         self.interface.afficher(f"Bienvenue, {self.nom}.")
-        self.interface.afficher("Choisis ton monde :\n1) Monde médiéval\n2) Monde fantastique\n3) Romance")
+        self.interface.afficher("Choisis ton monde :\n1) Monde médiéval\n2) Monde fantastique\n3) Romance\n4) Préhistorique")
         self.interface.attendre_reponse(self.choisir_monde)
 
     def choisir_monde(self, choix):
@@ -104,6 +108,11 @@ class Jeu:
             self.monde = "romance"
             self.interface.afficher("Tu as choisi la romance")
             self.romance1()
+        elif choix == "4":
+            self.monde = "prehistorique"
+            self.faim = 100
+            self.interface.afficher("Tu as choisi le monde préhistorique...")
+            self.prehistoire1()
         else:
             self.interface.afficher("Choix invalide, essaie encore.")
             self.interface.attendre_reponse(self.choisir_monde)
@@ -437,6 +446,45 @@ class Jeu:
         self.interface.afficher("Elle vous dit froidement" + "\n\x1B[3m-Aube : Salut\x1B[0m")
         self.interface.afficher(f"Affection : {self.prctaffect}")
 
+# ------------------------------
+# Monde Préhistorique
+# ------------------------------
+def prehistoire1(self):
+    # Initialiser la faim si ce n'est pas déjà fait
+    if self.faim is None:
+        self.faim = 100
+    self.interface.afficher("Tu te réveilles allongé sur un sol chaud, entouré de fougères géantes.")
+    self.interface.afficher("Ton ventre gargouille. Il va falloir trouver à manger pour survivre.")
+    self.interface.afficher("En regardant autour de toi, tu aperçois :")
+    self.interface.afficher("1) Un petit lac")
+    self.interface.afficher("2) Une grotte sombre")
+    self.interface.afficher("3) Des traces de pas d’un énorme animal")
+    self.interface.attendre_reponse(self.prehistoire_choix_depart)
+def prehistoire_lac(self):
+    self.interface.afficher("Tu arrives près du lac. Des poissons nagent près de la rive.")
+    self.interface.afficher("1) Essayer d’attraper un poisson")
+    self.interface.afficher("2) Boire de l’eau")
+    self.interface.attendre_reponse(self.prehistoire_lac_reponse)
+
+
+def prehistoire_lac_reponse(self, choix):
+    try:
+        choix = int(choix)
+    except:
+        return self.prehistoire_lac()
+
+    if choix == 1:
+        self.interface.afficher("Tu attrapes un poisson ! +20 faim")
+        self.faim = min(100, self.faim + 20)  # jamais > 100
+        self.inventaire.append("poisson cru")
+        self.interface.afficher(f"Inventaire : {self.inventaire}")
+        self.prehistoire_croisement()
+    elif choix == 2:
+        self.interface.afficher("Tu bois l’eau. +10 faim")
+        self.faim = min(100, self.faim + 10)
+        self.prehistoire_croisement()
+    else:
+        self.prehistoire_lac()
 
 class InterfaceConsole:
     # ------------------------------
