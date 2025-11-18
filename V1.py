@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import font, messagebox
 import json
 import os
+import random
 
 
 class Jeu:
@@ -66,6 +67,8 @@ class Jeu:
             self.romance1()
         elif self.monde == "prehistorique":
             self.prehistoire1()
+        elif self.monde == "futuriste":
+            self.futuriste1()
         else:
             self.interface.afficher("⚠️ Monde inconnu dans la sauvegarde.")
             self.lancement()
@@ -89,7 +92,7 @@ class Jeu:
         #
         self.nom = nom
         self.interface.afficher(f"Bienvenue, {self.nom}.")
-        self.interface.afficher("Choisis ton monde :\n1) Monde médiéval\n2) Monde fantastique\n3) Romance\n4) Préhistorique")
+        self.interface.afficher("Choisis ton monde :\n1) Monde médiéval\n2) Monde fantastique\n3) Romance\n4) Préhistorique\n5) Monde futuriste")
         self.interface.attendre_reponse(self.choisir_monde)
 
     def choisir_monde(self, choix):
@@ -113,6 +116,10 @@ class Jeu:
             self.faim = 100
             self.interface.afficher("Tu as choisi le monde préhistorique...")
             self.prehistoire1()
+        elif choix == "5":
+            self.monde = "futuriste"
+            self.interface.afficher("Tu as choisi le monde futuriste...")
+            self.futuriste1()
         else:
             self.interface.afficher("Choix invalide, essaie encore.")
             self.interface.attendre_reponse(self.choisir_monde)
@@ -449,42 +456,116 @@ class Jeu:
 # ------------------------------
 # Monde Préhistorique
 # ------------------------------
-def prehistoire1(self):
-    # Initialiser la faim si ce n'est pas déjà fait
-    if self.faim is None:
-        self.faim = 100
-    self.interface.afficher("Tu te réveilles allongé sur un sol chaud, entouré de fougères géantes.")
-    self.interface.afficher("Ton ventre gargouille. Il va falloir trouver à manger pour survivre.")
-    self.interface.afficher("En regardant autour de toi, tu aperçois :")
-    self.interface.afficher("1) Un petit lac")
-    self.interface.afficher("2) Une grotte sombre")
-    self.interface.afficher("3) Des traces de pas d’un énorme animal")
-    self.interface.attendre_reponse(self.prehistoire_choix_depart)
-def prehistoire_lac(self):
-    self.interface.afficher("Tu arrives près du lac. Des poissons nagent près de la rive.")
-    self.interface.afficher("1) Essayer d’attraper un poisson")
-    self.interface.afficher("2) Boire de l’eau")
-    self.interface.attendre_reponse(self.prehistoire_lac_reponse)
+    def prehistoire1(self):
+        # Initialiser la faim si ce n'est pas déjà fait
+        if self.faim is None:
+            self.faim = 100
+        self.interface.afficher("Tu te réveilles allongé sur un sol chaud, entouré de fougères géantes.")
+        self.interface.afficher("Ton ventre gargouille. Il va falloir trouver à manger pour survivre.")
+        self.interface.afficher("En regardant autour de toi, tu aperçois :")
+        self.interface.afficher("1) Un petit lac")
+        self.interface.afficher("2) Une grotte sombre")
+        self.interface.afficher("3) Des traces de pas d’un énorme animal")
+        self.interface.attendre_reponse(self.prehistoire_choix_depart)
+    def prehistoire_lac(self):
+        self.interface.afficher("Tu arrives près du lac. Des poissons nagent près de la rive.")
+        self.interface.afficher("1) Essayer d’attraper un poisson")
+        self.interface.afficher("2) Boire de l’eau")
+        self.interface.attendre_reponse(self.prehistoire_lac_reponse)
 
 
-def prehistoire_lac_reponse(self, choix):
-    try:
-        choix = int(choix)
-    except:
-        return self.prehistoire_lac()
+    def prehistoire_lac_reponse(self, choix):
+        try:
+            choix = int(choix)
+        except:
+            return self.prehistoire_lac()
 
-    if choix == 1:
-        self.interface.afficher("Tu attrapes un poisson ! +20 faim")
-        self.faim = min(100, self.faim + 20)  # jamais > 100
-        self.inventaire.append("poisson cru")
-        self.interface.afficher(f"Inventaire : {self.inventaire}")
-        self.prehistoire_croisement()
-    elif choix == 2:
-        self.interface.afficher("Tu bois l’eau. +10 faim")
-        self.faim = min(100, self.faim + 10)
-        self.prehistoire_croisement()
-    else:
-        self.prehistoire_lac()
+        if choix == 1:
+            self.interface.afficher("Tu attrapes un poisson ! +20 faim")
+            self.faim = min(100, self.faim + 20)  # jamais > 100
+            self.inventaire.append("poisson cru")
+            self.interface.afficher(f"Inventaire : {self.inventaire}")
+            self.prehistoire_croisement()
+        elif choix == 2:
+            self.interface.afficher("Tu bois l’eau. +10 faim")
+            self.faim = min(100, self.faim + 10)
+            self.prehistoire_croisement()
+        else:
+            self.prehistoire_lac()
+
+# ------------------------------
+# Monde Futuriste
+# ------------------------------
+    def futuriste1(self):
+        #
+        #début de l'aventure futuriste
+        #
+        self.interface.afficher("Bienvenue dans le monde futuriste")
+        self.interface.afficher("Tu avances dans une ruelle étroite, éclairée par des lampes froides qui jettent des reflets métalliques sur le bitume.")
+        self.interface.afficher("\n")
+        self.interface.afficher("La ville est silencieuse, et le bruit de tes pas résonne contre les façades de verre et de béton.")
+        self.interface.afficher("Ton alias, B1t, circule dans les forums de hackers de la ville, mais ici, personne ne te remarque.")
+        self.interface.afficher("Tu rentres chez toi, ton appartement minimaliste perché au dernier étage d’une tour moderne, avec vue sur la ville futuriste.")
+        self.interface.afficher("Tu poses ton sac et ton terminal portable s’allume automatiquement, affichant un flux de données intrigant.")
+        self.interface.afficherItalique("Quelques minutes plus tard")
+        self.interface.afficher("Tu observes l’écran et dois décider de ton action :")
+        self.interface.afficher("1) Explorer le flux immédiatement pour découvrir sa source")
+        self.interface.afficher("2) Attendre et analyser tranquillement les données pour éviter tout risque")
+
+        # Choix 3 aléatoire
+        chance = random.random()
+
+        if chance > 0.5:
+            self.interface.afficher("3) Lancer un petit programme automatique pour interagir avec le flux sans t’exposer")
+            self.interface.attendre_reponse(self.futreponse_b1t)
+        else:
+            self.interface.attendre_reponse(self.futreponse_b1t_sans3)
+        
+    def futreponse_b1t(self,choix):
+        #
+        # Choix entre poursuivre l'aventure ou 1ère fin
+        #
+        try:
+            choix =int(choix)
+        except ValueError:
+            self.interface.afficher("Entrée invalide.")
+            return self.futuriste1()
+            
+        if int(choix)==1:
+            self.futfin1()
+        elif int(choix)==2:
+            self.futfin1()
+        elif int(choix)==3:
+            self.futfin1()
+        else:
+            self.interface.afficher("Choix invalide.")
+            self.futuriste1()
+    def futreponse_b1t_sans3(self,choix):
+        #
+        # Choix entre poursuivre l'aventure ou 1ère fin
+        #
+        try:
+            choix =int(choix)
+        except ValueError:
+            self.interface.afficher("Entrée invalide.")
+            return self.futuriste1()
+        
+        if int(choix)==1:
+            self.futfin1()
+        elif int(choix)==2:
+            self.futfin1()
+        else:
+            self.interface.afficher("Choix invalide.")
+            self.futuriste1()
+        
+    def futfin1(self):
+        self.interface.afficher("Fin.")
+        self.interface.afficher("1) Rejouer")
+        self.interface.afficher("2) Quitter")
+        self.interface.attendre_reponse(self.finjeu)
+                        
+    
+
 
 class InterfaceConsole:
     # ------------------------------
