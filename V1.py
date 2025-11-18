@@ -345,7 +345,7 @@ class Jeu:
             self.medieval_place()
 
         def discussion_gardes(self):
-            pass
+            self.interface.afficher("test")
     
     # ------------------------------
     # MONDE FANTASTIQUE
