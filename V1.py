@@ -321,7 +321,31 @@ class Jeu:
 
     def medieval_place(self):
         self.interface.afficher("tu arrives devant la place du village")
-        
+        self.interface.afficher("tu explores les environs puis décides de te rendre vers l'entrée de l'église")
+        self.interface.afficher("En arrivant devant les portes, tu entends des voix étouffées venant de derrière le mur et tu comprends que c'est 2 gardes qui parlent")
+        self.interface.afficher("Que veux-tu faire ? ")
+        self.interface.afficher("1) Allez écouter leur discussions")
+        self.interface.afficher("2) Les ignorer et entrer dans l'église")
+        self.interface.attendre_reponse(self.reponse_place)
+    
+    def reponse_place(self,choix):
+        #
+        # Séparation des chemins de quête selon la réponse de l'utilisateur
+        #
+        try:
+            choix =int(choix)
+        except ValueError:
+            self.interface.afficher("Entrée invalide.")
+            return self.medieval_place()
+        if int(choix)==1:
+            self.discussion_gardes()
+        elif int(choix)==2:
+            self.rencontre_eglise()
+        else:
+            self.medieval_place()
+
+        def discussion_gardes(self):
+            pass
     
     # ------------------------------
     # MONDE FANTASTIQUE
