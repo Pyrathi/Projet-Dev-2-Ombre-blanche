@@ -212,7 +212,8 @@ class MondeMedieval:
     def medieval_place(self):
         self.interface.afficher("tu arrives devant la place du village")
         self.interface.afficher("tu explores les environs puis décides de te rendre vers l'entrée de l'église")
-        self.interface.afficher("En arrivant devant les portes, tu entends des voix étouffées venant de derrière le mur et tu comprends que c'est 2 gardes qui parlent")
+        self.interface.afficher("En arrivant devant les portes, tu entends des voix étouffées venant de derrière le mur et tu comprends que c'est 2 gardes qui discutent")
+        self.interface.afficher("ils regardent autour d'eux avec un air inquiet et tu te rends compte qu'ils parlent d'un sujet sensible")
         self.interface.afficher("Que veux-tu faire ? ")
         self.interface.afficher("1) Allez écouter leur discussions")
         self.interface.afficher("2) Les ignorer et entrer dans l'église")
@@ -235,6 +236,84 @@ class MondeMedieval:
             self.medieval_place()
 
     def discussion_gardes(self):
-        self.interface.afficher("test")
+        self.interface.afficher("tu t'approches doucement en essayant d'écouter leur discussion")
+        self.interface.afficher("De là où tu es, tu parviens a entendre quelques bribes")
+        self.interface.afficher("")
+        self.interface.afficherItalique("Seigneur ... disparu ... guerre ... fuire...famille")
+        self.interface.afficher("")
+        self.interface.afficher("Les gardes finissent de parler et commencent à s'éloigner")
+        self.interface.afficher("Après avoir entendu ça, tu te demandes si tu devrais les suivre ou retourner dans l'église")
+        self.interface.afficher("1) Les suivre")
+        self.interface.afficher("2) Retourner dans l'église")
+        self.interface.attendre_reponse(self.reponse_filature)
+    
+    def reponse_filature(self,choix):
+        try:
+            choix =int(choix)
+        except ValueError:
+            self.interface.afficher("Entrée invalide.")
+            return self.discussion_gardes()
+        if int(choix)==1:
+            self.filature_garde()
+        elif int(choix)==2:
+            self.rencontre_eglise()
+        else:
+            self.discussion_gardes()
+    #--------------------------
+    # Chemin de la magie
+    #--------------------------
     def rencontre_eglise(self):
-        self.interface.afficher("test")
+        self.interface.afficher("Tu entres dans l'église et tu t'émerveilles en voyant les décorations et la beauté de ce lieu")
+        self.interface.afficher("Tu décides de t'asseoir sur un banc afin de te reposer et d'effectuer une prière espérant éloigner les mauvais esprits ")
+        self.interface.afficher("pendant ta prière, tu entends des bruits étranges venant d'un coin reculé de l'église")
+        self.interface.afficher("tu t'approches prudemment et finis par te rendre compte que c'est une dame qui est en train de pleurer.")
+        self.interface.afficher("Elle finit par relever la tête et te voir,elle s'excuse de t'avoir déranger")
+        self.interface.afficher("Tu lui demandes ce qu'il se passe et elle te répond quelque chose mais à cause de ses sanglots, tu ne comprends pas")
+        self.interface.afficher("tu décides d'attendre qu'elle se calme et lui demandes de t'expliquer calmement.")
+        self.interface.afficher("Elle te dit que son mari a disparu, il est partit il y a de ça 3 jours pour explorer une grotte censée contenir un trésor mais il n'est jamais revenu")
+        self.interface.afficher("tu lui demandes si il était seul et où se trouves la grotte")
+        self.interface.afficher("Elle te répond qu'il était seul et que la grotte se situait au nord. elle te demandes si tu veux bien y faire un tour pour retrouver son bien-aimé")
+        self.interface.afficher("1) Lui promettre que tu essayera de retrouvre son mari")
+        self.interface.afficher("2) T'excuser et lui dire que ne peut pas l'aider car tu dois partir au plus vite")
+        self.interface.attendre_reponse(self.reponse_femme_triste)
+
+    def reponse_femme_triste(self,choix):
+        try:
+            choix =int(choix)
+        except ValueError:
+            self.interface.afficher("Entrée invalide.")
+            return self.rencontre_eglise()
+        if int(choix)==1:
+            self.quete_grotte()
+        elif int(choix)==2:
+            self.direction_taverne()
+        else:
+            self.rencontre_eglise()
+
+    def direction_taverne(self):
+        self.interface.afficher("Tu sors de l'église entendant la femme recommencer à sangloter")
+        self.interface.afficher("La journée  étant déjà bien entamée, tu décides de te rendre dans une taverne afin de manger et boire jusqu'à ne plus pouvoir")
+        self.interface.afficher("tu continues à faire la fête jusque tard et quand tu décides enfin à partir, tu te rends à une auberge que t'as conseiller le serveur")
+        self.interface.afficher("tu reserves une chambre pour la nuit et t'allonges dans ton lit, tu te rappelle de chaque instant de ta journée dans les moindre détails")
+        self.interface.afficher("tu regardes le plafond et te mets à rire, un rire qui s'apparentrait à la folie car tu sais qu'à ton réveil,")
+        self.interface.afficher("tu seras au bord d'un chemin avec au loin, un château qui t'attend comme à chaque réveil depuis que tu as rencontré ce sorcier qui t'as infligé cette foutue malédiction")
+        self.interface.afficher("")
+        self.interface.afficherItalique("Félicitations: Vous avez atteint la 1ère fin !")
+        self.interface.afficher("1) Rejouer")
+        self.interface.afficher("2) Quitter") 
+        self.interface.attendre_reponse(self.finjeu)
+
+    def quete_grotte(self):
+        self.interface.afficher("En t'éloignant, tu entends la voix de la femme")
+        self.interface.afficher("")
+        self.interface.afficherItalique("Merci, j'espère que vous le retrouverez, Vous avez ma bénédiction")
+        self.interface.afficher("")
+        self.interface.afficher("à ce moment là, tu ressens comme un sentiment de legereté, comme si le fardeau que tu portais depuis des années s'était évaporé")
+        #Faire la quete et revenir voir la femme qui lui avoue etre une pretresse qui la soigne de la malediction du jour infinni
+
+    #--------------------------
+    # Guerre/Disparition Seigneur
+    #--------------------------
+    def filature_garde(self):
+        self.interface.afficher("t")
+        # trouver un moyen d'inclure la malédiction dans cette partie
