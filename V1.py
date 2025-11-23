@@ -5,6 +5,9 @@ import os
 import random
 from mondes.medieval import MondeMedieval
 
+class MondeErreur(Exception):
+    """Exception personnalisée pour les erreurs."""
+    pass
 
 class Jeu:
     # ------------------------------
@@ -24,6 +27,16 @@ class Jeu:
         self.prctaffect=0
         self.faim = None
         self.fichier_save = "sauvegarde.json"
+        self.dino = {
+            "nom": "Brachiosaure",
+            "taille": "immense",
+            "agressif": True
+        }
+        self.tigre = {
+            "nom": "Tigre à dents de sabre",
+            "taille": "normal",
+            "agressif": True
+        }
 
     
     # ------------------------------
@@ -59,7 +72,7 @@ class Jeu:
         self.inventaire = data.get("inventaire", [])
         self.mana = data.get("mana", 0)
         self.monde = data.get("monde", None)
-        self.monde = data.get("faim", None)
+        self.faim = data.get("faim", None)
         self.interface.afficher(f"🔁 Partie chargée de {self.nom} dans le monde {self.monde} !")
 
         # Reprendre selon le monde
@@ -249,14 +262,18 @@ class Jeu:
             return self.prehistoire_lac()
 
         if choix == 1:
-            self.interface.afficher("Tu attrapes un poisson ! +20 faim")
-            self.faim = min(100, self.faim + 20)  # jamais > 100
-            self.inventaire.append("poisson cru")
-            self.interface.afficher(f"Inventaire : {self.inventaire}")
+            self.interface.afficher("Tu attrapes un poisson et tu le manges.")
+            self.interface.afficher("Quelques heures plus tard tu as une intoxication alimentaire. -50 faim")
+            self.faim -= 50 # jamais > 100
+            if self.faim <= 0:
+                return self.prehistoire_fin_famine
             self.prehistoire_croisement()
         elif choix == 2:
-            self.interface.afficher("Tu bois l’eau. +10 faim")
-            self.faim = min(100, self.faim + 10)
+            self.interface.afficher("Tu bois l’eau.")
+            self.interface.afficher("Quelques heures plus tard tu tombes gravement malade. - 91 faim")
+            self.faim -= 91
+            if self.faim <= 0:
+                return self.prehistoire_fin_famine
             self.prehistoire_croisement()
         else:
             self.prehistoire_lac()
@@ -274,7 +291,8 @@ class Jeu:
             return self.prehistoire_grotte()
 
         if choix == 1:
-            self.interface.afficher("Un tigre à dents de sabre surgit !")
+            self.interface.afficher(f"un {self.tigre['nom']} de taille {self.tigre['taille']} surgit!")
+            self.interface.afficher(f"")
             self.interface.afficher("1) Fuir")
             self.interface.afficher("2) Te battre avec une pierre")
             self.interface.attendre_reponse(self.prehistoire_tigre)
@@ -304,7 +322,12 @@ class Jeu:
             self.prehistoire_grotte()
 
     def prehistoire_traces(self):
-        self.interface.afficher("Tu suis les traces jusqu'à un dinosaure herbivore.")
+        self.interface.afficher("Tu suis les traces jusqu'à un dinosaure.")
+        self.inteface.afficher(f"Tu arrives et tu voit un {self.dino['nom']} de taille {self.dino['taille']}!" )
+        if self.dino["agressif"]:
+            self.inteface.afficher("Il semble daugereux!")
+        else:
+            self.inteface.afficher("Il semble innofensif.")
         self.interface.afficher("1) T'approcher doucement")
         self.interface.afficher("2) Reculer lentement")
         self.interface.attendre_reponse(self.prehistoire_traces_reponse)
@@ -316,13 +339,20 @@ class Jeu:
             return self.prehistoire_traces()
 
         if choix == 1:
-            self.interface.afficher("Le dinosaure semble pacifique et te laisse tranquille.")
-            self.prehistoire_croisement()
+            self.interface.afficher("Le dinosaure te voit et te mange...")
+            self.prehistoire_fin_mauvaise()
         else:
             self.interface.afficher("Tu t'éloignes sans problème.")
             self.prehistoire_croisement()
 
     def prehistoire_croisement(self):
+        try:
+            if self.faim <10:
+                raise MondeErreur("Tu es trop faible pour continuer!")
+        except MondeErreur as e:
+            self.interface.afficher(" {e}")
+            return self.prehistoire_fin_famine()
+        
         self.interface.afficher("\n La nuit tombe. Tu dois trouver un abri pour survivre.")
         self.interface.afficher("1) Construire un abri de fortune")
         self.interface.afficher("2) Allumer un feu")
@@ -338,20 +368,18 @@ class Jeu:
             self.interface.afficher("Le feu te protège des prédateurs. Tu passes la nuit sain et sauf.")
             return self.prehistoire_fin_bonne()
         elif choix == 1:
-            self.interface.afficher("L'abri est fragile… un prédateur rôde.")
+            self.interface.afficher("L'abri est fragile… un prédateur rôde...")
             return self.prehistoire_fin_mauvaise()
         else:
             self.prehistoire_croisement()
 
     def prehistoire_fin_bonne(self):
-        self.interface.afficher("Tu te réveilles vivant. Tu as survécu à la nuit préhistorique.")
-        self.interface.afficher("FIN BONNE")
+        self.interface.afficher("Tu te réveilles vivant. Tu as survécu à la nuit.")
         self.interface.afficher("1) Rejouer\n2) Quitter")
         self.interface.attendre_reponse(self.finjeu)
 
     def prehistoire_fin_mauvaise(self):
-        self.interface.afficher("Un prédateur t'attaque pendant ton sommeil…")
-        self.interface.afficher("FIN MAUVAISE")
+        self.interface.afficher("Vous êtes mort...")
         self.interface.afficher("1) Rejouer\n2) Quitter")
         self.interface.attendre_reponse(self.finjeu)
 
