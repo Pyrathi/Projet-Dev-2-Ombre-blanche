@@ -59,6 +59,7 @@ class Jeu:
         self.inventaire = data.get("inventaire", [])
         self.mana = data.get("mana", 0)
         self.monde = data.get("monde", None)
+        self.monde = data.get("faim", None)
         self.interface.afficher(f"🔁 Partie chargée de {self.nom} dans le monde {self.monde} !")
 
         # Reprendre selon le monde
@@ -68,6 +69,8 @@ class Jeu:
         elif self.monde == "romance":
             self.romance1()
         elif self.monde == "prehistorique":
+            if self.faim is None:
+                self.faim = 100
             self.prehistoire1()
         elif self.monde == "futuriste":
             self.futuriste1()
@@ -94,7 +97,7 @@ class Jeu:
         #
         self.nom = nom
         self.interface.afficher(f"Bienvenue, {self.nom}.")
-        self.interface.afficher("Choisis ton monde :\n1) Monde médiéval\n2) Romance\n3) Préhistorique\n4) Monde futuriste")
+        self.interface.afficher("Choisis ton monde :\n1) Monde médiéval\n2) Romance\n3) Monde préhistorique\n4) Monde futuriste")
         self.interface.attendre_reponse(self.choisir_monde)
 
     def choisir_monde(self, choix):
@@ -112,7 +115,6 @@ class Jeu:
             self.romance1()
         elif choix == "3":
             self.monde = "prehistorique"
-            self.faim = 100
             self.interface.afficher("Tu as choisi le monde préhistorique...")
             self.prehistoire1()
         elif choix == "4":
@@ -207,7 +209,6 @@ class Jeu:
 # Monde Préhistorique
 # ------------------------------
     def prehistoire1(self):
-        # Initialiser la faim si ce n'est pas déjà fait
         if self.faim is None:
             self.faim = 100
         self.interface.afficher("Tu te réveilles allongé sur un sol chaud, entouré de fougères géantes.")
@@ -217,12 +218,29 @@ class Jeu:
         self.interface.afficher("2) Une grotte sombre")
         self.interface.afficher("3) Des traces de pas d’un énorme animal")
         self.interface.attendre_reponse(self.prehistoire_choix_depart)
+
+    def prehistoire_choix_depart(self, choix):
+        try:
+            choix = int(choix)
+        except:
+            self.interface.afficher("Entrée invalide.")
+            return self.prehistoire1()
+
+        if choix == 1:
+            self.prehistoire_lac()
+        elif choix == 2:
+            self.prehistoire_grotte()
+        elif choix == 3:
+            self.prehistoire_traces()
+        else:
+            self.interface.afficher("Choix invalide.")
+            self.prehistoire1()
+
     def prehistoire_lac(self):
         self.interface.afficher("Tu arrives près du lac. Des poissons nagent près de la rive.")
         self.interface.afficher("1) Essayer d’attraper un poisson")
         self.interface.afficher("2) Boire de l’eau")
         self.interface.attendre_reponse(self.prehistoire_lac_reponse)
-
 
     def prehistoire_lac_reponse(self, choix):
         try:
@@ -242,6 +260,107 @@ class Jeu:
             self.prehistoire_croisement()
         else:
             self.prehistoire_lac()
+            
+    def prehistoire_grotte(self):
+        self.interface.afficher("La grotte est sombre. Des bruits inquiétants résonnent.")
+        self.interface.afficher("1) Entrer dans la grotte")
+        self.interface.afficher("2) Faire demi-tour")
+        self.interface.attendre_reponse(self.prehistoire_grotte_reponse)
+
+    def prehistoire_grotte_reponse(self, choix):
+        try:
+            choix = int(choix)
+        except:
+            return self.prehistoire_grotte()
+
+        if choix == 1:
+            self.interface.afficher("Un tigre à dents de sabre surgit !")
+            self.interface.afficher("1) Fuir")
+            self.interface.afficher("2) Te battre avec une pierre")
+            self.interface.attendre_reponse(self.prehistoire_tigre)
+        else:
+            self.prehistoire_croisement()
+
+    def prehistoire_tigre(self, choix):
+        try:
+            choix = int(choix)
+        except:
+            return self.prehistoire_grotte()
+
+        if choix == 1:
+            self.interface.afficher("Tu fuis à toute vitesse. -20 faim")
+            self.faim -= 20
+            if self.faim <= 0:
+                return self.prehistoire_fin_famine()
+            self.prehistoire_croisement()
+        elif choix == 2:
+            self.interface.afficher("Tu te bats courageusement…")
+            self.interface.afficher("Tu es blessé ! -40 faim")
+            self.faim -= 40
+            if self.faim <= 0:
+                return self.prehistoire_fin_famine()
+            self.prehistoire_croisement()
+        else:
+            self.prehistoire_grotte()
+
+    def prehistoire_traces(self):
+        self.interface.afficher("Tu suis les traces jusqu'à un dinosaure herbivore.")
+        self.interface.afficher("1) T'approcher doucement")
+        self.interface.afficher("2) Reculer lentement")
+        self.interface.attendre_reponse(self.prehistoire_traces_reponse)
+
+    def prehistoire_traces_reponse(self, choix):
+        try:
+            choix = int(choix)
+        except:
+            return self.prehistoire_traces()
+
+        if choix == 1:
+            self.interface.afficher("Le dinosaure semble pacifique et te laisse tranquille.")
+            self.prehistoire_croisement()
+        else:
+            self.interface.afficher("Tu t'éloignes sans problème.")
+            self.prehistoire_croisement()
+
+    def prehistoire_croisement(self):
+        self.interface.afficher("\n La nuit tombe. Tu dois trouver un abri pour survivre.")
+        self.interface.afficher("1) Construire un abri de fortune")
+        self.interface.afficher("2) Allumer un feu")
+        self.interface.attendre_reponse(self.prehistoire_final)
+
+    def prehistoire_final(self, choix):
+        try:
+            choix = int(choix)
+        except:
+            return self.prehistoire_croisement()
+
+        if choix == 2:
+            self.interface.afficher("Le feu te protège des prédateurs. Tu passes la nuit sain et sauf.")
+            return self.prehistoire_fin_bonne()
+        elif choix == 1:
+            self.interface.afficher("L'abri est fragile… un prédateur rôde.")
+            return self.prehistoire_fin_mauvaise()
+        else:
+            self.prehistoire_croisement()
+
+    def prehistoire_fin_bonne(self):
+        self.interface.afficher("Tu te réveilles vivant. Tu as survécu à la nuit préhistorique.")
+        self.interface.afficher("FIN BONNE")
+        self.interface.afficher("1) Rejouer\n2) Quitter")
+        self.interface.attendre_reponse(self.finjeu)
+
+    def prehistoire_fin_mauvaise(self):
+        self.interface.afficher("Un prédateur t'attaque pendant ton sommeil…")
+        self.interface.afficher("FIN MAUVAISE")
+        self.interface.afficher("1) Rejouer\n2) Quitter")
+        self.interface.attendre_reponse(self.finjeu)
+
+    def prehistoire_fin_famine(self):
+        self.interface.afficher("Ton ventre crie famine… tu t'effondres.")
+        self.interface.afficher("FIN : Mort de faim.")
+        self.interface.afficher("1) Rejouer\n2) Quitter")
+        self.interface.attendre_reponse(self.finjeu)
+
 
 # ------------------------------
 # Monde Futuriste
