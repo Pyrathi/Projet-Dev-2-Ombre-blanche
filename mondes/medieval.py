@@ -384,7 +384,7 @@ class MondeMedieval:
         for i in self.inventaire:
             if i=="epee":
                 self.interface.afficher("3) Dégainer ton épéer et le tuer dans son sommeil")
-        self.interface.attendre_reponse(self.gobelin())
+        self.interface.attendre_reponse(self.gobelin)
     
     def gobelin(self,choix):
         try:
@@ -397,7 +397,11 @@ class MondeMedieval:
         elif int(choix)==2:
             self.mari_blesse()
         elif int(choix)==3:
-            self.grotte_porte()
+            if "epee" in self.inventaire:
+                self.grotte_porte()
+            else:
+                self.grotte_combat()
+
         else:
             self.grotte_combat()
 
