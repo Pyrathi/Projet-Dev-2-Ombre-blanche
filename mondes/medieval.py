@@ -2,6 +2,17 @@ class MondeMedieval:
     def __init__(self, jeu):
         self.jeu = jeu
         self.interface = jeu.interface    
+
+    #-------------------------
+    #Propriétés utiles
+    #-------------------------
+    @property
+    def inventaire(self):
+        return self.jeu.inventaire
+    
+    #---------------------
+    #Histoire
+    #---------------------
     def medieval1(self):
         #
         #début de l'aventure médiévale
@@ -94,7 +105,7 @@ class MondeMedieval:
         self.interface.afficherItalique("Le loup se trouve dans la prairie à l'ouest du château")
         self.interface.afficherItalique("Fais attention à toi, il à l'air plus féroce qu'un loup normal")
         self.interface.afficherItalique(f"Bonne chance {self.jeu.nom}")
-        self.jeu.inventaire.append("epee")
+        self.inventaire.append("epee")
         self.interface.afficher("")
         self.interface.afficher(f"ton inventaire est composé de {self.jeu.inventaire}")
         self.interface.afficher("")
@@ -135,7 +146,7 @@ class MondeMedieval:
         self.interface.afficher("")
         self.interface.afficher("Bien que sauver d'affaire pour le moment, une douleur atroce t'empêche de poser ton dos contre le tronc")
         self.interface.afficher("et en voulant l'attraper, tu remarques que ton épée n'est plus dans son fourreau.")
-        self.jeu.inventaire.remove("epee")
+        self.inventaire.remove("epee")
         self.interface.afficher("")
         self.interface.afficher("Ne pouvant plus rien faire, tu décides d'attendre que le loup s'éloigne en espérant avoir la force de rentrer au château")
         self.interface.afficher("")
@@ -204,7 +215,7 @@ class MondeMedieval:
         self.interface.afficher("celui-ci te vois arriver avec la fourure sur le dos et s'exclame:")
         self.interface.afficher("")
         self.interface.afficherItalique("Je savais que tu réussirait! Pour te remercier, prend cette clé, elle pourra peut être t'aider quand tu auras besoin,sâche que je te suis redevable")
-        self.jeu.inventaire.append("cle")
+        self.inventaire.append("cle")
         self.interface.afficher("Tu le remercies pour ce cadeau et prends congé")
         self.interface.afficher("tu décides finalement de te diriger vers la place du village")
         self.medieval_place()
