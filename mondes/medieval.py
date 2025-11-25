@@ -9,6 +9,14 @@ class MondeMedieval:
     @property
     def inventaire(self):
         return self.jeu.inventaire
+
+    @property
+    def sort(self):
+        return self.jeu.sort
+    
+    @property
+    def mana(self):
+        return self.jeu.mana
     
     #---------------------
     #Histoire
@@ -395,15 +403,110 @@ class MondeMedieval:
         if int(choix)==1:
             self.mort_gobelin()
         elif int(choix)==2:
-            self.mari_blesse()
+            self.esquive_gobelin()
         elif int(choix)==3:
             if "epee" in self.inventaire:
-                self.grotte_porte()
+                self.tuer_gobelin()
             else:
                 self.grotte_combat()
 
         else:
             self.grotte_combat()
+
+    def mort_gobelin(self):
+        self.interface.afficher("")
+        self.interface.afficher("Tu prends ton élan et te jettes sur le gobelin endormi")
+        self.interface.afficher("Malheureusement, le gobelin t'entends et se réveille juste avant que tu l'atteignes")
+        self.interface.afficher("étant déjà lancer, tu ne peux plus t'arrêter,tu vois un sourire apparaitre sur le visage de ton adversaire.")
+        self.interface.afficher("Il dégaine son poignard et profites de ton élan pour te poignarder en plein coeur")
+        self.interface.afficher("tu sens tes forces t'abandonner pendant que tu te vides de ton sang.")
+        self.interface.afficher("Tu sais que cette blessure te sera fatale et tu te demandes si le destin se joue de toi,")
+        self.interface.afficher("tu as pu goûter à un semblant de liberté en étant soigné de ta malédiction mais te voilà de nouveau condamné.")
+        self.interface.afficher("")
+        self.interface.afficher("Tu es mort, que veux tu faire :")
+        self.interface.afficher("1) Rejouer")
+        self.interface.afficher("2) Quitter") 
+        self.interface.attendre_reponse(self.finjeu)
+    
+    def esquive_gobelin(self):
+        self.interface.afficher("")
+        self.interface.afficher("Tu décide de contourner le gobelin, tu commences à marcher tout doucement en évitant de faire le moindre bruit")
+        self.interface.afficher("Lorsque tu arrives à son niveau, celui-ci émet un drôle de groognement")
+        self.interface.afficher("tu te figes sur place en priant pour qu'il ne se réveille pas")
+        self.interface.afficher("Après quelques secondes, tu pousses un soufflement de soulagement, au moment de te remettre en route, tu aperçois une petite porrte juste derrière le gobelin.")
+        self.interface.afficher("Après quelques secondes d'hésitation, tu décides de continuer ta route, sans armes tu as peux de chance de tuer le gobelin")
+        self.interface.afficher("Tu suis le chemin sans encombre et parviens a sortir du tunnel pour rejoindre une vaste salle")
+        self.mari_blesse()
+
+    def tuer_gobelin(self):
+        self.interface.afficher("")
+        self.interface.afficher("Tu dégaines lentement ton épee et décides de te rapprocher sans faire de bruit")
+        self.interface.afficher("Tu te retrouves à quelques pas du gobelin, celui-ci émet un grognement et ouvre lentement les yeux.")
+        self.interface.afficher("Avant même qu'il ait le temps de comprendre ce qu'il se passe, tu abas ton épee et le tranche en deux.")
+        self.interface.afficher("tu attends quelques secondes pour t'assurer qu'il est bien mort puis commence à t'éloigner")
+        self.interface.afficher("En t'éloignant, tu ressens un courant d'air et te fais la réflexion qu'il n'y a aucune source d'air dans ce tunnel,")
+        self.interface.afficher("tu tournes la tête vers le cadavre du gobelin et tu remarques une petite porte caché que tu n'avais pas vu en passant.")
+        self.interface.afficher("Tu hésites, que faire")
+        self.interface.afficher("")
+        self.interface.afficher("1) entrer dans la porte")
+        self.interface.afficher("2) passer ton chemin pour aller retrouver l'homme")
+        self.interface.attendre_reponse(self.choix_porte_cache)
+        
+    def choix_porte_cache(self,choix):
+        try:
+            choix =int(choix)
+        except ValueError:
+            self.interface.afficher("Entrée invalide.")
+            return self.tuer_gobelin()
+        if int(choix)==1:
+            self.passage_secret()
+        elif int(choix)==2:
+            self.mari_blesse()
+        else:
+            self.tuer_gobelin()
+
+    def passage_secret(self):
+        self.interface.afficher("")
+        self.interface.afficher("Tu décides d'entrer et tu suis un long chemin")
+        self.interface.afficher("Après quelques minutes de marche,tu vois une autre porte, tu décides de l'ouvrir.")
+        self.grotte_porte()
+    
+    def grotte_porte(self):
+        self.interface.afficher("")
+        self.interface.afficher("Tu arrives dans un salle plutôt chaleureuse, tu observes les alentours et ne repère aucune mennace.")
+        self.interface.afficher("Tu vois un vieille porte au fond avec un cadenas")
+        self.interface.afficher("Malgré le cadenas, tu essaies de forcer la porte mais elle ne bouge pas")
+        for i in self.inventaire:
+            if i=="cle":
+                self.porte_ouverte()
+        self.retour()
+
+    def retour(self):
+        self.interface.afficher("")
+        self.interface.afficher("N'ayant aucun moyen de l'ouvrir, tu décides de retourner sur tes pas")
+        self.mari_blesse()
+    
+    def porte_ouverte(self):
+        self.interface.afficher("")
+        self.interface.afficher("Tu cherches un  autre moyen d'ouvrir la porte quand tout d'un coup tu te rappelles que le marchand t'as donné une clé après l'avoir aider.")
+        self.interface.afficher("Tu sors la clé et essayes d'ouvrir la porte, à ta grande surprise, celle-ci s'ouvre")
+        self.interface.afficher("Tu arrives dans une grande salle vide au milieu de laquelle se trouve un coffre fermé")
+        self.interface.afficher("tu te demandes si c'est un piège mais le fait que la salle était scellé derrière une porte,")
+        self.interface.afficher("te fais dire que non. Tu t'approches du coffre est l'ouvres")
+        self.interface.afficher("à l'intérieur, se trouve un parchemin. Tu le saisis dans le but de lire et celui-ci disparait tandis qu'une marque apparait sur ta main.")
+        self.interface.afficher("Tu ne saurais l'expliquer mais tu as le sentiment d'être capable d'utiliser un sort magique.")
+        self.interface.afficher("tu as toujours pensé que cela était réservé à certaines personnes mais tu comprends aujourd'hui que toi aussi en était capable")
+        self.interface.afficher("tu comprends donc que le parchemin contenait un sort permettant de soigné des blessures et qu'en le trouvant, tu as appris ce sort")
+        self.sort.append("soin")
+        self.mana=100
+        self.interface.afficher("Le coffre n'ayant plus rien à offrir, tu décides de ressortir et de continuer ton chemin")
+        self.mari_blesse()
+
+    def mari_blesse(self):
+        self.interface.afficher("")
+        self.interface.afficher("tt")
+
+
 
     #--------------------------
     # Guerre/Disparition Seigneur

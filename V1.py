@@ -22,6 +22,7 @@ class Jeu:
         self.inventaire=[]
         self.pnj_allie=[]
         self.pnj_ennemi=[]
+        self.sort=[]
         self.mana=0
         self.monde = None
         self.prctaffect=0
@@ -78,14 +79,18 @@ class Jeu:
         # Reprendre selon le monde
         if self.monde == "medieval":
             self.monde_actuel = MondeMedieval(self)
+            self.interface.activer_bouton_medieval()
             self.monde_actuel.medieval1()
         elif self.monde == "romance":
+            self.interface.desactiver_bouton_medieval()
             self.romance1()
         elif self.monde == "prehistorique":
+            self.interface.desactiver_bouton_medieval()
             if self.faim is None:
                 self.faim = 100
             self.prehistoire1()
         elif self.monde == "futuriste":
+            self.interface.desactiver_bouton_medieval()
             self.futuriste1()
         else:
             self.interface.afficher("⚠️ Monde inconnu dans la sauvegarde.")
@@ -119,19 +124,23 @@ class Jeu:
         #
         if choix == "1":
             self.monde = "medieval"
+            self.interface.activer_bouton_medieval()
             self.interface.afficher("Tu as choisi le monde médiéval...")
             self.monde_actuel = MondeMedieval(self)
             self.monde_actuel.medieval1()
         elif choix == "2":
             self.monde = "romance"
+            self.interface.desactiver_bouton_medieval()
             self.interface.afficher("Tu as choisi la romance")
             self.romance1()
         elif choix == "3":
             self.monde = "prehistorique"
+            self.interface.desactiver_bouton_medieval()
             self.interface.afficher("Tu as choisi le monde préhistorique...")
             self.prehistoire1()
         elif choix == "4":
             self.monde = "futuriste"
+            self.interface.desactiver_bouton_medieval()
             self.interface.afficher("Tu as choisi le monde futuriste...")
             self.futuriste1()
         else:
@@ -507,10 +516,20 @@ class InterfaceTk:
         self.bouton_envoyer = tk.Button(frame, text="Envoyer", command=self.envoyer)
         self.bouton_envoyer.pack(side="left", padx=(0, 5))
         self.bouton_inventaire = tk.Button(frame, text="Inventaire", command=self.afficher_inventaire, bg="#4a90e2", fg="white")
-        self.bouton_inventaire.pack(side="left")
+        
+        self.bouton_sort = tk.Button(frame, text="Sorts", command=self.afficher_sort, bg="#4a90e2", fg="white")
+        
 
         
         self.callback = None
+    
+    def activer_bouton_medieval(self):
+        self.bouton_inventaire.pack(side="left")
+        self.bouton_sort.pack(side="left")
+    
+    def desactiver_bouton_medieval(self):
+        self.bouton_inventaire.pack_forget()
+        self.bouton_sort.pack_forget()
 
     def afficher(self, message):
         #
@@ -548,6 +567,11 @@ class InterfaceTk:
         objets = self.jeu.inventaire
         contenu = "\n".join(f"- {obj}" for obj in objets) if objets else "Ton inventaire est vide."
         messagebox.showinfo("Inventaire", contenu)
+        
+    def afficher_sort(self):
+        objets = self.jeu.sort
+        contenu = "\n".join(f"- {obj}" for obj in objets) if objets else "Tu ne possèdes aucun sorts."
+        messagebox.showinfo("Sorts", contenu)
 
     def lancer(self):
         self.root.mainloop()
