@@ -8,7 +8,24 @@ from mondes.medieval import MondeMedieval
 class MondeErreur(Exception):
     """Exception personnalisée pour les erreurs."""
     pass
+class BarreAffection:
+    
+    def __init__(self, jeu, valeur_initiale=5):
+        self.jeu = jeu 
+        self._valeur = valeur_initiale
 
+    @property
+    def valeur(self):
+        return self._valeur
+
+    @valeur.setter
+    def valeur(self, v):
+       
+       
+        self._valeur = v
+    
+        if self._valeur == 100:
+            self.jeu.event100()
 class Jeu:
     # ------------------------------
     # Paramêtre globale
@@ -18,6 +35,7 @@ class Jeu:
         # Pseudo de l'aventurier et inventaire de celui-ci
         #
         self.interface=interface
+        self.affection = BarreAffection(self)
         self.nom=""
         self.inventaire=[]
         self.pnj_allie=[]
@@ -208,24 +226,28 @@ class Jeu:
             self.interface.afficher("Entrée invalide.")
             return self.romance1()
         if int(choix) == 1:
-            self.prctaffect -= 2
+            self.affection.valeur -= 2
             self.approcheSilence()
         elif int(choix) == 2:
-            self.prctaffect += 2
             self.approcheToi()
+            self.affection.valeur += 95
+            
         else:
             self.rompremiermot()
 
 
     def approcheSilence(self):
         self.interface.afficher("Aube lève les yeux vers vous, un malaise s'installe, elle vous dit d'un ton froid" + "\n\x1B[3m-Aube : Tu comptes me regarder comme ça pendant combien de temps?\x1B[0m")
-        self.interface.afficher(f"Affection : {self.prctaffect}")
+        self.interface.afficher(f"Affection : {self.affection.valeur}")
 
 
     def approcheToi(self):
         self.interface.afficher("Aube lève les yeux vers vous, étonné que quelqu'un vienne lui parler")
         self.interface.afficher("Elle vous dit froidement" + "\n\x1B[3m-Aube : Salut\x1B[0m")
-        self.interface.afficher(f"Affection : {self.prctaffect}")
+        self.interface.afficher(f"Affection : {self.affection.valeur}")
+    def event100(self):
+        self.interface.afficher("\nAube pose ses mains sur tes joues, et elle t'embrasse")
+        self.interface.afficher(f"Affection : {self.affection.valeur}")
 
 # ------------------------------
 # Monde Préhistorique
