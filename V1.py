@@ -489,6 +489,14 @@ class InterfaceConsole:
     def attendre_reponse(self, callback):
         reponse = input("> ")
         callback(reponse)
+    
+    def activer_bouton_medieval(self):
+        pass  
+
+    def desactiver_bouton_medieval(self):
+        pass
+
+
 
 class InterfaceTk:
     # ------------------------------
