@@ -1,3 +1,35 @@
+import re
+import random
+
+def extraire_numero(texte):
+    #---------
+    #Fonction regex pour extraire le numéro dans la réponse
+    #Return: le choix sous forme d'int
+    #---------
+    match = re.search(r"\d+", texte)
+    return int(match.group()) if match else None
+
+def valider_choix(range_min, range_max):
+    #---------
+    #Fonction Gere les potentiels erreures dans le choix
+    #Return: le choix sous forme d'int dans la range possible
+    #---------
+    def decorateur(func):
+        def wrapper(self, choix):
+            choix = extraire_numero(choix)
+            if choix is None:
+                self.interface.afficher("Entrée invalide.")
+                return func(self, None)
+            if choix < range_min or choix > range_max:
+                self.interface.afficher("Choix hors limite.")
+                return func(self, None)
+            return func(self, choix)
+        return wrapper
+    return decorateur
+
+
+
+
 class MondeMedieval:
     def __init__(self, jeu):
         self.jeu = jeu
@@ -17,6 +49,10 @@ class MondeMedieval:
     @property
     def mana(self):
         return self.jeu.mana
+    
+    @mana.setter    
+    def mana(self,valeur):
+        self.mana=valeur
     
     #---------------------
     #Histoire
@@ -38,16 +74,8 @@ class MondeMedieval:
         self.interface.afficher("2) ignore le et entre dans la ville")
         self.interface.attendre_reponse(self.reponse_garde)
         
+    @valider_choix(1,2)
     def reponse_garde(self,choix):
-        #
-        # Choix entre poursuivre l'aventure ou 1ère fin
-        #
-        try:
-            choix =int(choix)
-        except ValueError:
-            self.interface.afficher("Entrée invalide.")
-            return self.medieval1()
-        
         if int(choix)==1:
             self.medieval_marchand1()
         elif int(choix)==2:
@@ -130,6 +158,7 @@ class MondeMedieval:
         self.interface.afficherItalique("3 heures plus tard")
         self.interface.afficher("")
         self.interface.afficher("Tu remarques que la nuit tombre et tu n'as toujours pas trouver le loup ni même ses traces")
+        self.interface.afficher(next(self.jeu.marche))
         self.interface.afficher("pour éviter tout risque, tu décides de rentrer au château et au moment de te retourner, tu vois 2 yeux rouges sang te fixer")
         self.interface.afficher("Tu paniques et 2 choix s'offrent à toi:")
         self.interface.afficher("")
@@ -359,6 +388,8 @@ class MondeMedieval:
         self.interface.afficher("")
         self.interface.afficherItalique("De longues heures de marche plus tard")
         self.interface.afficher("")
+        self.interface.afficher(next(self.jeu.marche))
+        self.interface.afficher("De ce fais,tu te sens de plus en plus angoissé")
         self.interface.afficher("Tu aperçois enfin la grotte ainsi que le soleil qui se lève,tu ressens une point d'angoisse car depuis la malédiction, tu n'avais jamais vu un autre jour se lever.")
         self.interface.afficher("Malgré les craintes, rien ne se passe et tu te demandes si c'est grâce à la femme de l'église")
         self.interface.afficher("tu te réjouis et entre dans la grotte afin de retrouver le mari")
@@ -498,7 +529,7 @@ class MondeMedieval:
         self.interface.afficher("tu as toujours pensé que cela était réservé à certaines personnes mais tu comprends aujourd'hui que toi aussi en était capable")
         self.interface.afficher("tu comprends donc que le parchemin contenait un sort permettant de soigné des blessures et qu'en le trouvant, tu as appris ce sort")
         self.sort.append("soin")
-        self.mana=100
+        self.jeu.mana=100
         self.interface.afficher("Le coffre n'ayant plus rien à offrir, tu décides de ressortir et de continuer ton chemin")
         self.mari_blesse()
 

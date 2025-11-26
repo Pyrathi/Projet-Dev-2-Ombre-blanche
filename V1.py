@@ -5,6 +5,20 @@ import os
 import random
 from mondes.medieval import MondeMedieval
 
+
+def marche_generator():
+        #-----------
+        #Fonction générant une pjrase d'ambiance aléatoire lors d'un déplacement
+        #
+        evenements = [
+            "Un bruit étrange te fait sursauter.",
+            "Tu remarques une silhouette fugace derrière les arbres.",
+            "Ton pas résonne dans le silence.",
+            "Tu sens que quelque chose te surveille...",
+        ]
+        while True:
+            yield random.choice(evenements)
+
 class MondeErreur(Exception):
     """Exception personnalisée pour les erreurs."""
     pass
@@ -45,6 +59,7 @@ class Jeu:
         self.pnj_allie=[]
         self.pnj_ennemi=[]
         self.sort=[]
+        self.marche = marche_generator()
         self.mana=0
         self.monde = None
         self.prctaffect=0
