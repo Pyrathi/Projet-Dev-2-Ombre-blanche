@@ -3,6 +3,7 @@ from tkinter import font, messagebox
 import json
 import os
 import random
+import re
 from mondes.medieval import MondeMedieval
 
 
@@ -437,11 +438,11 @@ class Jeu:
             intensite -= 1
 
     def prehistoire_final(self, choix):
-        try:
-            choix = int(choix)
-        except ValueError:
-            self.interface.afficher("Entrée invalide")
+        if not re.match(r"^[1-2]$", choix.strip()):
+            self.interface.afficher("Entrée invalide, tapez 1 ou 2.")
             return self.prehistoire_croisement()
+        
+        choix =int(choix)
 
         if choix == 2:
             self.interface.afficher("tu allume un feu pour passer la nuit.")
