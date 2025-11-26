@@ -75,7 +75,17 @@ class Jeu:
             "taille": "normal",
             "agressif": True
         }
-
+    @property
+    def temperature(self):
+        return self._temperature
+    
+    @temperature.setter
+    def temperature(self, valeur):
+        if not isinstance(valeur, (int, float)):
+            raise ValueError("La température doit être un nombre.")
+        if valeur <-30 or valeur > 60:
+            raise ValueError("Température préhistorique impossible")
+        self._temperature = valeur
     
     # ------------------------------
     # Sauvegarde / Chargement
@@ -280,6 +290,7 @@ class Jeu:
     def prehistoire1(self):
         if self.faim is None:
             self.faim = 100
+        self.modifier_faim = lambda f: max(0, min(100, self.faim + f))
         self.interface.afficher("Tu te réveilles allongé sur un sol chaud, entouré de fougères géantes.")
         self.interface.afficher("Ton ventre gargouille. Il va falloir trouver à manger pour survivre.")
         self.interface.afficher("En regardant autour de toi, tu aperçois :")
@@ -314,20 +325,21 @@ class Jeu:
     def prehistoire_lac_reponse(self, choix):
         try:
             choix = int(choix)
-        except:
+        except ValueError:
+            self.interface.afficher("Entrée invalide.")
             return self.prehistoire_lac()
 
         if choix == 1:
             self.interface.afficher("Tu attrapes un poisson et tu le manges.")
             self.interface.afficher("Quelques heures plus tard tu as une intoxication alimentaire. -50 faim")
-            self.faim -= 50 # jamais > 100
+            self.faim = self.modifier_faim(-50)
             if self.faim <= 0:
                 return self.prehistoire_fin_famine
             self.prehistoire_croisement()
         elif choix == 2:
             self.interface.afficher("Tu bois l’eau.")
             self.interface.afficher("Quelques heures plus tard tu tombes gravement malade. - 91 faim")
-            self.faim -= 91
+            self.faim = self.modifier_faim(-91)
             if self.faim <= 0:
                 return self.prehistoire_fin_famine
             self.prehistoire_croisement()
@@ -343,7 +355,8 @@ class Jeu:
     def prehistoire_grotte_reponse(self, choix):
         try:
             choix = int(choix)
-        except:
+        except ValueError:
+            self.interface.afficher("Entrée invalide.")
             return self.prehistoire_grotte()
 
         if choix == 1:
@@ -358,19 +371,20 @@ class Jeu:
     def prehistoire_tigre(self, choix):
         try:
             choix = int(choix)
-        except:
+        except ValueError:
+            self.interface.afficher("Entrée invalide")
             return self.prehistoire_grotte()
 
         if choix == 1:
             self.interface.afficher("Tu fuis à toute vitesse. -20 faim")
-            self.faim -= 20
+            self.faim = self.modifier_faim(-20)
             if self.faim <= 0:
                 return self.prehistoire_fin_famine()
             self.prehistoire_croisement()
         elif choix == 2:
             self.interface.afficher("Tu te bats courageusement…")
             self.interface.afficher("Tu es blessé ! -40 faim")
-            self.faim -= 40
+            self.faim = self.modifier_faim(-40)
             if self.faim <= 0:
                 return self.prehistoire_fin_famine()
             self.prehistoire_croisement()
@@ -391,7 +405,8 @@ class Jeu:
     def prehistoire_traces_reponse(self, choix):
         try:
             choix = int(choix)
-        except:
+        except ValueError:
+            self.interface.afficher("Entrée invalide")
             return self.prehistoire_traces()
 
         if choix == 1:
@@ -414,15 +429,31 @@ class Jeu:
         self.interface.afficher("2) Allumer un feu")
         self.interface.attendre_reponse(self.prehistoire_final)
 
+        #----------générateur----------
+    def generateur_feu(self):
+        intensite = 3
+        while intensite > 0:
+            yield intensite 
+            intensite -= 1
+
     def prehistoire_final(self, choix):
         try:
             choix = int(choix)
-        except:
+        except ValueError:
+            self.interface.afficher("Entrée invalide")
             return self.prehistoire_croisement()
 
         if choix == 2:
-            self.interface.afficher("Le feu te protège des prédateurs. Tu passes la nuit sain et sauf.")
-            return self.prehistoire_fin_bonne()
+            self.interface.afficher("tu allume un feu pour passer la nuit.")
+            feu = self.generateur_feu()
+            while True:
+                try:
+                    intensite = next(feu)
+                    self.interface.afficher(f"L'intensité du feu est maintenant {intensite}")
+                except StopIteration:
+                    break
+            self.prehistoire_fin_bonne()
+            
         elif choix == 1:
             self.interface.afficher("L'abri est fragile… un prédateur rôde...")
             return self.prehistoire_fin_mauvaise()
