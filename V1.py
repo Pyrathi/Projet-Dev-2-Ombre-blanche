@@ -20,7 +20,10 @@ class BarreAffection:
 
     @valeur.setter
     def valeur(self, v):
-       
+        if v < 0:
+            raise MondeErreur("L'affection ne peut pas être négative")
+        if v > 100:
+            raise MondeErreur("L'affection ne peut pas dépasser 100")
        
         self._valeur = v
     
@@ -36,6 +39,7 @@ class Jeu:
         #
         self.interface=interface
         self.affection = BarreAffection(self)
+        self.format_aff = lambda v: f"Affection actuelle : {v}/100" #fonction lambda affichage affection
         self.nom=""
         self.inventaire=[]
         self.pnj_allie=[]
@@ -215,7 +219,7 @@ class Jeu:
     def rompremiermot(self):
         self.interface.afficher("Vous décidez de vous approchez du banc derrière lequel elle est assise")
         self.interface.afficher("1) Vous êtes debout en face de la où elle est assise et resté silencieux ")
-        self.interface.afficher("2) Vous décidez d'entamer la dicussion  " + "\n\x1B[3m-Vous : Hello\x1B[0m")
+        self.interface.afficher("2) Vous décidez d'entamer la dicussion  " + "\n-Vous : Hello")
         self.interface.attendre_reponse(self.choixabordage)
 
 
@@ -226,7 +230,10 @@ class Jeu:
             self.interface.afficher("Entrée invalide.")
             return self.romance1()
         if int(choix) == 1:
-            self.affection.valeur -= 2
+            try:
+                self.affection.valeur -= 100
+            except MondeErreur:
+                self.affection.valeur=0
             self.approcheSilence()
         elif int(choix) == 2:
             self.approcheToi()
@@ -237,17 +244,20 @@ class Jeu:
 
 
     def approcheSilence(self):
-        self.interface.afficher("Aube lève les yeux vers vous, un malaise s'installe, elle vous dit d'un ton froid" + "\n\x1B[3m-Aube : Tu comptes me regarder comme ça pendant combien de temps?\x1B[0m")
-        self.interface.afficher(f"Affection : {self.affection.valeur}")
+        self.interface.afficher("Aube lève les yeux vers vous, un malaise s'installe, elle vous dit d'un ton froid" + "\n-Aube : Tu comptes me regarder comme ça pendant combien de temps?")
+        self.interface.afficher(self.format_aff(self.affection.valeur))
+
 
 
     def approcheToi(self):
         self.interface.afficher("Aube lève les yeux vers vous, étonné que quelqu'un vienne lui parler")
-        self.interface.afficher("Elle vous dit froidement" + "\n\x1B[3m-Aube : Salut\x1B[0m")
-        self.interface.afficher(f"Affection : {self.affection.valeur}")
+        self.interface.afficher("Elle vous dit froidement" + "\n-Aube : Salut")
+        self.interface.afficher(self.format_aff(self.affection.valeur))
+
     def event100(self):
         self.interface.afficher("\nAube pose ses mains sur tes joues, et elle t'embrasse")
-        self.interface.afficher(f"Affection : {self.affection.valeur}")
+        self.interface.afficher(self.format_aff(self.affection.valeur))
+
 
 # ------------------------------
 # Monde Préhistorique
