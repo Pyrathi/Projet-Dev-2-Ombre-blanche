@@ -23,6 +23,9 @@ def marche_generator():
 class MondeErreur(Exception):
     """Exception personnalisée pour les erreurs."""
     pass
+class ErreurCle(Exception):
+    """Exception personnalisée pour les erreurs de clé."""
+    pass
 class BarreAffection:
     
     def __init__(self, jeu, valeur_initiale=5):
@@ -76,6 +79,13 @@ class Jeu:
             "taille": "normal",
             "agressif": True
         }
+#Futuriste
+        self._cledecrypt=0
+        self.infos_hack = {
+            "niveau": 1,
+            "reput": "Débutant"
+        }
+#Fin futuriste
     @property
     def temperature(self):
         return self._temperature
@@ -87,7 +97,17 @@ class Jeu:
         if valeur <-30 or valeur > 60:
             raise ValueError("Température préhistorique impossible")
         self._temperature = valeur
-    
+#Futuriste
+    @property
+    def cledecrypt(self):
+        return self._cledecrypt
+
+    @cledecrypt.setter
+    def set_cledecrypt(self, valeur):
+        if valeur >= 0 and valeur <=1:
+            self._cledecrypt = valeur
+        else:
+            raise ErreurCle("La valeur de la clé de décryptage doit être 0 ou 1.")
     # ------------------------------
     # Sauvegarde / Chargement
     # ------------------------------
