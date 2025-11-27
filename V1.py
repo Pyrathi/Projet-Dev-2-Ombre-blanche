@@ -69,16 +69,22 @@ class Jeu:
         self.prctaffect=0
         self.faim = None
         self.fichier_save = "sauvegarde.json"
-        self.dino = {
-            "nom": "Brachiosaure",
-            "taille": "immense",
-            "agressif": True
-        }
-        self.tigre = {
-            "nom": "Tigre à dents de sabre",
-            "taille": "normal",
-            "agressif": True
-        }
+        self.objet_animaux=[]
+
+#Préhistorique: fonction possede_objet_animaux pour savoir si je possède l'objet demandée
+    def possede_objet_animaux(self, objet):
+        return objet in self.objet_animaux
+#Préhistorique: fonction afficher objet_animaux pour voir l'inventaire
+    def afficher_objet_animaux(self):
+        if not self.objet_animaux:
+            self.interface.afficher("Ton inventaire est vide.")
+            return
+            
+        self.interface.afficher("Inventaire: ")
+        for objet in self.objet_animaux:
+            self.interface.afficher(" - " + objet)
+
+
 #Futuriste
         self._cledecrypt=0
         self.infos_hack = {
@@ -323,7 +329,7 @@ class Jeu:
     def prehistoire_choix_depart(self, choix):
         try:
             choix = int(choix)
-        except:
+        except ValueError:
             self.interface.afficher("Entrée invalide.")
             return self.prehistoire1()
 
@@ -381,8 +387,8 @@ class Jeu:
             return self.prehistoire_grotte()
 
         if choix == 1:
-            self.interface.afficher(f"un {self.tigre['nom']} de taille {self.tigre['taille']} surgit!")
-            self.interface.afficher(f"")
+            self.interface.afficher("Sur le chemin trouve une pierre par terre et tu l'a prends, qui sait? Peut-être que cela va servir... ")
+            self.interface.afficher("Tout à coup, tu voit un tigre à dent de sabre devant toi qui s'apprète à t'attaqué!")
             self.interface.afficher("1) Fuir")
             self.interface.afficher("2) Te battre avec une pierre")
             self.interface.attendre_reponse(self.prehistoire_tigre)
@@ -406,6 +412,8 @@ class Jeu:
             self.interface.afficher("Tu te bats courageusement…")
             self.interface.afficher("Tu es blessé ! -40 faim")
             self.faim = self.modifier_faim(-40)
+            self.objet_animaux.append("peau du tigre")
+            self.interface.afficher("Tu lui arrache la peau pensant que cela va t'aider pour la suite de l'histoire. ")
             if self.faim <= 0:
                 return self.prehistoire_fin_famine()
             self.prehistoire_croisement()
@@ -414,13 +422,11 @@ class Jeu:
 
     def prehistoire_traces(self):
         self.interface.afficher("Tu suis les traces jusqu'à un dinosaure.")
-        self.inteface.afficher(f"Tu arrives et tu voit un {self.dino['nom']} de taille {self.dino['taille']}!" )
-        if self.dino["agressif"]:
-            self.inteface.afficher("Il semble daugereux!")
-        else:
-            self.inteface.afficher("Il semble innofensif.")
-        self.interface.afficher("1) T'approcher doucement")
-        self.interface.afficher("2) Reculer lentement")
+        self.interface.afficher("Sur le chemin trouve une pierre par terre et tu l'a prends, qui sait? Peut-être que cela va servir... ")
+        self.interface.afficher("Tu arrives et tu voit un dinosaure!" )
+        self.interface.afficher("Il semble daugereux!")
+        self.interface.afficher("1) tu t'approches sans faire attention")
+        self.interface.afficher("2) Tu t'approche lentement")
         self.interface.attendre_reponse(self.prehistoire_traces_reponse)
 
     def prehistoire_traces_reponse(self, choix):
@@ -434,7 +440,11 @@ class Jeu:
             self.interface.afficher("Le dinosaure te voit et te mange...")
             self.prehistoire_fin_mauvaise()
         else:
-            self.interface.afficher("Tu t'éloignes sans problème.")
+            self.interface.afficher("Sans faire de bruit et par miracle tu arrives à le tué grâce à la pierre! ")
+            self.objet_animaux.append("griffe")
+            self.objet_animaux.remove("pierre")
+            self.interface.afficher("Tu lui arrche les griffes. Qui sait? Peu-être que cela va servir...")
+            self.interface.afficher("Malheureusement en te battant, tu casse la pierre")
             self.prehistoire_croisement()
 
     def prehistoire_croisement(self):
@@ -442,7 +452,7 @@ class Jeu:
             if self.faim <10:
                 raise MondeErreur("Tu es trop faible pour continuer!")
         except MondeErreur as e:
-            self.interface.afficher(" {e}")
+            self.interface.afficher(f"{e}")
             return self.prehistoire_fin_famine()
         
         self.interface.afficher("\n La nuit tombe. Tu dois trouver un abri pour survivre.")
@@ -466,6 +476,9 @@ class Jeu:
 
         if choix == 2:
             self.interface.afficher("tu allume un feu pour passer la nuit.")
+            if self.possede_objet_animaux("peau du tigre"):
+                self.interface.afficher("Tu as la peau du tigre qui te réchauffe plus")
+                self.faim = self.modifier_faim(+10)
             feu = self.generateur_feu()
             while True:
                 try:
