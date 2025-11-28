@@ -71,10 +71,11 @@ class Jeu:
         self.fichier_save = "sauvegarde.json"
         self.objet_animaux=[]
 
-#Préhistorique: fonction possede_objet_animaux pour savoir si je possède l'objet demandée
+    #Préhistorique: fonction possede_objet_animaux pour savoir si je possède l'objet demandée
     def possede_objet_animaux(self, objet):
         return objet in self.objet_animaux
-#Préhistorique: fonction afficher objet_animaux pour voir l'inventaire
+    
+    # Préhistorique: fonction afficher objet_animaux pour voir l'inventaire
     def afficher_objet_animaux(self):
         if not self.objet_animaux:
             self.interface.afficher("Ton inventaire est vide.")
@@ -314,6 +315,8 @@ class Jeu:
 # ------------------------------
 # Monde Préhistorique
 # ------------------------------
+    # Début de l'histoire
+
     def prehistoire1(self):
         if self.faim is None:
             self.faim = 100
@@ -326,6 +329,7 @@ class Jeu:
         self.interface.afficher("3) Des traces de pas d’un énorme animal")
         self.interface.attendre_reponse(self.prehistoire_choix_depart)
 
+    # Choisilr entre 3 chemins
     def prehistoire_choix_depart(self, choix):
         try:
             choix = int(choix)
@@ -343,6 +347,7 @@ class Jeu:
             self.interface.afficher("Choix invalide.")
             self.prehistoire1()
 
+    # Choix du premier chemin: boire l'eau ou manger un poisson
     def prehistoire_lac(self):
         self.interface.afficher("Tu arrives près du lac. Des poissons nagent près de la rive.")
         self.interface.afficher("1) Essayer d’attraper un poisson")
@@ -363,6 +368,8 @@ class Jeu:
             if self.faim <= 0:
                 return self.prehistoire_fin_famine
             self.prehistoire_croisement()
+
+        # Première possiblilité de fin (famine) sinon croisement
         elif choix == 2:
             self.interface.afficher("Tu bois l’eau.")
             self.interface.afficher("Quelques heures plus tard tu tombes gravement malade. - 91 faim")
@@ -372,13 +379,15 @@ class Jeu:
             self.prehistoire_croisement()
         else:
             self.prehistoire_lac()
-            
+
+    # Choix du deuxième chemin: entre entrer dans la grotte ou ne pas entrer   
     def prehistoire_grotte(self):
         self.interface.afficher("La grotte est sombre. Des bruits inquiétants résonnent.")
         self.interface.afficher("1) Entrer dans la grotte")
         self.interface.afficher("2) Faire demi-tour")
         self.interface.attendre_reponse(self.prehistoire_grotte_reponse)
 
+    # Choix entre fuir ou se battre
     def prehistoire_grotte_reponse(self, choix):
         try:
             choix = int(choix)
@@ -394,7 +403,7 @@ class Jeu:
             self.interface.attendre_reponse(self.prehistoire_tigre)
         else:
             self.prehistoire_croisement()
-
+    
     def prehistoire_tigre(self, choix):
         try:
             choix = int(choix)
@@ -408,6 +417,8 @@ class Jeu:
             if self.faim <= 0:
                 return self.prehistoire_fin_famine()
             self.prehistoire_croisement()
+
+        # Optention de la peau du tigre
         elif choix == 2:
             self.interface.afficher("Tu te bats courageusement…")
             self.interface.afficher("Tu es blessé ! -40 faim")
@@ -420,9 +431,11 @@ class Jeu:
         else:
             self.prehistoire_grotte()
 
+    # Choix du troisième chemin: entre avancer lentement ou avancer en faisant du bruit + optention d'une pierre
     def prehistoire_traces(self):
         self.interface.afficher("Tu suis les traces jusqu'à un dinosaure.")
         self.interface.afficher("Sur le chemin trouve une pierre par terre et tu l'a prends, qui sait? Peut-être que cela va servir... ")
+        self.objet_animaux.append("pierre")
         self.interface.afficher("Tu arrives et tu voit un dinosaure!" )
         self.interface.afficher("Il semble daugereux!")
         self.interface.afficher("1) tu t'approches sans faire attention")
@@ -435,10 +448,13 @@ class Jeu:
         except ValueError:
             self.interface.afficher("Entrée invalide")
             return self.prehistoire_traces()
-
+        
+        # Deuxième possibilité de fin (mauvaise) sinon croisement
         if choix == 1:
             self.interface.afficher("Le dinosaure te voit et te mange...")
             self.prehistoire_fin_mauvaise()
+
+        # Optention de la griffe du tigre et perte de la pierre
         else:
             self.interface.afficher("Sans faire de bruit et par miracle tu arrives à le tué grâce à la pierre! ")
             self.objet_animaux.append("griffe")
@@ -447,6 +463,7 @@ class Jeu:
             self.interface.afficher("Malheureusement en te battant, tu casse la pierre")
             self.prehistoire_croisement()
 
+    # Croisement entre tout les chemins
     def prehistoire_croisement(self):
         try:
             if self.faim <10:
@@ -460,7 +477,7 @@ class Jeu:
         self.interface.afficher("2) Allumer un feu")
         self.interface.attendre_reponse(self.prehistoire_final)
 
-        #----------générateur----------
+    #----------générateur----------
     def generateur_feu(self):
         intensite = 3
         while intensite > 0:
@@ -494,23 +511,25 @@ class Jeu:
         else:
             self.prehistoire_croisement()
 
+    # Bonne fin sans mourir
     def prehistoire_fin_bonne(self):
         self.interface.afficher("Tu te réveilles vivant. Tu as survécu à la nuit.")
         self.interface.afficher("1) Rejouer\n2) Quitter")
         self.interface.attendre_reponse(self.finjeu)
 
+    # Mauvaise fin (mort)
     def prehistoire_fin_mauvaise(self):
         self.interface.afficher("Vous êtes mort...")
         self.interface.afficher("1) Rejouer\n2) Quitter")
         self.interface.attendre_reponse(self.finjeu)
 
+    # Fin famine, plus assez de vie ou mort de faim
     def prehistoire_fin_famine(self):
         self.interface.afficher("Ton ventre crie famine… tu t'effondres.")
         self.interface.afficher("FIN : Mort de faim.")
         self.interface.afficher("1) Rejouer\n2) Quitter")
         self.interface.attendre_reponse(self.finjeu)
-
-
+    
 # ------------------------------
 # Monde Futuriste
 # ------------------------------
