@@ -71,7 +71,7 @@ class Jeu:
         self.fichier_save = "sauvegarde.json"
         self.objet_animaux=[]
 
-    #Préhistorique: fonction possede_objet_animaux pour savoir si je possède l'objet demandée
+    # Préhistorique: fonction possede_objet_animaux pour savoir si je possède l'objet demandée
     def possede_objet_animaux(self, objet):
         return objet in self.objet_animaux
     
@@ -85,6 +85,10 @@ class Jeu:
         for objet in self.objet_animaux:
             self.interface.afficher(" - " + objet)
 
+    # Préhistorique: modifier la faim du joueur
+    def modifier_faim(self, quantite):
+        self.faim = max(0, min(100, self.faim + quantite))
+        return self.faim
 
 #Futuriste
         self._cledecrypt=0
@@ -223,7 +227,9 @@ class Jeu:
             self.interface.attendre_reponse(self.choisir_monde)
 
    
-    
+    def finjeu(self, _=None):
+        self.interface.afficher("Partie terminée !")
+        self.lancement()
    
 
     # ------------------------------
@@ -320,7 +326,6 @@ class Jeu:
     def prehistoire1(self):
         if self.faim is None:
             self.faim = 100
-        self.modifier_faim = lambda f: max(0, min(100, self.faim + f))
         self.interface.afficher("Tu te réveilles allongé sur un sol chaud, entouré de fougères géantes.")
         self.interface.afficher("Ton ventre gargouille. Il va falloir trouver à manger pour survivre.")
         self.interface.afficher("En regardant autour de toi, tu aperçois :")
@@ -364,7 +369,7 @@ class Jeu:
         if choix == 1:
             self.interface.afficher("Tu attrapes un poisson et tu le manges.")
             self.interface.afficher("Quelques heures plus tard tu as une intoxication alimentaire. -50 faim")
-            self.faim = self.modifier_faim(-50)
+            self.modifier_faim(-50)
             if self.faim <= 0:
                 return self.prehistoire_fin_famine
             self.prehistoire_croisement()
@@ -373,7 +378,7 @@ class Jeu:
         elif choix == 2:
             self.interface.afficher("Tu bois l’eau.")
             self.interface.afficher("Quelques heures plus tard tu tombes gravement malade. - 91 faim")
-            self.faim = self.modifier_faim(-91)
+            self.modifier_faim(-100)
             if self.faim <= 0:
                 return self.prehistoire_fin_famine
             self.prehistoire_croisement()
@@ -413,7 +418,7 @@ class Jeu:
 
         if choix == 1:
             self.interface.afficher("Tu fuis à toute vitesse. -20 faim")
-            self.faim = self.modifier_faim(-20)
+            self.modifier_faim(-20)
             if self.faim <= 0:
                 return self.prehistoire_fin_famine()
             self.prehistoire_croisement()
@@ -422,7 +427,7 @@ class Jeu:
         elif choix == 2:
             self.interface.afficher("Tu te bats courageusement…")
             self.interface.afficher("Tu es blessé ! -40 faim")
-            self.faim = self.modifier_faim(-40)
+            self.modifier_faim(-40)
             self.objet_animaux.append("peau du tigre")
             self.interface.afficher("Tu lui arrache la peau pensant que cela va t'aider pour la suite de l'histoire. ")
             if self.faim <= 0:
@@ -734,3 +739,4 @@ if __name__ == "__main__":
 
         jeu.lancement()
 
+    
