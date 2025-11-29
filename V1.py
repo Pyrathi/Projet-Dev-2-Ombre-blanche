@@ -415,7 +415,7 @@ class Jeu:
         except ValueError:
             self.interface.afficher("Entrée invalide")
             return self.prehistoire_grotte()
-
+        
         if choix == 1:
             self.interface.afficher("Tu fuis à toute vitesse. -20 faim")
             self.modifier_faim(-20)
@@ -500,7 +500,7 @@ class Jeu:
             self.interface.afficher("tu allume un feu pour passer la nuit.")
             if self.possede_objet_animaux("peau du tigre"):
                 self.interface.afficher("Tu as la peau du tigre qui te réchauffe plus")
-                self.faim = self.modifier_faim(+10)
+                self.modifier_faim(+10)
             feu = self.generateur_feu()
             while True:
                 try:
