@@ -6,6 +6,27 @@ import random
 import re
 from mondes.medieval import MondeMedieval
 
+# Préhistroqiue: fonction regex (extraction numérique)
+def extraire_num(texte):
+    correspondance = re.search(r"\d+", texte)
+    if correspondance:
+        return int(correspondance.group()) if correspondance else None
+    
+    # Préhistroqiue: Fonction décorateur (gère les choix des joueurs)
+def valider(min, max):
+    def decorateur(func):
+        def wrapper(self, choix):
+            choix = extraire_num(choix)
+            if choix is None:
+                self.interface.afficher("Entrée invalide.")
+                return func(self, None)
+            if choix < min or choix > max:
+                self.interface.afficher("Choix hors limite.")
+                return func(self, None)
+            return func(self, choix)
+        return wrapper
+    return decorateur
+
 
 def marche_generator():
         #-----------
@@ -335,11 +356,9 @@ class Jeu:
         self.interface.attendre_reponse(self.prehistoire_choix_depart)
 
     # Choisilr entre 3 chemins
+    @valider(1, 3)
     def prehistoire_choix_depart(self, choix):
-        try:
-            choix = int(choix)
-        except ValueError:
-            self.interface.afficher("Entrée invalide.")
+        if choix is None:
             return self.prehistoire1()
 
         if choix == 1:
@@ -348,9 +367,6 @@ class Jeu:
             self.prehistoire_grotte()
         elif choix == 3:
             self.prehistoire_traces()
-        else:
-            self.interface.afficher("Choix invalide.")
-            self.prehistoire1()
 
     # Choix du premier chemin: boire l'eau ou manger un poisson
     def prehistoire_lac(self):
@@ -359,13 +375,11 @@ class Jeu:
         self.interface.afficher("2) Boire de l’eau")
         self.interface.attendre_reponse(self.prehistoire_lac_reponse)
 
+    @valider(1, 2)
     def prehistoire_lac_reponse(self, choix):
-        try:
-            choix = int(choix)
-        except ValueError:
-            self.interface.afficher("Entrée invalide.")
+        if choix is None:
             return self.prehistoire_lac()
-
+        
         if choix == 1:
             self.interface.afficher("Tu attrapes un poisson et tu le manges.")
             self.interface.afficher("Quelques heures plus tard tu as une intoxication alimentaire. -50 faim")
@@ -392,30 +406,28 @@ class Jeu:
         self.interface.afficher("2) Faire demi-tour")
         self.interface.attendre_reponse(self.prehistoire_grotte_reponse)
 
+    @valider(1, 2)
     # Choix entre fuir ou se battre
     def prehistoire_grotte_reponse(self, choix):
-        try:
-            choix = int(choix)
-        except ValueError:
-            self.interface.afficher("Entrée invalide.")
+        if choix is None:
             return self.prehistoire_grotte()
-
+        
         if choix == 1:
             self.interface.afficher("Sur le chemin trouve une pierre par terre et tu l'a prends, qui sait? Peut-être que cela va servir... ")
             self.interface.afficher("Tout à coup, tu voit un tigre à dent de sabre devant toi qui s'apprète à t'attaqué!")
             self.interface.afficher("1) Fuir")
             self.interface.afficher("2) Te battre avec une pierre")
             self.interface.attendre_reponse(self.prehistoire_tigre)
-        else:
+        elif choix == 2:
             self.prehistoire_croisement()
+        else:
+            self.prehistoire_grotte_reponse()
     
+    @valider(1, 2)
     def prehistoire_tigre(self, choix):
-        try:
-            choix = int(choix)
-        except ValueError:
-            self.interface.afficher("Entrée invalide")
-            return self.prehistoire_grotte()
-        
+        if choix is None:
+            return self.prehistoire_grotte_reponse()
+         
         if choix == 1:
             self.interface.afficher("Tu fuis à toute vitesse. -20 faim")
             self.modifier_faim(-20)
@@ -447,11 +459,9 @@ class Jeu:
         self.interface.afficher("2) Tu t'approche lentement")
         self.interface.attendre_reponse(self.prehistoire_traces_reponse)
 
+    @valider(1, 2)
     def prehistoire_traces_reponse(self, choix):
-        try:
-            choix = int(choix)
-        except ValueError:
-            self.interface.afficher("Entrée invalide")
+        if choix is None:
             return self.prehistoire_traces()
         
         # Deuxième possibilité de fin (mauvaise) sinon croisement
@@ -489,13 +499,11 @@ class Jeu:
             yield intensite 
             intensite -= 1
 
+    @valider(1, 2)
     def prehistoire_final(self, choix):
-        if not re.match(r"^[1-2]$", choix.strip()):
-            self.interface.afficher("Entrée invalide, tapez 1 ou 2.")
+        if choix is None:
             return self.prehistoire_croisement()
         
-        choix =int(choix)
-
         if choix == 2:
             self.interface.afficher("tu allume un feu pour passer la nuit.")
             if self.possede_objet_animaux("peau du tigre"):
