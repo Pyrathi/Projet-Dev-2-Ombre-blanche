@@ -79,6 +79,13 @@ class Jeu:
         self.interface=interface
         self.affection = BarreAffection(self)
         self.format_aff = lambda v: f"Affection actuelle : {v}/100" #fonction lambda affichage affection
+        self.choix_choisis_romance=[] #permettra d'affiché les choix sélectionnés
+        self.choix_romance_recap_dico= {
+            1: "Vous partez de la classe sans lui adresser la parole",
+            2: "Vous vous approchez d'Aube pour la première fois",
+            3: "Vous restez silencieux en face d'elle, un malaise s'installe",
+            4: "Vous engagez la conversation et dites 'Hello'"
+        }
         self.nom=""
         self.inventaire=[]
         self.pnj_allie=[]
@@ -256,6 +263,7 @@ class Jeu:
     # ------------------------------
     # Romance
     # ------------------------------
+    
     def romance1(self):
         #
         # Début de la romance
@@ -277,10 +285,14 @@ class Jeu:
         except ValueError:
             self.interface.afficher("Entrée invalide.")
             return self.romance1()
+        
+        
         if int(choix) == 1:
+            self.choix_choisis_romance.append(1)
             self.romfin1()
         elif int(choix) == 2:
-            self.rompremiermot()
+            self.choix_choisis_romance.append(2)
+            self.rompremiermot()    
         else:
             self.romance1()
 
@@ -309,18 +321,30 @@ class Jeu:
         except ValueError:
             self.interface.afficher("Entrée invalide.")
             return self.romance1()
+        
+        
+
         if int(choix) == 1:
             try:
-                self.affection.valeur -= 100
+                self.affection.valeur -= 5
             except MondeErreur:
                 self.affection.valeur=0
+
+            self.choix_choisis_romance.append(3)   
             self.approcheSilence()
+            for num in self.choix_choisis_romance:
+                texte = self.choix_romance_recap_dico.get(num, f"(Choix {num} non défini)")
+                self.interface.afficher(f"{num}) {texte}")
         elif int(choix) == 2:
+            self.choix_choisis_romance.append(4)
             self.approcheToi()
             self.affection.valeur += 95
-            
+            for num in self.choix_choisis_romance:
+                texte = self.choix_romance_recap_dico.get(num, f"(Choix {num} non défini)")
+                self.interface.afficher(f"{num}) {texte}")
         else:
             self.rompremiermot()
+        
 
 
     def approcheSilence(self):
