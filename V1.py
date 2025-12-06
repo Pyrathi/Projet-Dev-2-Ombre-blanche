@@ -30,7 +30,7 @@ def valider(min, max):
 
 def marche_generator():
         #-----------
-        #Fonction générant une pjrase d'ambiance aléatoire lors d'un déplacement
+        #Fonction générant une phrase d'ambiance aléatoire lors d'un déplacement
         #
         evenements = [
             "Un bruit étrange te fait sursauter.",
