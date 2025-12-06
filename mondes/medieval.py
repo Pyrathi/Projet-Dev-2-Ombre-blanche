@@ -67,7 +67,9 @@ class MondeMedieval:
         self.interface.afficher("En ouvrant les yeux, tu remarques que tu te trouves au bord d'un chemin.")
         self.interface.afficher("tu décides de regarder autour de toi pour comprendre où tu es et finis par apercevoir un château au loin.")
         self.interface.afficher("Après une courte réflexion,tu décides de t'y rendre")
+        self.interface.afficher("")
         self.interface.afficherItalique("1 heure de marche plus tard")
+        self.interface.afficher("")
         self.interface.afficher("Tu arrives devant les murailles du château \n en t'avançant, tu rencontres un garde :")
         self.interface.afficher("")
         self.interface.afficher("1) Salue le poliment")
@@ -120,16 +122,12 @@ class MondeMedieval:
         self.interface.afficher("1) Accepter d'aider le marchand")
         self.interface.afficher("2) Refuser de l'aider")
         self.interface.attendre_reponse(self.reponse_marchand)
-
+   
+    valider_choix(1,2)
     def reponse_marchand(self,choix):
         #
         # Séparation des chemins de quête selon la réponse de l'utilisateur
         #
-        try:
-            choix =int(choix)
-        except ValueError:
-            self.interface.afficher("Entrée invalide.")
-            return self.medieval_marchand1()
         if int(choix)==1:
             self.quete_loup()
         elif int(choix)==2:
@@ -166,15 +164,11 @@ class MondeMedieval:
         self.interface.afficher("2) Tu dégaines ton épée et te prépares au combat")
         self.interface.attendre_reponse(self.reponse_loup1)
 
+    valider_choix(1,2)
     def reponse_loup1(self,choix):
         #
         # Séparation des chemins de quête selon la réponse de l'utilisateur
         #
-        try:
-            choix =int(choix)
-        except ValueError:
-            self.interface.afficher("Entrée invalide.")
-            return self.quete_loup()
         if int(choix)==1:
             self.fuite_foret()
         elif int(choix)==2:
@@ -224,15 +218,11 @@ class MondeMedieval:
         self.interface.afficher("3) Attendre de voir ce qu'il fait")
         self.interface.attendre_reponse(self.reponse_loup2)
 
+    valider_choix(1,3)
     def reponse_loup2(self,choix):
         #
         # Séparation des chemins de quête selon la réponse de l'utilisateur
         #
-        try:
-            choix =int(choix)
-        except ValueError:
-            self.interface.afficher("Entrée invalide.")
-            return self.quete_loup()
         if int(choix)==1:
             self.fuite_foret()
         elif int(choix)==2:
@@ -285,15 +275,11 @@ class MondeMedieval:
         self.interface.afficher("2) Les ignorer et entrer dans l'église")
         self.interface.attendre_reponse(self.reponse_place)
     
+    valider_choix(1,2)
     def reponse_place(self,choix):
         #
         # Séparation des chemins de quête selon la réponse de l'utilisateur
         #
-        try:
-            choix =int(choix)
-        except ValueError:
-            self.interface.afficher("Entrée invalide.")
-            return self.medieval_place()
         if int(choix)==1:
             self.discussion_gardes()
         elif int(choix)==2:
@@ -306,7 +292,7 @@ class MondeMedieval:
         self.interface.afficher("tu t'approches doucement en essayant d'écouter leur discussion")
         self.interface.afficher("De là où tu es, tu parviens a entendre quelques bribes")
         self.interface.afficher("")
-        self.interface.afficherItalique("Seigneur ... disparu ... guerre ... fuire...famille")
+        self.interface.afficherItalique("Seigneur ... malade ... sorcier ... fuite...malédiction")
         self.interface.afficher("")
         self.interface.afficher("Les gardes finissent de parler et commencent à s'éloigner")
         self.interface.afficher("Après avoir entendu ça, tu te demandes si tu devrais les suivre ou retourner dans l'église")
@@ -315,12 +301,8 @@ class MondeMedieval:
         self.interface.afficher("2) Retourner dans l'église")
         self.interface.attendre_reponse(self.reponse_filature)
     
+    valider_choix(1,2)
     def reponse_filature(self,choix):
-        try:
-            choix =int(choix)
-        except ValueError:
-            self.interface.afficher("Entrée invalide.")
-            return self.discussion_gardes()
         if int(choix)==1:
             self.filature_garde()
         elif int(choix)==2:
@@ -348,12 +330,8 @@ class MondeMedieval:
         self.interface.afficher("2) T'excuser et lui dire que ne peut pas l'aider car tu dois partir au plus vite")
         self.interface.attendre_reponse(self.reponse_femme_triste)
 
+    valider_choix(1,2)
     def reponse_femme_triste(self,choix):
-        try:
-            choix =int(choix)
-        except ValueError:
-            self.interface.afficher("Entrée invalide.")
-            return self.rencontre_eglise()
         if int(choix)==1:
             self.quete_grotte()
         elif int(choix)==2:
@@ -399,12 +377,8 @@ class MondeMedieval:
         self.interface.afficher("2)celui de droite")
         self.interface.attendre_reponse(self.grotte_entree)
         
+    valider_choix(1,2)    
     def grotte_entree(self,choix):
-        try:
-            choix =int(choix)
-        except ValueError:
-            self.interface.afficher("Entrée invalide.")
-            return self.quete_grotte()
         if int(choix)==1:
             self.grotte_porte()
         elif int(choix)==2:
@@ -420,17 +394,12 @@ class MondeMedieval:
         self.interface.afficher("")
         self.interface.afficher("1) Te jeter dessus en profitant qu'il soit assoupi pour prendre le dessus")
         self.interface.afficher("2) le contourner doucement en essayant de ne pas le réveiller")
-        for i in self.inventaire:
-            if i=="epee":
-                self.interface.afficher("3) Dégainer ton épéer et le tuer dans son sommeil")
+        if "epee" in self.inventaire:
+            self.interface.afficher("3) Dégainer ton épéer et le tuer dans son sommeil")
         self.interface.attendre_reponse(self.gobelin)
     
+    valider_choix(1,3)
     def gobelin(self,choix):
-        try:
-            choix =int(choix)
-        except ValueError:
-            self.interface.afficher("Entrée invalide.")
-            return self.grotte_combat()
         if int(choix)==1:
             self.mort_gobelin()
         elif int(choix)==2:
@@ -483,12 +452,8 @@ class MondeMedieval:
         self.interface.afficher("2) passer ton chemin pour aller retrouver l'homme")
         self.interface.attendre_reponse(self.choix_porte_cache)
         
+    valider_choix(1,2)
     def choix_porte_cache(self,choix):
-        try:
-            choix =int(choix)
-        except ValueError:
-            self.interface.afficher("Entrée invalide.")
-            return self.tuer_gobelin()
         if int(choix)==1:
             self.passage_secret()
         elif int(choix)==2:
@@ -507,10 +472,10 @@ class MondeMedieval:
         self.interface.afficher("Tu arrives dans un salle plutôt chaleureuse, tu observes les alentours et ne repère aucune mennace.")
         self.interface.afficher("Tu vois un vieille porte au fond avec un cadenas")
         self.interface.afficher("Malgré le cadenas, tu essaies de forcer la porte mais elle ne bouge pas")
-        for i in self.inventaire:
-            if i=="cle":
-                self.porte_ouverte()
-        self.retour()
+        if "cle" in self.inventaire:
+            self.porte_ouverte()
+        else:    
+            self.retour()
 
     def retour(self):
         self.interface.afficher("")
@@ -535,12 +500,53 @@ class MondeMedieval:
 
     def mari_blesse(self):
         self.interface.afficher("")
-        self.interface.afficher("tt")
+        self.interface.afficher("Tu arrives finalement dans une petite salle, tu aperçois une silhouette allongée au loin")
+        self.interface.afficher("En t'approchant,tu vois que c'est un homme et qu'il à l'air d'être sévèrement blesser à l'abdomen.")
+        self.interface.afficher("Il t'entend arriver, saisit maladroitement son épee malgré la souffrance que tu peux lire sur son visage,")
+        self.interface.afficher("tu lui expliques calmement que sa femme t'as envoyé pour le retrouver car elle s'inquiétait pour lui.")
+        self.interface.afficher("N'ayant pas vraiment le choix, l'homme te fais confiance et te demandes ton aide pour sortir d'ici.")
+        self.interface.afficher("")
+        self.interface.afficher("1) l'aider en lui administrant les premiers soin et en le portant jusqu'au village")
+        self.interface.afficher("2) Profiter d'être seul pour l'achever et lui voler ses affaires")
+        if "soin" in self.sort:
+            self.interface.afficher("3) Utiliser ton nouveau pouvoir pour le soigner")
+        self.interface.attendre_reponse(self.choix_mari)
 
+    valider_choix(1,3)
+    def choix_mari(self,choix):
+        if int(choix)==1:
+            self.femme_soigne()
+        elif int(choix)==2:
+            self.mauvaise_nouvelle()
+        elif int(choix)==3 and "soin" in self.sort:
+            self.retrouvaille()
+        else:
+            self.mari_blesse()
 
+    def femme_soigne(self):
+        self.interface.afficher("")
+        self.interface.afficher("Tu rentres tant bien que mal au village avec l'homme blessé.")
+        self.interface.afficher("Arrivé à l'église, la femme se rue vers vous et soigne le mari à l'aide d'un sort de soin,")
+        self.interface.afficher("en la voyant faire, tu comprends que c'est elle qui à levé la malédiction qui pesait sur ton âme.")
+        self.interface.afficher("Une fois l'homme complètement guérit, elle te remercies du fond du coeur")
+        self.suite_eglise()
+
+    def mauvaise_nouvelle(self):
+        self.interface.afficher("")
+        self.interface.afficher("Tu rentres au village, heureux du butin que tu as récuperer.")
+        self.interface.afficher("Tu te rends à l'église et adopte une mine sombre,")
+        self.interface.afficher("en t'apercevant, la femme vient te voir mais en te voyant seul avec un air sombre,")
+        self.interface.afficher("elle comprend que son mari n'a pas survécu, elle fond en larmes,incapable de prononcer quoi que se soit.")
+        self.interface.afficher("Tu lui dis que tu as fais tout ce qui était en ton puvoir mais tu es arrivé trop tard.")
+        self.interface.afficher("tu la laisse seul quelques minutes pour qu'elle reprenne ses esprits.")
+        self.suit_eglise()
+
+    def retrouvaille(self):
+        self.interface.afficher("")
+        self.interface.afficher("Vous rentrez au village ensemble.")
 
     #--------------------------
-    # Guerre/Disparition Seigneur
+    # malédiction Seigneur
     #--------------------------
     def filature_garde(self):
         self.interface.afficher("t")
