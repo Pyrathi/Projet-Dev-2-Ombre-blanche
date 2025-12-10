@@ -409,17 +409,16 @@ class Jeu:
             self.interface.afficher("Quelques heures plus tard tu as une intoxication alimentaire. -50 faim")
             self.modifier_faim(-50)
             if self.faim <= 0:
-                return self.prehistoire_fin_famine
+                return self.prehistoire_fin_famine()
             self.prehistoire_croisement()
 
         # Première possiblilité de fin (famine) sinon croisement
         elif choix == 2:
             self.interface.afficher("Tu bois l’eau.")
-            self.interface.afficher("Quelques heures plus tard tu tombes gravement malade. - 91 faim")
+            self.interface.afficher("Quelques heures plus tard tu tombes gravement malade. - 100 faim")
             self.modifier_faim(-100)
             if self.faim <= 0:
-                return self.prehistoire_fin_famine
-            self.prehistoire_croisement()
+                return self.prehistoire_fin_famine()
         else:
             self.prehistoire_lac()
 
@@ -444,8 +443,6 @@ class Jeu:
             self.interface.attendre_reponse(self.prehistoire_tigre)
         elif choix == 2:
             self.prehistoire_croisement()
-        else:
-            self.prehistoire_grotte_reponse()
     
     @valider(1, 2)
     def prehistoire_tigre(self, choix):
@@ -457,7 +454,7 @@ class Jeu:
             self.modifier_faim(-20)
             if self.faim <= 0:
                 return self.prehistoire_fin_famine()
-            self.prehistoire_croisement()
+            return self.prehistoire_croisement()
 
         # Optention de la peau du tigre
         elif choix == 2:
@@ -468,9 +465,7 @@ class Jeu:
             self.interface.afficher("Tu lui arrache la peau pensant que cela va t'aider pour la suite de l'histoire. ")
             if self.faim <= 0:
                 return self.prehistoire_fin_famine()
-            self.prehistoire_croisement()
-        else:
-            self.prehistoire_grotte()
+            return self.prehistoire_croisement()
 
     # Choix du troisième chemin: entre avancer lentement ou avancer en faisant du bruit + optention d'une pierre
     def prehistoire_traces(self):
