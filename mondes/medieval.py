@@ -1,5 +1,6 @@
 import re
 import random
+import sys
 
 def extraire_numero(texte):
     #---------
@@ -112,7 +113,7 @@ class MondeMedieval:
         if int(choix)==1:
             self.jeu.lancement()
         else:
-            exit
+           sys.exit
 
     def medieval_marchand1(self):
         #
@@ -129,7 +130,7 @@ class MondeMedieval:
         self.interface.afficher("2) Refuser de l'aider")
         self.interface.attendre_reponse(self.reponse_marchand)
    
-    valider_choix(1,2)
+    @valider_choix(1,2)
     def reponse_marchand(self,choix):
         '''
         PRE: choix doit être 1 ou 2
@@ -173,7 +174,7 @@ class MondeMedieval:
         self.interface.afficher("2) Tu dégaines ton épée et te prépares au combat")
         self.interface.attendre_reponse(self.reponse_loup1)
 
-    valider_choix(1,2)
+    @valider_choix(1,2)
     def reponse_loup1(self,choix):
         '''
         PRE: choix doit être 1 ou 2
@@ -228,7 +229,7 @@ class MondeMedieval:
         self.interface.afficher("3) Attendre de voir ce qu'il fait")
         self.interface.attendre_reponse(self.reponse_loup2)
 
-    valider_choix(1,3)
+    @valider_choix(1,3)
     def reponse_loup2(self,choix):
         '''
         PRE: choix doit être 1, 2 ou 3
@@ -287,7 +288,7 @@ class MondeMedieval:
         self.interface.afficher("2) Les ignorer et entrer dans l'église")
         self.interface.attendre_reponse(self.reponse_place)
     
-    valider_choix(1,2)
+    @valider_choix(1,2)
     def reponse_place(self,choix):
         '''
         PRE: choix doit être 1 ou 2
@@ -314,7 +315,7 @@ class MondeMedieval:
         self.interface.afficher("2) Retourner dans l'église")
         self.interface.attendre_reponse(self.reponse_filature)
     
-    valider_choix(1,2)
+    @valider_choix(1,2)
     def reponse_filature(self,choix):
         '''
         PRE: choix doit être 1 ou 2
@@ -347,7 +348,7 @@ class MondeMedieval:
         self.interface.afficher("2) T'excuser et lui dire que ne peut pas l'aider car tu dois partir au plus vite")
         self.interface.attendre_reponse(self.reponse_femme_triste)
 
-    valider_choix(1,2)
+    @valider_choix(1,2)
     def reponse_femme_triste(self,choix):
         '''
         PRE: choix doit être 1 ou 2
@@ -398,7 +399,7 @@ class MondeMedieval:
         self.interface.afficher("2)celui de droite")
         self.interface.attendre_reponse(self.grotte_entree)
         
-    valider_choix(1,2)    
+    @valider_choix(1,2)    
     def grotte_entree(self,choix):
         """
         PRE: choix doit être 1 ou 2
@@ -423,7 +424,7 @@ class MondeMedieval:
             self.interface.afficher("3) Dégainer ton épéer et le tuer dans son sommeil")
         self.interface.attendre_reponse(self.gobelin)
     
-    valider_choix(1,3)
+    @valider_choix(1,3)
     def gobelin(self,choix):
         """ 
         PRE: choix doit être 1, 2 ou 3
@@ -481,7 +482,7 @@ class MondeMedieval:
         self.interface.afficher("2) passer ton chemin pour aller retrouver l'homme")
         self.interface.attendre_reponse(self.choix_porte_cache)
         
-    valider_choix(1,2)
+    @valider_choix(1,2)
     def choix_porte_cache(self,choix):
         """
         PRE: choix doit être 1 ou 2
@@ -545,7 +546,7 @@ class MondeMedieval:
             self.interface.afficher("3) Utiliser ton nouveau pouvoir pour le soigner")
         self.interface.attendre_reponse(self.choix_mari)
 
-    valider_choix(1,3)
+    @valider_choix(1,3)
     def choix_mari(self,choix):
         """
         PRE: choix doit être 1, 2 ou 3
@@ -591,7 +592,7 @@ class MondeMedieval:
         self.interface.afficher("2) Refuser et continuer ton aventure")
         self.interface.attendre_reponse(self.choix_futur)
 
-    valider_choix(1,2)
+    @valider_choix(1,2)
     def choix_futur(self,choix):
         """
         PRE: choix doit être 1 ou 2
@@ -641,7 +642,7 @@ class MondeMedieval:
         else:
             self.roi()
     
-    valider_choix(1,2)
+    @valider_choix(1,2)
     def choix_roi(self,choix):
         self.interface.afficher("")
         if int(choix)==1:
@@ -675,7 +676,7 @@ class MondeMedieval:
         self.interface.afficher("2) Fuir le château et le village avant que la nouvelle se répande")
         self.interface.attendre_reponse(self.choix_roi_sans_soin)
     
-    valider_choix(1,2)
+    @valider_choix(1,2)
     def choix_roi_sans_soin(self,choix):
         """
         PRE: choix doit être 1 ou 2
@@ -730,7 +731,7 @@ class MondeMedieval:
         self.interface.afficher("2) Aller leur parler")
         self.interface.attendre_reponse(self.choix_chateau)
     
-    valider_choix(1,2)
+    @valider_choix(1,2)
     def choix_chateau(self,choix):
         if int(choix)==1:
             self.infiltration()
@@ -753,7 +754,7 @@ class MondeMedieval:
         self.interface.afficher("2) Abandonner et partir")
         self.interface.attendre_reponse(self.choix_gardes_parle)
 
-    valider_choix(1,2)
+    @valider_choix(1,2)
     def choix_gardes_parle(self,choix):
         """
         PRE: choix doit être 1 ou 2
@@ -804,7 +805,7 @@ class MondeMedieval:
         self.interface.afficher("3) Promettre de retrouver le sorcier")
         self.interface.attendre_reponse(self.choix_roi_infiltration)
 
-    valider_choix(1,3)
+    @valider_choix(1,3)
     def choix_roi_infiltration(self,choix):
         """
         PRE: choix doit être 1, 2 ou 3
@@ -850,7 +851,7 @@ class MondeMedieval:
         self.interface.afficher("2) Te préparer à combattre le sorcier")
         self.interface.attendre_reponse(self.choix_confrontation)
     
-    valider_choix(1,2)
+    @valider_choix(1,2)
     def choix_confrontation(self,choix):
         """
         PRE: choix doit être 1 ou 2
@@ -888,7 +889,7 @@ class MondeMedieval:
         self.interface.afficher("2) Lui foncer dessus pour tenter de le surprendre")
         self.interface.attendre_reponse(self.choix_strategie)
     
-    valider_choix(1,2)
+    @valider_choix(1,2)
     def choix_strategie(self,choix):
         """
         PRE: choix doit être 1 ou 2
@@ -926,7 +927,7 @@ class MondeMedieval:
             self.interface.afficher("3) Utiliser le sort offensif que le roi t'a donné")
         self.interface.attendre_reponse(self.choix_final_sorcier)
         
-    valider_choix(1,3)
+    @valider_choix(1,3)
     def choix_final_sorcier(self,choix):
         """
         PRE: choix doit être 1, 2 ou 3
@@ -970,7 +971,7 @@ class MondeMedieval:
         self.interface.afficher("2) Le tuer directement")
         self.interface.attendre_reponse(self.dernier_sorcier)
 
-    valider_choix(1,2)
+    @valider_choix(1,2)
     def dernier_sorcier(self,choix):
         """
         PRE: choix doit être 1 ou 2
