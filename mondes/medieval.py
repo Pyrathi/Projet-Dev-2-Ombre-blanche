@@ -78,6 +78,10 @@ class MondeMedieval:
         
     @valider_choix(1,2)
     def reponse_garde(self,choix):
+        '''
+        PRE: choix doit être 1 ou 2
+        POST: Renvoie vers la suite de l'histoire selon le choix de l'utilisateur
+        '''
         if int(choix)==1:
             self.medieval_marchand1()
         elif int(choix)==2:
@@ -125,9 +129,10 @@ class MondeMedieval:
    
     valider_choix(1,2)
     def reponse_marchand(self,choix):
-        #
-        # Séparation des chemins de quête selon la réponse de l'utilisateur
-        #
+        '''
+        PRE: choix doit être 1 ou 2
+        POST: Renvoie vers la suite de l'histoire selon le choix de l'utilisateur
+        '''
         if int(choix)==1:
             self.quete_loup()
         elif int(choix)==2:
@@ -166,9 +171,10 @@ class MondeMedieval:
 
     valider_choix(1,2)
     def reponse_loup1(self,choix):
-        #
-        # Séparation des chemins de quête selon la réponse de l'utilisateur
-        #
+        '''
+        PRE: choix doit être 1 ou 2
+        POST: Renvoie vers la suite de l'histoire selon le choix de l'utilisateur
+        '''
         if int(choix)==1:
             self.fuite_foret()
         elif int(choix)==2:
@@ -220,9 +226,10 @@ class MondeMedieval:
 
     valider_choix(1,3)
     def reponse_loup2(self,choix):
-        #
-        # Séparation des chemins de quête selon la réponse de l'utilisateur
-        #
+        '''
+        PRE: choix doit être 1, 2 ou 3
+        POST: Renvoie vers la suite de l'histoire selon le choix de l'utilisateur
+        '''
         if int(choix)==1:
             self.fuite_foret()
         elif int(choix)==2:
@@ -277,9 +284,10 @@ class MondeMedieval:
     
     valider_choix(1,2)
     def reponse_place(self,choix):
-        #
-        # Séparation des chemins de quête selon la réponse de l'utilisateur
-        #
+        '''
+        PRE: choix doit être 1 ou 2
+        POST: Renvoie vers la suite de l'histoire selon le choix de l'utilisateur
+        '''
         if int(choix)==1:
             self.discussion_gardes()
         elif int(choix)==2:
@@ -303,6 +311,10 @@ class MondeMedieval:
     
     valider_choix(1,2)
     def reponse_filature(self,choix):
+        '''
+        PRE: choix doit être 1 ou 2
+        POST: Renvoie vers la suite de l'histoire selon le choix de l'utilisateur
+        '''
         if int(choix)==1:
             self.filature_garde()
         elif int(choix)==2:
@@ -332,6 +344,10 @@ class MondeMedieval:
 
     valider_choix(1,2)
     def reponse_femme_triste(self,choix):
+        '''
+        PRE: choix doit être 1 ou 2
+        POST: Renvoie vers la suite de l'histoire selon le choix de l'utilisateur
+        '''
         if int(choix)==1:
             self.quete_grotte()
         elif int(choix)==2:
@@ -379,6 +395,10 @@ class MondeMedieval:
         
     valider_choix(1,2)    
     def grotte_entree(self,choix):
+        """
+        PRE: choix doit être 1 ou 2
+        POST: Renvoie vers la suite de l'histoire selon le choix de l'utilisateur
+        """
         if int(choix)==1:
             self.grotte_porte()
         elif int(choix)==2:
@@ -400,6 +420,10 @@ class MondeMedieval:
     
     valider_choix(1,3)
     def gobelin(self,choix):
+        """ 
+        PRE: choix doit être 1, 2 ou 3
+        POST: Renvoie vers la suite de l'histoire selon le choix de l'utilisateur'
+        """
         if int(choix)==1:
             self.mort_gobelin()
         elif int(choix)==2:
@@ -454,6 +478,10 @@ class MondeMedieval:
         
     valider_choix(1,2)
     def choix_porte_cache(self,choix):
+        """
+        PRE: choix doit être 1 ou 2
+        POST: Renvoie vers la suite de l'histoire selon le choix de l'utilisateur
+        """
         if int(choix)==1:
             self.passage_secret()
         elif int(choix)==2:
@@ -514,6 +542,10 @@ class MondeMedieval:
 
     valider_choix(1,3)
     def choix_mari(self,choix):
+        """
+        PRE: choix doit être 1, 2 ou 3
+        POST: Renvoie vers la suite de l'histoire selon le choix de l'utilisateur
+        """
         if int(choix)==1:
             self.femme_soigne()
         elif int(choix)==2:
@@ -537,13 +569,81 @@ class MondeMedieval:
         self.interface.afficher("Tu te rends à l'église et adopte une mine sombre,")
         self.interface.afficher("en t'apercevant, la femme vient te voir mais en te voyant seul avec un air sombre,")
         self.interface.afficher("elle comprend que son mari n'a pas survécu, elle fond en larmes,incapable de prononcer quoi que se soit.")
-        self.interface.afficher("Tu lui dis que tu as fais tout ce qui était en ton puvoir mais tu es arrivé trop tard.")
+        self.interface.afficher("Tu lui dis que tu as fais tout ce qui était en ton pouvoir mais tu es arrivé trop tard.")
         self.interface.afficher("tu la laisse seul quelques minutes pour qu'elle reprenne ses esprits.")
         self.suit_eglise()
 
     def retrouvaille(self):
         self.interface.afficher("")
         self.interface.afficher("Vous rentrez au village ensemble.")
+        self.interface.afficher("Arrivé à l'église, la femme se rue dans les bras de son mari et te remercie du fond du coeur de l'avoir sauvé.")
+        self.interface.afficher("Elle te dis qu'elle a senti que tu étais quelqu'un de bien et qu'elle a voulu t'aider en levant la malédiction qui pesait sur ton âme.")
+        self.interface.afficher("tu la remercies et lui dis que tu es heureux d'avoir pu l'aider. Tu lui expliques aussi que tu as découvert un nouveau pouvoir en entrant dans la grotte")
+        self.interface.afficher("Elle te dis que c'est un don rare et que tu devrais l'utiliser à bon escient.")
+        self.interface.afficher("Elle te propose de rester à l'église et d'utiliser ton don pour sauver les autres avec elle")
+        self.interface.afficher("")
+        self.interface.afficher("1) Accepter sa proposition et rester à l'église")
+        self.interface.afficher("2) Refuser et continuer ton aventure")
+        self.interface.attendre_reponse(self.choix_futur)
+
+    valider_choix(1,2)
+    def choix_futur(self,choix):
+        """
+        PRE: choix doit être 1 ou 2
+        POST: Renvoie vers la suite de l'histoire selon le choix de l'utilisateur
+        """
+        if int(choix)==1:
+            self.fin_eglise()
+        elif int(choix)==2:
+            self.suite_eglise()
+        else:
+            self.retrouvaille()
+
+    def fin_eglise(self):
+        self.interface.afficher("")
+        self.interface.afficher("Tu décides de rester à l'église et d'utiliser ton don pour sauver les autres.")
+        self.interface.afficher("Tu passes le reste de ta vie à aider les autres et à vivre en paix, libéré de la malédiction qui pesait sur ton âme.")
+        self.interface.afficher("")
+        self.interface.afficherItalique("Félicitations: Vous avez atteint la 2ème fin !")
+        self.interface.afficher("")
+        self.interface.afficher("1) Rejouer")
+        self.interface.afficher("2) Quitter") 
+        self.interface.attendre_reponse(self.finjeu)
+
+    def suite_eglise(self):
+        self.interface.afficher("")
+        self.interface.afficher("Après avoir passé du temps à l'église, tu décides de reprendre ta route")
+        self.interface.afficher("tu te diriges vers le château afin d'aller voir le roi") 
+        self.interface.afficher("En arrivant, tu vois les portes ouvertes et aucun gardes en vue.")
+        self.interface.afficher("tu entres prudemment et avances dans les couloirs jusqu'à arriver devant la salle du trône")
+        self.interface.afficher("à ta grande surprise, le roi n'est pas là, à sa place se trouve un trône vide")
+        self.interface.afficher("Tu décides donc d'explorer le château à la recherche d'indices sur ce qu'il se passe")
+        self.interface.afficher("")
+        self.interface.afficherItalique("1 bonne heure de fouille plus tard")
+        self.interface.afficher("")
+        self.interface.afficher("tu arrives devant une porte entrouverte d'où s'échappe une lumière diffuse")
+        self.interface.afficher("tu t'approches doucement et aperçois le roi alongé sur un lit, visiblement malade")
+        self.interface.afficher("il t'entend arriver et te dit d'une voix faible:")
+        self.interface.afficher("")
+        self.interface.afficherItalique("comme tu peux le voir, je suis très malade et je ne sais pas combien de temps il me reste")
+        self.interface.afficherItalique("je pense que c'est l'oeuvre d'un sorcier maléfique qui m'a jeté une malédiction")
+        self.interface.afficherItalique("je ne pourrais donc pas t'aider si c'est la raison pour laquelle tu es venu.")
+        if "soin" in self.sort:
+            self.interface.afficher("Tu lui dis que tu es à la recherche de ce sorcier et que tu te comptes l'éliminer")
+            self.interface.afficher("")
+            self.interface.afficher("1) Utiliser ton sort de soin pour tenter de le guérir")
+            self.interface.afficher("2) Lui dire que tu ne peux pas l'aider et partir")
+            self.interface.attendre_reponse(self.choix_roi)
+        else:
+            self.interface.afficher("Tu lui dis que tu es à la recherche de ce sorcier et que tu te comptes l'éliminer")
+            self.interface.afficher("Le roi te remercie pour ton aide mais te dis qu'il ne peut rien faire pour toi dans son état et que tu ne pourras rien contre le sorcier.")
+            self.interface.afficher("tu le remercies pour ses conseils. ")
+            self.interface.afficher("tu vois son regard devenir vide et tu comprends qu'il vient de rendre son dernier souffle.")
+            self.interface.afficher("tu ne sais pas quoi faire dans cette situation:")
+            self.interface.afficher("")
+            self.interface.afficher("1) Prévenir les gardes du château")
+            self.interface.afficher("2) Fuir le château et le village avant que la nouvelle se répande")
+            self.interface.attendre_reponse(self.choix_roi_sans_soin)
 
     #--------------------------
     # malédiction Seigneur
