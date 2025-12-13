@@ -670,6 +670,12 @@ class InterfaceTk:
         self.root.attributes("-fullscreen", True)
         self.root.update_idletasks()
 
+        image_originale_inventaire = tk.PhotoImage(file="assets/chest.png")
+        self.img_inventaire = image_originale_inventaire.subsample(4, 4)
+
+        image_originale_sort= tk.PhotoImage(file="assets/parchment.png")
+        self.img_sort = image_originale_sort.subsample(4, 4)
+
         self.root.bind("<Escape>", lambda e: self.root.attributes("-fullscreen", False))
         self.root.title("Aventure Textuelle")
         self.zone = tk.Text(self.root, wrap="word", state="disabled", bg="#111", fg="#eee")
@@ -685,16 +691,34 @@ class InterfaceTk:
 
         self.bouton_envoyer = tk.Button(frame, text="Envoyer", command=self.envoyer)
         self.bouton_envoyer.pack(side="left", padx=(0, 5))
-        self.bouton_inventaire = tk.Button(frame, text="Inventaire", command=self.afficher_inventaire, bg="#4a90e2", fg="white")
+        self.bouton_inventaire = tk.Button(frame,
+                                        image=self.img_inventaire ,
+                                        command=self.afficher_inventaire, 
+                                        bd=0,
+                                        relief="flat", 
+                                        cursor="hand2",
+                                        bg="#1e1e1e",      
+                                        activebackground="#1e1e1e", 
+                                        highlightthickness=0
+                                        )
         
-        self.bouton_sort = tk.Button(frame, text="Sorts", command=self.afficher_sort, bg="#4a90e2", fg="white")
+        self.bouton_sort = tk.Button(frame,
+                                    image=self.img_sort,
+                                    command=self.afficher_sort, 
+                                    bd=0,
+                                    relief="flat",
+                                    cursor="hand2",
+                                    bg="#1e1e1e", 
+                                    activebackground="#1e1e1e", 
+                                    highlightthickness=0
+                                    )
         
-
+        
         
         self.callback = None
     
     def activer_bouton_medieval(self):
-        self.bouton_inventaire.pack(side="left")
+        self.bouton_inventaire.pack(side="left",padx=5)
         self.bouton_sort.pack(side="left")
     
     def desactiver_bouton_medieval(self):
