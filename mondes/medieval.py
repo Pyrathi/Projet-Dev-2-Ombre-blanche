@@ -62,6 +62,8 @@ class MondeMedieval:
         #début de l'aventure médiévale
         #
         self.interface.afficher("")
+        self.inventaire.clear()
+        self.sort.clear()
         self.interface.afficher("Bienvenue dans ce monde médiéval")
         self.interface.afficher("\n")
         self.interface.afficher("En ouvrant les yeux, tu remarques que tu te trouves au bord d'un chemin.")
@@ -148,9 +150,11 @@ class MondeMedieval:
         self.interface.afficher("Le marchand te remercie et te demande d'aller tuer un loup qui embête son troupeau de mouton")
         self.interface.afficher("Tu lui réponds que tu n'as pas d'armes et que donc c'est trop dangereux")
         self.interface.afficher("Le marchand te donne une épée et te dis:")
+        self.interface.afficher("")
         self.interface.afficherItalique("Le loup se trouve dans la prairie à l'ouest du château")
         self.interface.afficherItalique("Fais attention à toi, il à l'air plus féroce qu'un loup normal")
         self.interface.afficherItalique(f"Bonne chance {self.jeu.nom}")
+        self.interface.afficher("")
         self.inventaire.append("epee")
         self.interface.afficher("")
         self.interface.afficher(f"ton inventaire est composé de {self.jeu.inventaire}")
@@ -266,6 +270,7 @@ class MondeMedieval:
         self.interface.afficher("")
         self.interface.afficherItalique("Je savais que tu réussirait! Pour te remercier, prend cette clé, elle pourra peut être t'aider quand tu auras besoin,sâche que je te suis redevable")
         self.inventaire.append("cle")
+        self.interface.afficher("")
         self.interface.afficher("Tu le remercies pour ce cadeau et prends congé")
         self.interface.afficher("tu décides finalement de te diriger vers la place du village")
         self.medieval_place()
@@ -357,7 +362,7 @@ class MondeMedieval:
 
     def direction_taverne(self):
         self.interface.afficher("")
-        self.interface.afficher("Tu sors de l'église entendant la femme recommencer à sangloter")
+        self.interface.afficher("Tu sors du batiment et te demandant quoi faire maintenant")
         self.interface.afficher("La nuit étant déjà bien entamée, tu décides de te rendre dans une taverne afin de manger et boire jusqu'à ne plus pouvoir")
         self.interface.afficher("tu continues à faire la fête jusque tard et quand tu décides enfin à partir, tu te rends à une auberge que t'as conseiller le serveur")
         self.interface.afficher("tu reserves une chambre pour terminer la nuit. Tu t'allonges dans ton lit tout en te rappellant de chaque instant de ta journée dans les moindre détails")
@@ -747,8 +752,36 @@ class MondeMedieval:
         self.interface.afficher("1) Avouer que tu les a espionné et dire que tu peux les aider")
         self.interface.afficher("2) Abandonner et partir")
         self.interface.attendre_reponse(self.choix_gardes_parle)
+
+    valider_choix(1,2)
+    def choix_gardes_parle(self,choix):
+        """
+        PRE: choix doit être 1 ou 2
+        POST: Renvoie vers la suite de l'histoire selon le choix de l'utilisateur
+        """
+        if int(choix)==1:
+            self.fin_cachot()
+        elif int(choix)==2:
+            self.interface.afficher("")
+            self.interface.afficher("Tu décides de retourner vers l'église")
+            self.rencontre_eglise()
+        else:
+            self.parler_gardes()
         
-    
+    def fin_cachot(self):
+        self.interface.afficher("")
+        self.interface.afficher("Tu avoues aux gardes que tu les as espionné et leur dis que tu peux les aider")
+        self.interface.afficher("Les gardes te regardent avec méfiance mais décident de t'emmener au donjon pour t'interroger")
+        self.interface.afficher("Après plusieurs heures d'interrogatoire, ils concluent que tu es un espion au service du sorcier maléfique")
+        self.interface.afficher("tu es condamné à passer le reste de tes jours dans le cachot du château, loin de la lumière du jour")
+        self.interface.afficher("")
+        self.interface.afficherItalique("Malheureusement, c'est ici que ton aventure se termine")
+        self.interface.afficher("")
+        self.interface.afficher("1) Rejouer")
+        self.interface.afficher("2) Quitter") 
+        self.interface.attendre_reponse(self.finjeu)
+
+
     def infiltration(self):
         self.interface.afficher("")
         self.interface.afficher("Tu profites que les gardes soient éloignés pour entrer dans le château")
@@ -769,4 +802,231 @@ class MondeMedieval:
         self.interface.afficher("1) Abandonner et partir")
         self.interface.afficher("2) Lui raconter ton histoire")
         self.interface.afficher("3) Promettre de retrouver le sorcier")
-        self.attendre_reponse(self.choix_roi_infiltration)
+        self.interface.attendre_reponse(self.choix_roi_infiltration)
+
+    valider_choix(1,3)
+    def choix_roi_infiltration(self,choix):
+        """
+        PRE: choix doit être 1, 2 ou 3
+        POST: Renvoie vers la suite de l'histoire selon le choix de l'utilisateur
+        """
+        if int(choix)==1:
+            self.direction_taverne()
+        elif int(choix)==2:
+            self.sort_offensif()
+        elif int(choix)==3:
+            self.traque()
+        else:
+            self.infiltration()
+
+    def sort_offensif(self):
+        self.interface.afficher("")
+        self.interface.afficher("Tu décides de lui raconter ton histoire, jusqu'à la malédiction qui te force à revivre cette journée encore et encore")
+        self.interface.afficher("Le roi t'écoute attentivement et se reconnait dans ton récit")
+        self.interface.afficher("Il te dit qu'il ne peut pas t'aider directement mais qu'il peut te donner un sort offensif pour t'aider dans ta quête")
+        self.interface.afficher("tu acceptes son offre et il te transmet un parchemin contenant le sort")
+        self.interface.afficher("Il te dit de ne l'utiliser qu'au moment opportun car si tu te loupes, il ne servira plus à rien face à un sorcier expérimenté")
+        self.interface.afficher("tu le ranges précieusement dans ton sac et le remercies avant de quitter le château")
+        self.sort.append("offensif")
+        self.traque()
+
+    def traque(self):
+        self.interface.afficher("")
+        self.interface.afficher("tu quittes le château et te diriges vers la forêt où réside la tour du sorcier maléfique")
+        self.interface.afficher("")
+        self.interface.afficherItalique("Plusieurs heures de marche plus tard")
+        self.interface.afficher("")
+        self.interface.afficher("Tu arrives devant la tour sombre du sorcier, entourée d'arbres tordus et de brouillard")
+        self.interface.afficher("Tu t'avances prudemment vers l'entrée, prêt à affronter ce qui t'attend à l'intérieur")
+        self.interface.afficher(next(self.jeu.marche))
+        self.interface.afficher("tu entres dans la tour et montes les escaliers en colimaçon jusqu'à arriver dans une grande salle")
+        self.interface.afficher("Au centre de la pièce, se tient le sorcier maléfique, un sourire narquois sur le visage")
+        self.interface.afficher("Il te regarde avec un sourire narquois et te dit:")
+        self.interface.afficher("")
+        self.interface.afficherItalique("Alors comme ça, tu es venu me chercher ? Tu es bien courageux, mais tu ne sais pas à quoi tu t'exposes.")
+        self.interface.afficherItalique("Prépare-toi à affronter ta destinée.")
+        self.interface.afficher("")
+        self.interface.afficher("1) Essayer de le supplier de lever les malédictions")
+        self.interface.afficher("2) Te préparer à combattre le sorcier")
+        self.interface.attendre_reponse(self.choix_confrontation)
+    
+    valider_choix(1,2)
+    def choix_confrontation(self,choix):
+        """
+        PRE: choix doit être 1 ou 2
+        POST: Renvoie vers la suite de l'histoire selon le choix de l'utilisateur
+        """
+        if int(choix)==1:
+            self.supplication()
+        elif int(choix)==2:
+            self.combat_sorcier()
+        else:
+            self.traque()
+    
+    def supplication(self):
+        self.interface.afficher("")
+        self.interface.afficher("Tu décides d'essayer de le supplier de lever les malédictions")
+        self.interface.afficher("tu t'agenouilles devant lui et lui demandes humblement de te libérer de cette malédiction ainsi que de libérer le roi")
+        self.interface.afficher("Le sorcier éclate de rire en t'entendant")
+        self.interface.afficher("Il te dit que tu es pathétique et que tu ne mérites pas sa clémence")
+        self.interface.afficher("Il lève sa baguette et te lance un sort qui te transforme en pierre sur le champ")
+        self.interface.afficher("")
+        self.interface.afficherItalique("Malheureusement, c'est ici que ton aventure se termine")
+        self.interface.afficher("")
+        self.interface.afficher("1) Rejouer")
+        self.interface.afficher("2) Quitter") 
+        self.interface.attendre_reponse(self.finjeu)
+
+    def combat_sorcier(self):
+        self.interface.afficher("")
+        self.interface.afficher("Tu te prépares à combattre le sorcier")
+        self.interface.afficher("Le sorcier rit de ta bravoure et lève sa baguette, prêt à attaquer")
+        self.interface.afficher("Le combat s'engage et tu dois faire preuve de toute ta ruse et de ton courage pour en venir à bout")
+        self.interface.afficher("2 choix s'offrent à toi:")
+        self.interface.afficher("")
+        self.interface.afficher("1) Attendre qu'il agisse en premier pour contre-attaquer")
+        self.interface.afficher("2) Lui foncer dessus pour tenter de le surprendre")
+        self.interface.attendre_reponse(self.choix_strategie)
+    
+    valider_choix(1,2)
+    def choix_strategie(self,choix):
+        """
+        PRE: choix doit être 1 ou 2
+        POST: Renvoie vers la suite de l'histoire selon le choix de l'utilisateur
+        """
+        if int(choix)==1:
+            self.fin_sorcier_defensif()
+        elif int(choix)==2:
+            self.sorcier_combat_2()
+        else:
+            self.combat_sorcier()
+
+    def fin_sorcier_defensif(self):
+        self.interface.afficher("")
+        self.interface.afficher("Tu décides d'attendre qu'il agisse en premier pour contre-attaquer")
+        self.interface.afficher("Le sorcier lance un sort puissant et rapide qui te touche de plein fouet avant même que tu aies le temps de réagir")
+        self.interface.afficher("tu sens tes forces t'abandonner et tu t'effondres au sol, incapable de continuer le combat")
+        self.interface.afficher("Le sorcier s'approche de toi et te lance un dernier sort qui te transforme en pierre sur le champ")
+        self.interface.afficher("")
+        self.interface.afficherItalique("Malheureusement, c'est ici que ton aventure se termine")
+        self.interface.afficher("")
+        self.interface.afficher("1) Rejouer")
+        self.interface.afficher("2) Quitter") 
+        self.interface.attendre_reponse(self.finjeu)
+    
+    def sorcier_combat_2(self):
+        self.interface.afficher("")
+        self.interface.afficher("Tu décides de lui foncer dessus pour tenter de le surprendre")
+        self.interface.afficher("Le sorcier est pris de court par ta rapidité et te rate en lançant son sort")
+        self.interface.afficher("tu vois dans son regard une lueur de peur alors que tu t'approches de lui")
+        self.interface.afficher("il faut saisir cette opportunité pour agir sans qu'il ait le temps de se reprendre")
+        self.interface.afficher("1) Faire semblant de jeter un sort pour le distraire")
+        self.interface.afficher("2) Lancer ton épée pour tenter de le déstabiliser")
+        if "offensif" in self.sort:
+            self.interface.afficher("3) Utiliser le sort offensif que le roi t'a donné")
+        self.interface.attendre_reponse(self.choix_final_sorcier)
+        
+    valider_choix(1,3)
+    def choix_final_sorcier(self,choix):
+        """
+        PRE: choix doit être 1, 2 ou 3
+        POST: Renvoie vers la suite de l'histoire selon le choix de l'utilisateur
+        """
+        if int(choix)==1:
+            self.fin_sorcier_humilier()
+        elif int(choix)==2:
+            self.sorcier_maitriser()
+        elif int(choix)==3 and "offensif" in self.sort:
+            self.sorcier_blesse()
+        else:
+            self.sorcier_combat_2()
+
+    def fin_sorcier_humilier(self):
+        self.interface.afficher("")
+        self.interface.afficher("Tu décides de faire semblant de jeter un sort pour le distraire")
+        self.interface.afficher("Le sorcier, maitre de la magie, n'est pas dupe et voit à travers ton stratagème")
+        self.interface.afficher("Il lève sa baguette et te lance un sort qui te paralyse sur le champ.")
+        self.interface.afficher("Il s'approche et commence à se moquer de toi")
+        self.interface.afficher("tu sens la honte t'envahir alors que tu es incapable de bouger")
+        self.interface.afficher("Avant d'en finir, il te lance de nombreux sorts te faisant souffrir comme jamais tu n'avais souffert auparavant")
+        self.interface.afficher("Enfin, il te lance un dernier sort qui te transforme en pierre sur le champ")
+        self.interface.afficher("")
+        self.interface.afficherItalique("Malheureusement, c'est ici que ton aventure se termine")
+        self.interface.afficher("")
+        self.interface.afficher("1) Rejouer")
+        self.interface.afficher("2) Quitter") 
+        self.interface.attendre_reponse(self.finjeu)
+    
+    def sorcier_maitriser(self):
+        self.interface.afficher("")
+        self.interface.afficher("Tu décides de lancer ton épée pour tenter de le déstabiliser")
+        self.interface.afficher("Ton épée vole à travers la pièce et vient se planter dans le mur juste à côté du sorcier")
+        self.interface.afficher("Pris de panique, il tente de lancer un sort mais tu en profites pour t'approcher rapidement de lui")
+        self.interface.afficher("Tu le maîtrises avant qu'il ait le temps de réagir et lui arraches sa baguette")
+        self.interface.afficher("Tu la brises en deux, le sorcier s'effondre au sol, vaincu")
+        self.interface.afficher("Que faire de lui ?")
+        self.interface.afficher("")
+        self.interface.afficher("1) Le convaincre de lever les malédictions en échange de sa vie")
+        self.interface.afficher("2) Le tuer directement")
+        self.interface.attendre_reponse(self.dernier_sorcier)
+
+    valider_choix(1,2)
+    def dernier_sorcier(self,choix):
+        """
+        PRE: choix doit être 1 ou 2
+        POST: Renvoie vers la suite de l'histoire selon le choix de l'utilisateur
+        """
+        if int(choix)==1:
+            self.fin_mort_clemence()
+        elif int(choix)==2:
+            self.fin_sorcier_mort()
+        else:
+            self.sorcier_maitriser()
+
+    def fin_mort_clemence(self):
+        self.interface.afficher("")
+        self.interface.afficher("Tu décides de le convaincre de lever les malédictions en échange de sa vie")
+        self.interface.afficher("Le sorcier, voyant qu'il n'a plus d'autre choix, accepte à contrecœur")
+        self.interface.afficher("Il lève les mains et commence à prononcer une incantation")
+        self.interface.afficher("Au fur et à mesure qu'il parle, tu sens une énergie étrange t'envahir")
+        self.interface.afficher("Tu comprends trop tard que c'était un piège et que le sorcier t'a jeté une malédiction encore plus puissante")
+        self.interface.afficher("tu sens tes forces t'abandonner et tu t'effondres au sol, incapable de respirer")
+        self.interface.afficher("Avant de perdre connaissance, tu vois le sorcier sourire malicieusement")
+        self.interface.afficher("tu regrettes d'avoir fait preuve de clémence envers lui")
+        self.interface.afficher("")
+        self.interface.afficherItalique("Malheureusement, c'est ici que ton aventure se termine")
+        self.interface.afficher("")
+        self.interface.afficher("1) Rejouer")
+        self.interface.afficher("2) Quitter") 
+        self.interface.attendre_reponse(self.finjeu)
+
+    def sorcier_blesse(self):
+        self.interface.afficher("")
+        self.interface.afficher("Tu décides d'utiliser le sort offensif que le roi t'a donné")
+        self.interface.afficher("tu concentres ton énergie et lances le sort en direction du sorcier")
+        self.interface.afficher("Le sort frappe le sorcier de plein fouet, le projetant contre un mur")
+        self.interface.afficher("gravement blessé, il s'effondre au sol, incapable de se relever")
+        self.interface.afficher("Tu t'approches de lui, prêt à en finir une bonne fois pour toutes")
+        self.interface.afficher("Son regard est rempli de peur et de surprise alors qu'il réalise qu'il a sous-estimé tes capacités")
+        self.interface.afficher("Tu le regardes souriant et lui dit qu'il a perdu à cause de son arrogance")
+        self.interface.afficher("")
+        self.fin_sorcier_mort()
+
+    def fin_sorcier_mort(self):
+        self.interface.afficher("")
+        self.interface.afficher("Tu décides de l'achever directement")
+        self.interface.afficher("Au moment où il pousse son dernier soupir, tu sens une énergie étrange t'envahir")
+        self.interface.afficher("et tu comprends que la malédiction qui pesait sur ton âme ainsi que celle du roi sont enfin levées")
+        self.interface.afficher("Tu te sens libre pour la première fois depuis longtemps")
+        self.interface.afficher("Tu sors de la tour du sorcier et te diriges vers le village pour annoncer la bonne nouvelle")
+        self.interface.afficher("À ton arrivée, le roi t'accueille chaleureusement et te félicite pour ton courage et ta détermination")
+        self.interface.afficher("il te remercie d'avoir sauvé le royaume de la menace du sorcier maléfique")
+        self.interface.afficher("Il te nomme chevalier du royaume et te donne une terre en récompense de tes actes héroïques")
+        self.interface.afficher("")
+        self.interface.afficherItalique("Félicitations: Vous avez atteint la 5ème fin !")
+        self.interface.afficher("")
+        self.interface.afficher("1) Rejouer")
+        self.interface.afficher("2) Quitter") 
+        self.interface.attendre_reponse(self.finjeu)
+
+    
