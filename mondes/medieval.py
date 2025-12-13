@@ -629,25 +629,144 @@ class MondeMedieval:
         self.interface.afficherItalique("je pense que c'est l'oeuvre d'un sorcier maléfique qui m'a jeté une malédiction")
         self.interface.afficherItalique("je ne pourrais donc pas t'aider si c'est la raison pour laquelle tu es venu.")
         if "soin" in self.sort:
-            self.interface.afficher("Tu lui dis que tu es à la recherche de ce sorcier et que tu te comptes l'éliminer")
             self.interface.afficher("")
             self.interface.afficher("1) Utiliser ton sort de soin pour tenter de le guérir")
-            self.interface.afficher("2) Lui dire que tu ne peux pas l'aider et partir")
+            self.interface.afficher("2) Lui dire que tu ne peux pas l'aider")
             self.interface.attendre_reponse(self.choix_roi)
         else:
-            self.interface.afficher("Tu lui dis que tu es à la recherche de ce sorcier et que tu te comptes l'éliminer")
-            self.interface.afficher("Le roi te remercie pour ton aide mais te dis qu'il ne peut rien faire pour toi dans son état et que tu ne pourras rien contre le sorcier.")
-            self.interface.afficher("tu le remercies pour ses conseils. ")
-            self.interface.afficher("tu vois son regard devenir vide et tu comprends qu'il vient de rendre son dernier souffle.")
-            self.interface.afficher("tu ne sais pas quoi faire dans cette situation:")
-            self.interface.afficher("")
-            self.interface.afficher("1) Prévenir les gardes du château")
-            self.interface.afficher("2) Fuir le château et le village avant que la nouvelle se répande")
-            self.interface.attendre_reponse(self.choix_roi_sans_soin)
+            self.roi()
+    
+    valider_choix(1,2)
+    def choix_roi(self,choix):
+        self.interface.afficher("")
+        if int(choix)==1:
+            self.fin_roi_soigne()
+        elif int(choix)==2:
+            self.roi()
+    
+    def fin_roi_soigne(self):
+        self.interface.afficher("")
+        self.interface.afficher("Tu décides d'utiliser ton sort de soin pour tenter de le guérir")
+        self.interface.afficher("tu poses ta main sur son front et concentres ton énergie")
+        self.interface.afficher("Après quelques instants, le roi ouvre les yeux et te regarde avec reconnaissance")
+        self.interface.afficher("Il te remercie chaleureusement et te dis que tu as sauvé sa vie")
+        self.interface.afficher("En guise de remerciement, il te donne une bourse remplie d'or et te souhaite bonne chance pour la suite de ton aventure")
+        self.interface.afficher("")
+        self.interface.afficherItalique("Félicitations: Vous avez atteint la 3ème fin !")
+        self.interface.afficher("")
+        self.interface.afficher("1) Rejouer")
+        self.interface.afficher("2) Quitter") 
+        self.interface.attendre_reponse(self.finjeu)
+        
+    def roi(self):
+        self.interface.afficher("")
+        self.interface.afficher("Tu lui dis que tu es à la recherche de ce sorcier et que tu te comptes l'éliminer")
+        self.interface.afficher("Le roi te remercie pour ton aide mais te dis qu'il ne peut rien faire pour toi dans son état et que tu ne pourras rien contre le sorcier.")
+        self.interface.afficher("tu le remercies pour ses conseils. ")
+        self.interface.afficher("tu vois son regard devenir vide et tu comprends qu'il vient de rendre son dernier souffle.")
+        self.interface.afficher("tu ne sais pas quoi faire dans cette situation:")
+        self.interface.afficher("")
+        self.interface.afficher("1) Prévenir les gardes du château")
+        self.interface.afficher("2) Fuir le château et le village avant que la nouvelle se répande")
+        self.interface.attendre_reponse(self.choix_roi_sans_soin)
+    
+    valider_choix(1,2)
+    def choix_roi_sans_soin(self,choix):
+        """
+        PRE: choix doit être 1 ou 2
+        POST: Renvoie vers la suite de l'histoire selon le choix de l'utilisateur
+        """
+        if int(choix)==1:
+            self.fin_roi_gardes()
+        elif int(choix)==2:
+            self.fuite_chateau()
+        else:
+            self.roi()
+
+    def fin_roi_gardes(self):
+        self.interface.afficher("")
+        self.interface.afficher("Tu décides de prévenir les gardes du château")
+        self.interface.afficher("En apprenant la nouvelle, ceux-ci t'arrêtent sans te laisser le temps de réagir")
+        self.interface.afficher("Ils t'accusent du meutre du roi. Tu tentes de te défendre mais en vain, ils te conduisent au donjon")
+        self.interface.afficher("Quelques heures plus tard,ils t'ammènent à l'échafaud où tu es exécuté sans autre forme de procès pour un meurtre que tu n'as pas commis")
+        self.interface.afficher("")
+        self.interface.afficherItalique("Malheureusement, c'est ici que ton aventure se termine")
+        self.interface.afficher("")
+        self.interface.afficher("1) Rejouer")
+        self.interface.afficher("2) Quitter") 
+        self.interface.attendre_reponse(self.finjeu)
+    
+    def fuite_chateau(self):
+        self.interface.afficher("")
+        self.interface.afficher("Tu décides de fuir le château et le village avant que la nouvelle se répande")
+        self.interface.afficher("tu cours aussi vite que tu peux jusqu'à sortir des murs de la ville")
+        self.interface.afficher("Une fois en sécurité, tu réfléchit au sens de ta quête")
+        self.interface.afficher("tu en viens à te dire que ce n'est peut-être le futur que tu souhaites.")
+        self.interface.afficher("Tu décides de laisser tomber avant qu'il ne soit trop tard et pars vivre dans une petite ferme loin de tout")
+        self.interface.afficher("tu passes le reste de tes jours à cultiver la terre et à vivre en paix, loin des intrigues et des dangers du monde")
+        self.interface.afficher("")
+        self.interface.afficherItalique("Félicitations: Vous avez atteint la 4ème fin !")
+        self.interface.afficher("")
+        self.interface.afficher("1) Rejouer")
+        self.interface.afficher("2) Quitter") 
+        self.interface.attendre_reponse(self.finjeu)
 
     #--------------------------
     # malédiction Seigneur
     #--------------------------
     def filature_garde(self):
-        self.interface.afficher("t")
-        # Le sorcier qui a jete la malédiction a kidnape le roi
+        self.interface.afficher("")
+        self.interface.afficher("Tu décides de suivre les gardes discrètement")
+        self.interface.afficher("Après avoir marché pendant un long moment, tu arrives devant les portes du château")
+        self.interface.afficher("Les gardes s'arrêtent et discutent quelques instants avant de s'éloigner légèrement")
+        self.interface.afficher("Tu hésites à en profiter pour te faufiler à l'intérieur:")
+        self.interface.afficher("")
+        self.interface.afficher("1) Entrer dans le château")
+        self.interface.afficher("2) Aller leur parler")
+        self.interface.attendre_reponse(self.choix_chateau)
+    
+    valider_choix(1,2)
+    def choix_chateau(self,choix):
+        if int(choix)==1:
+            self.infiltration()
+        elif int(choix)==2:
+            self.parler_gardes()
+        else:
+            self.filature_garde()
+    
+    def parler_gardes(self):
+        self.interface.afficher("")
+        self.interface.afficher("Tu décides d'aller leur parler")
+        self.interface.afficher("En t'approchant, les gardes se figent et te regardent avec méfiance")
+        self.interface.afficher("l'un d'eux te demande ce que tu fais ici à cette heure tardive")
+        self.interface.afficher("tu expliques que tu es un voyageur de passage et que tu voulait voir le roi")
+        self.interface.afficher("les gardes échangent un regard avant de te dire que le château est fermé pour la nuit et que tu ne peux pas entrer")
+        self.interface.afficher("tu insistes en disant que tu as des affaires importantes à discuter avec le roi")
+        self.interface.afficher("les gardes te regardent avec suspicion")
+        self.interface.afficher("")
+        self.interface.afficher("1) Avouer que tu les a espionné et dire que tu peux les aider")
+        self.interface.afficher("2) Abandonner et partir")
+        self.interface.attendre_reponse(self.choix_gardes_parle)
+        
+    
+    def infiltration(self):
+        self.interface.afficher("")
+        self.interface.afficher("Tu profites que les gardes soient éloignés pour entrer dans le château")
+        self.interface.afficher("tu avances prudemment dans les couloirs jusqu'à arriver devant la salle du trône")
+        self.interface.afficher("à ta grande surprise, le roi n'est pas là, à sa place se trouve un trône vide")
+        self.interface.afficher("Tu décides donc d'explorer le château à la recherche d'indices sur ce qu'il se passe")
+        self.interface.afficher("")
+        self.interface.afficherItalique("1 bonne heure de fouille plus tard")
+        self.interface.afficher("")
+        self.interface.afficher("tu arrives devant une porte entrouverte d'où s'échappe une lumière diffuse")
+        self.interface.afficher("tu t'approches doucement et aperçois le roi alongé sur un lit, visiblement malade")
+        self.interface.afficher("il t'entend arriver et te dit d'une voix faible:")
+        self.interface.afficher("")
+        self.interface.afficherItalique("comme tu peux le voir, je suis très malade et je ne sais pas combien de temps il me reste")
+        self.interface.afficherItalique("je pense que c'est l'oeuvre d'un sorcier maléfique qui m'a jeté une malédiction")
+        self.interface.afficherItalique("je ne pourrais donc pas t'aider si c'est la raison pour laquelle tu es venu.")
+        self.interface.afficher("")
+        self.interface.afficher("1) Abandonner et partir")
+        self.interface.afficher("2) Lui raconter ton histoire")
+        self.interface.afficher("3) Promettre de retrouver le sorcier")
+        self.attendre_reponse(self.choix_roi_infiltration)
