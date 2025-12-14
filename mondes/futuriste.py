@@ -17,7 +17,7 @@ class MondeFuturiste:
         }
     
     
-    
+# -- -- --@property -- -- --
     @property
     def cledecrypt(self):
         return self._cledecrypt
@@ -32,7 +32,7 @@ class MondeFuturiste:
 #---------------------
 #Histoire
 #---------------------
-    def futuriste1(self):
+    def fut0(self):
         #
         #début de l'aventure futuriste
         #
@@ -50,7 +50,6 @@ class MondeFuturiste:
 
         # Choix 3 aléatoire
         chance = random.random()
-
         if chance > 0.5:
             self.interface.afficher("3) Lancer un petit programme automatique pour interagir avec le flux sans t’exposer")
             self.interface.attendre_reponse(self.futreponse_b1t)
@@ -65,17 +64,18 @@ class MondeFuturiste:
             choix =int(choix)
         except ValueError:
             self.interface.afficher("Entrée invalide.")
-            return self.futuriste1()
+            return self.fut0()
             
         if int(choix)==1:
-            self.futfin1()
+            self.fut1a()
         elif int(choix)==2:
-            self.futfin1()
+            self.fut1b()
         elif int(choix)==3:
-            self.futfin1()
+            self.fut1c()
         else:
             self.interface.afficher("Choix invalide.")
             self.futuriste1()
+
     def futreponse_b1t_sans3(self,choix):
         #
         # Choix entre poursuivre l'aventure ou 1ère fin
@@ -84,18 +84,116 @@ class MondeFuturiste:
             choix =int(choix)
         except ValueError:
             self.interface.afficher("Entrée invalide.")
-            return self.futuriste1()
+            return self.fut0()
         
         if int(choix)==1:
-            self.futfin1()
+            self.fut1a()
         elif int(choix)==2:
-            self.futfin1()
+            self.fut1b()
         else:
             self.interface.afficher("Choix invalide.")
             self.futuriste1()
         
+    def fut1a(self):
+        self.interface.afficher("Tu es audacieux et curieux.")
+        self.interface.afficher("Mais ton manque d’expérience ne t’aide pas et la source reste indétectable.")
+        self.interface.afficher("Toutefois, tu es sûr de tes compétences en hacking.")
+        self.interface.afficher("\n")
+        self.interface.afficher("Une fenêtre popup apparaît sur ton terminal, t’invitant à cliquer sur la suite.")
+        self.interface.afficher("Que fais-tu ?")
+        self.interface.afficher("\n")
+        self.interface.afficher("a) Tu l’ignores et continues à explorer le réseau")
+        self.interface.afficher("b) Sûr de toi, tu cliques sur la fenêtre")
+        self.interface.attendre_reponse(self.choix1a)
+   
+    def choix1a(self, reponse):
+        if reponse.upper() == "a":
+            self.interface.afficher("Tu ignores la fenêtre et poursuis ton exploration.")
+            self.fut2a(self):
+       
+        elif reponse.upper() == "b":
+            self.interface.afficher("Tu cliques sur la fenêtre, convaincu de maîtriser la situation.")
+            self.fut2b(self):
+      
+        else:
+            self.interface.afficher("Choix invalide.")
+            self.interface.attendre_reponse(self.choix1a)
+   
+   
+
+    def fut1b(self):
+        self.interface.afficher("Ton calme et ta sérénité sont tes points forts.")
+        self.interface.afficher("Ton analyse ne donne pas beaucoup de résultats, mais soudain, un événement inattendu survient.")
+        self.interface.afficher("\n")
+        self.interface.afficher("Une fenêtre popup apparaît sur ton terminal, t’invitant à cliquer sur la suite.")
+        self.interface.afficher("Que fais-tu ?")
+        self.interface.afficher("\n")
+        self.interface.afficher("a) Tu l’ignores et continues avec une analyse plus poussée")
+        self.interface.afficher("b) Tu l’ignores et continues avec une analyse plus poussée")
+    
+        self.interface.attendre_reponse(self.choix1b)
+     
+     def choix1b(self, reponse):
+        if reponse.upper() == "a":
+            self.interface.afficher("Tu l’ignores et continues avec une analyse plus poussée.")
+            self.fut2c(self):
+       
+        elif reponse.upper() == "b":
+            self.interface.afficher("Tu l’ignores et continues avec une analyse plus poussée.")
+            self.fut2b(self):
+      
+        else:
+            self.interface.afficher("Choix invalide.")
+            self.interface.attendre_reponse(self.choix1b)
+   
+
+
+    def fut1c(self):
+
+    def fut2a(self):
+    def fut2b(self):
+    def fut2c(self):
+    def fut2d(self):
+    
+    def fut3a(self):
+    def fut3a(self):
+    def fut3a(self):
+
+s
     def futfin1(self):
-        self.interface.afficher("Fin.")
+        self.interface.afficher("Les systèmes s’ouvrent un à un sous ton contrôle.")
+        self.interface.afficher("Le flux n’est plus un mystère, mais un outil.")
+        self.interface.afficher("Ton alias circule désormais dans les couches profondes de la ville numérique.")
+        self.interface.afficher("\n")
+        self.interface.afficher("Tu as gagné en pouvoir, mais chaque victoire attire de nouveaux regards.")
         self.interface.afficher("1) Rejouer")
         self.interface.afficher("2) Quitter")
         self.interface.attendre_reponse(self.jeu.finjeu)
+
+    def futfin2(self):
+        self.interface.afficher("Tu choisis de disparaître avant qu’il ne soit trop tard.")
+        self.interface.afficher("Les données que tu emportes sont incomplètes, mais ton anonymat est intact.")
+        self.interface.afficher("\n")
+        self.interface.afficher("Dans cette ville, survivre sans être vu est parfois la plus grande des victoires.")    
+        self.interface.afficher("1) Rejouer")
+        self.interface.afficher("2) Quitter")
+        self.interface.attendre_reponse(self.jeu.finjeu)
+
+    def futfin3(self):
+        self.interface.afficher("Une alerte. Puis le silence. Tes accès se ferment brutalement, et ton signal est marqué.")
+        self.interface.afficher("B1t s’efface des réseaux.")
+        self.interface.afficher("Pour continuer d’exister, il faudra renaître sous un autre nom.")  
+        self.interface.afficher("1) Rejouer")
+        self.interface.afficher("2) Quitter")
+        self.interface.attendre_reponse(self.jeu.finjeu)
+
+    def finjeu(self, reponse):
+    if reponse == "1":
+        # Redémarre le jeu
+        self.interface.afficher("Redémarrage du jeu...")
+        self.jeu.commencer()  
+    elif reponse == "2":
+        self.interface.afficher("Merci d’avoir joué. À bientôt !")
+        exit()  
+        self.interface.afficher("Choix invalide, veuillez réessayer.")
+        self.interface.attendre_reponse(self.finjeu) 
