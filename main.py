@@ -240,7 +240,7 @@ class Jeu:
             self.interface.desactiver_bouton_medieval()
             self.interface.afficher("Tu as choisi le monde futuriste...")
             self.monde_actuel = MondeFuturiste(self)
-            self.monde_actuel.futuriste1()
+            self.monde_actuel.fut0()
         else:
             self.interface.afficher("Choix invalide, essaie encore.")
             self.interface.attendre_reponse(self.choisir_monde)
