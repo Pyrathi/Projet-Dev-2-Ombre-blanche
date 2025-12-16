@@ -757,15 +757,80 @@ class InterfaceTk:
             self.callback(texte)
     
     def afficher_inventaire(self):
-        """Affiche une fenêtre listant les objets du joueur."""
-        objets = self.jeu.inventaire
-        contenu = "\n".join(f"- {obj}" for obj in objets) if objets else "Ton inventaire est vide."
-        messagebox.showinfo("Inventaire", contenu)
+        # """Affiche une fenêtre listant les objets du joueur."""
+        titre_fenetre="Ma besace"
+        couleur_texte = "#2F1B0C"
+        style_police = ("Times New Roman", 14, "italic bold")
+        try:
+            img_fond = tk.PhotoImage(file="assets/parchemin2.png")
+        except:
+            img_fond = None
+            
+        popup = tk.Toplevel(self.root)
+        popup.title(titre_fenetre)
+        
+        w, h = 300, 400
+        x = self.root.winfo_x() + (self.root.winfo_width() // 2) - (w // 2)
+        y = self.root.winfo_y() + (self.root.winfo_height() // 2) - (h // 2)
+        popup.geometry(f"{w}x{h}+{x}+{y}")
+        
+        bg_color = "#1e1e1e" if img_fond is None else "white"
+        canvas = tk.Canvas(popup, width=w, height=h, highlightthickness=0, bg=bg_color)
+        canvas.pack(fill="both", expand=True)
+        
+        if img_fond:
+            popup.img = img_fond 
+            canvas.create_image(w//2, h//2, image=img_fond)
+        liste = self.jeu.inventaire
+        if not liste:
+            texte = "Votre sac est vide..."
+        else:
+            texte = "\n".join(f"~ {obj} ~" for obj in liste)
+        canvas.create_text(
+            w//2, h//2,          
+            text=texte, 
+            fill=couleur_texte,   
+            font=style_police,   
+            justify="center"      
+        )
+        
         
     def afficher_sort(self):
-        objets = self.jeu.sort
-        contenu = "\n".join(f"- {obj}" for obj in objets) if objets else "Tu ne possèdes aucun sorts."
-        messagebox.showinfo("Sorts", contenu)
+        titre_fenetre="Mes sorts"
+        couleur_texte = "#2F1B0C"
+        style_police = ("Times New Roman", 14, "italic bold")
+        try:
+            img_fond = tk.PhotoImage(file="assets/parchemin2.png")
+        except:
+            img_fond = None
+            
+        popup = tk.Toplevel(self.root)
+        popup.title(titre_fenetre)
+        
+        w, h = 300, 400
+        x = self.root.winfo_x() + (self.root.winfo_width() // 2) - (w // 2)
+        y = self.root.winfo_y() + (self.root.winfo_height() // 2) - (h // 2)
+        popup.geometry(f"{w}x{h}+{x}+{y}")
+        
+        bg_color = "#1e1e1e" if img_fond is None else "white"
+        canvas = tk.Canvas(popup, width=w, height=h, highlightthickness=0, bg=bg_color)
+        canvas.pack(fill="both", expand=True)
+        
+        if img_fond:
+            popup.img = img_fond 
+            canvas.create_image(w//2, h//2, image=img_fond)
+        liste = self.jeu.sort
+        if not liste:
+            texte = "Vous n'avez aucun sort..."
+        else:
+            texte = "\n".join(f"~ {obj} ~" for obj in liste)
+        canvas.create_text(
+            w//2, h//2,          
+            text=texte, 
+            fill=couleur_texte,   
+            font=style_police,   
+            justify="center"      
+        )
 
     def lancer(self):
         self.root.mainloop()
