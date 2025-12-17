@@ -710,20 +710,40 @@ class InterfaceTk:
         self.root.bind("<Escape>", lambda e: self.root.attributes("-fullscreen", False))
         self.root.title("Aventure Textuelle")
         self.zone = tk.Text(self.root, wrap="word", state="disabled", bg="#fdf5e6", fg="#5b3a29", font=("Papyrus", 14))
-        self.zone.pack(fill="both", expand=True, padx=20, pady=20)
+        
 
         self.root.bind("<Escape>", lambda e: self.root.attributes("-fullscreen", False))
         frame = tk.Frame(self.root, bg="#1e1e1e")
-        frame.pack(side="bottom", pady=15)
+        
 
-        self.entree = tk.Entry(frame, width=40, font=("Papyrus",14,"italic"), bg="#fdf5e6", fg="#5b3a29", insertbackground="#5b3a29", relief="flat", bd=5)
+        
+        ecran_largeur = self.root.winfo_screenwidth()
+        taille_police = 18 if ecran_largeur > 1920 else 14
 
-        self.entree.pack(side="left", padx=(0, 5))
+        self.entree = tk.Entry(
+            frame, 
+            width=40, 
+            font=("Papyrus", taille_police, "italic"), 
+            bg="#fdf5e6", 
+            fg="#5b3a29", 
+            insertbackground="#5b3a29", 
+            relief="flat", 
+            
+            bd=10 
+        )
+
+        
+        
+
         self.entree.bind("<Return>", self.envoyer)
 
         self.bouton_envoyer = tk.Button(frame, text="Envoyer", command=self.envoyer, font=("Papyrus",12,"bold italic"), bg="#f5deb3", fg="#5b3a29", activebackground="#e6d5a5", activeforeground="#5b3a29", relief="raised", bd=3, cursor="hand2")
 
-        self.bouton_envoyer.pack(side="left", padx=(0, 5))
+        frame.pack(side="bottom", fill="x", padx=50, pady=20)
+        self.entree.pack(side="left", fill="x", expand=True, padx=(0, 10), ipady=12)
+        self.bouton_envoyer.pack(side="left", ipady=5, ipadx=10)
+        self.zone.pack(fill="both", expand=True, padx=20, pady=(20, 0))
+        
         self.bouton_inventaire = tk.Button(frame,
                                         image=self.img_inventaire ,
                                         command=self.afficher_inventaire, 
