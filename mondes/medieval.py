@@ -104,6 +104,7 @@ class MondeMedieval:
         self.interface.afficher("")
         self.interface.afficher("1) Rejouer")
         self.interface.afficher("2) Quitter") 
+        self.jeu.supprmier_sauvegarde() 
         self.interface.attendre_reponse(self.finjeu)
 
     def finjeu(self,choix):
@@ -256,6 +257,7 @@ class MondeMedieval:
         self.interface.afficher("")
         self.interface.afficher("1) Rejouer")
         self.interface.afficher("2) Quitter") 
+        self.jeu.supprmier_sauvegarde() 
         self.interface.attendre_reponse(self.finjeu)
 
     def combat_loup2(self):
@@ -374,6 +376,7 @@ class MondeMedieval:
         self.interface.afficher("")
         self.interface.afficher("1) Rejouer")
         self.interface.afficher("2) Quitter") 
+        self.jeu.supprmier_sauvegarde() 
         self.interface.attendre_reponse(self.finjeu)
 
     def quete_grotte(self):
@@ -456,6 +459,7 @@ class MondeMedieval:
         self.interface.afficher("Tu es mort, que veux tu faire :")
         self.interface.afficher("1) Rejouer")
         self.interface.afficher("2) Quitter") 
+        self.jeu.supprmier_sauvegarde() 
         self.interface.attendre_reponse(self.finjeu)
     
     def esquive_gobelin(self):
@@ -614,6 +618,7 @@ class MondeMedieval:
         self.interface.afficher("")
         self.interface.afficher("1) Rejouer")
         self.interface.afficher("2) Quitter") 
+        self.jeu.supprmier_sauvegarde() 
         self.interface.attendre_reponse(self.finjeu)
 
     def suite_eglise(self):
@@ -662,6 +667,7 @@ class MondeMedieval:
         self.interface.afficher("")
         self.interface.afficher("1) Rejouer")
         self.interface.afficher("2) Quitter") 
+        self.jeu.supprmier_sauvegarde() 
         self.interface.attendre_reponse(self.finjeu)
         
     def roi(self):
@@ -700,6 +706,7 @@ class MondeMedieval:
         self.interface.afficher("")
         self.interface.afficher("1) Rejouer")
         self.interface.afficher("2) Quitter") 
+        self.jeu.supprmier_sauvegarde() 
         self.interface.attendre_reponse(self.finjeu)
     
     def fuite_chateau(self):
@@ -715,6 +722,7 @@ class MondeMedieval:
         self.interface.afficher("")
         self.interface.afficher("1) Rejouer")
         self.interface.afficher("2) Quitter") 
+        self.jeu.supprmier_sauvegarde() 
         self.interface.attendre_reponse(self.finjeu)
 
     #--------------------------
@@ -780,6 +788,7 @@ class MondeMedieval:
         self.interface.afficher("")
         self.interface.afficher("1) Rejouer")
         self.interface.afficher("2) Quitter") 
+        self.jeu.supprmier_sauvegarde() 
         self.interface.attendre_reponse(self.finjeu)
 
 
@@ -876,6 +885,7 @@ class MondeMedieval:
         self.interface.afficher("")
         self.interface.afficher("1) Rejouer")
         self.interface.afficher("2) Quitter") 
+        self.jeu.supprmier_sauvegarde() 
         self.interface.attendre_reponse(self.finjeu)
 
     def combat_sorcier(self):
@@ -913,6 +923,7 @@ class MondeMedieval:
         self.interface.afficher("")
         self.interface.afficher("1) Rejouer")
         self.interface.afficher("2) Quitter") 
+        self.jeu.supprmier_sauvegarde() 
         self.interface.attendre_reponse(self.finjeu)
     
     def sorcier_combat_2(self):
@@ -956,6 +967,7 @@ class MondeMedieval:
         self.interface.afficher("")
         self.interface.afficher("1) Rejouer")
         self.interface.afficher("2) Quitter") 
+        self.jeu.supprmier_sauvegarde() 
         self.interface.attendre_reponse(self.finjeu)
     
     def sorcier_maitriser(self):
@@ -999,6 +1011,7 @@ class MondeMedieval:
         self.interface.afficher("")
         self.interface.afficher("1) Rejouer")
         self.interface.afficher("2) Quitter") 
+        self.jeu.supprmier_sauvegarde() 
         self.interface.attendre_reponse(self.finjeu)
 
     def sorcier_blesse(self):
@@ -1027,7 +1040,8 @@ class MondeMedieval:
         self.interface.afficherItalique("Félicitations: Vous avez atteint la 5ème fin !")
         self.interface.afficher("")
         self.interface.afficher("1) Rejouer")
-        self.interface.afficher("2) Quitter") 
+        self.interface.afficher("2) Quitter")
+        self.jeu.supprmier_sauvegarde() 
         self.interface.attendre_reponse(self.finjeu)
 
     
