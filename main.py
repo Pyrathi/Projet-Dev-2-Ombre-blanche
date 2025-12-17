@@ -13,7 +13,7 @@ def extraire_num(texte):
     if correspondance:
         return int(correspondance.group()) if correspondance else None
     
-    # Préhistroqiue: Fonction décorateur (gère les choix des joueurs)
+# Préhistroqiue: Fonction décorateur (gère les choix des joueurs)
 def valider(min, max):
     def decorateur(func):
         def wrapper(self, choix):
@@ -101,7 +101,7 @@ class Jeu:
         self.mana=0
         self.monde = None
         self.prctaffect=0
-        self.faim = None
+        self.faim = 100
         self.fichier_save = "sauvegarde.json"
         self.objet_animaux=[]
 
@@ -137,7 +137,7 @@ class Jeu:
         self._temperature = valeur
 
     # ------------------------------
-    # Sauvegarde / Chargement
+    # Sauvegarde / Chargement / Suppression
     # ------------------------------
     def sauvegarder(self):
         #
@@ -145,53 +145,67 @@ class Jeu:
         #
         data = {
             "nom": self.nom,
-            "inventaire": self.inventaire,
-            "mana": self.mana,
             "monde": self.monde,
-            "faim": self.faim
         }
-        with open(self.fichier_save, "w") as f:
-            json.dump(data, f)
-        self.interface.afficher("💾 Partie sauvegardée !")
+
+        if self.monde == "préhistorique":
+            data["faim"] = self.faim
+            data["objet_animaux"] =self.objet_animaux
+
+        if self.monde == "medieval":
+            data["mana"] = self.mana
+            data["inventaire"] = self.inventaire
+
+        with open(self.fichier_save, "w", encoding="utf-8") as sauvegarde:
+            json.dump(data, sauvegarde, indent= 4, ensure_ascii=False)
+
+        self.interface.afficher("Partie sauvegardée !")
+
 
     def charger_partie(self):
         #
         # Permet de charger une partie sauvegarder précédement
         #
         if not os.path.exists(self.fichier_save):
-            self.interface.afficher("❌ Aucune sauvegarde trouvée.")
+            self.interface.afficher("Aucune sauvegarde trouvée.")
             return self.lancement()
 
-        with open(self.fichier_save, "r") as f:
-            data = json.load(f)
+        with open(self.fichier_save, "r", encoding="utf-8") as chargement:
+            data = json.load(chargement)
 
         self.nom = data.get("nom", "")
-        self.inventaire = data.get("inventaire", [])
-        self.mana = data.get("mana", 0)
-        self.monde = data.get("monde", None)
-        self.faim = data.get("faim", None)
-        self.interface.afficher(f"🔁 Partie chargée de {self.nom} dans le monde {self.monde} !")
+        self.monde = data.get("monde")
 
         # Reprendre selon le monde
         if self.monde == "medieval":
             self.monde_actuel = MondeMedieval(self)
             self.interface.activer_bouton_medieval()
+            self.mana = data.get("mana", 0)
+            self.inventaire = data.get("inventaire", [])
             self.monde_actuel.medieval1()
+
         elif self.monde == "romance":
             self.interface.desactiver_bouton_medieval()
             self.romance1()
+
         elif self.monde == "prehistorique":
             self.interface.desactiver_bouton_medieval()
-            if self.faim is None:
-                self.faim = 100
+            self.faim = data.get("faim", 100)
+            self.objet_animaux = data.get("objet_animaux", [])
             self.prehistoire1()
+
         elif self.monde == "futuriste":
             self.monde_actuel = MondeFuturiste(self)
             self.interface.desactiver_bouton_medieval()
             self.monde_actuel.futuriste1()
+
         else:
-            self.interface.afficher("⚠️ Monde inconnu dans la sauvegarde.")
+            self.interface.afficher("Monde inconnu dans la sauvegarde.")
             self.lancement()
+    # Supprimer la sauvegarde si le monde est terminé
+    def supprmier_sauvegarde(self):
+        if os.path.exists(self.fichier_save):
+            os.remove(self.fichier_save)
 
     # ------------------------------
     # Lancement
@@ -296,6 +310,7 @@ class Jeu:
         self.interface.afficher("Fin.")
         self.interface.afficher("1) Rejouer")
         self.interface.afficher("2) Quitter")
+        self.supprmier_sauvegarde()
         self.interface.attendre_reponse(self.finjeu)
 
 
@@ -619,12 +634,14 @@ class Jeu:
     def prehistoire_fin_bonne(self):
         self.interface.afficher("Tu te réveilles vivant. Tu as survécu à la nuit.")
         self.interface.afficher("1) Rejouer\n2) Quitter")
+        self.supprmier_sauvegarde()
         self.interface.attendre_reponse(self.finjeu)
 
     # Mauvaise fin (mort)
     def prehistoire_fin_mauvaise(self):
         self.interface.afficher("Vous êtes mort...")
         self.interface.afficher("1) Rejouer\n2) Quitter")
+        self.supprmier_sauvegarde()
         self.interface.attendre_reponse(self.finjeu)
 
     # Fin famine, plus assez de vie ou mort de faim
@@ -632,6 +649,7 @@ class Jeu:
         self.interface.afficher("Ton ventre crie famine… tu t'effondres.")
         self.interface.afficher("FIN : Mort de faim.")
         self.interface.afficher("1) Rejouer\n2) Quitter")
+        self.supprmier_sauvegarde()
         self.interface.attendre_reponse(self.finjeu)
     
 
@@ -650,6 +668,10 @@ class InterfaceConsole:
 
     def attendre_reponse(self, callback):
         reponse = input("> ")
+
+        if reponse.lower() == "save":
+            self.jeu.sauvegarder()
+            return self.attendre_reponse(callback)
         callback(reponse)
     
     def activer_bouton_medieval(self):
@@ -753,6 +775,11 @@ class InterfaceTk:
         texte = self.entree.get()
         self.entree.delete(0, tk.END)
         self.afficher(f"> {texte}")
+
+        if texte.lower() == "save":
+            self.jeu.sauvegarder()
+            return
+        
         if self.callback:
             self.callback(texte)
     
