@@ -143,6 +143,10 @@ class Jeu:
         #
         # Permet la sauvegarder la partie dans un fichier
         #
+        if not self.nom or not self.monde:
+            self.interface.afficher("Impossible de sauvegarder : nom ou monde non défini.")
+            return
+
         data = {
             "nom": self.nom,
             "monde": self.monde,
@@ -657,6 +661,9 @@ class InterfaceConsole:
     # ------------------------------
     # Affichage console
     # ------------------------------
+    def __init__(self, jeu):
+        self.jeu = jeu
+    
     def afficher(self, texte):
         print(texte)
 
@@ -872,13 +879,39 @@ if __name__ == "__main__":
     if choix == "2":
         jeu = Jeu(None)
         interface = InterfaceTk(jeu)
-        jeu.interface = interface 
+        jeu.interface = interface
         jeu.lancement()
         interface.lancer()
+
+        if os.path.exists(jeu.fichier_save):
+            interface.afficher("Une sauvegarde existe.")
+            interface.afficher("1) Continuer la partie")
+            interface.afficher("2) Nouvelle partie")
+            rep = input("> ")
+
+            if rep == "1":
+                jeu.charger_partie()
+            else:
+                jeu.lancement()
+        else:
+            jeu.lancement()
+
+        interface.lancer()
+        
     else:
-        interface = InterfaceConsole()
-        jeu = Jeu(interface)
-
-        jeu.lancement()
-
+        jeu = Jeu(None)
+        interface = InterfaceConsole(jeu)
+        jeu.interface = interface
     
+    if os.path.exists(jeu.fichier_save):
+        print("Une sauvegarde existe.")
+        print("1) Continuer la partie")
+        print("2) Nouvelle partie")
+        rep = input("> ")
+
+        if rep == "1":
+            jeu.charger_partie()
+        else:
+            jeu.lancement()
+    else:
+        jeu.lancement()
