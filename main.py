@@ -237,7 +237,7 @@ class Jeu:
         #
         # Lance la partie et attends que l'utilisateur donne son nom
         #
-        self.interface.afficher("Bonjour aventurier, quel est ton nom ?")
+        self.interface.root.after(300, lambda: self.interface.afficher("Bonjour aventurier, quel est ton nom ?"))
         self.interface.attendre_reponse(self.set_nom)
     
     
@@ -247,6 +247,7 @@ class Jeu:
         #Reçoit le nom de l'utilisateur et donne le choix du monde
         #
         self.nom = nom
+        self.interface.remonter_texte_histoire()
         self.interface.afficher(f"Bienvenue, {self.nom}.")
         self.interface.afficher("Choisis ton monde :\n1) Monde médiéval\n2) Romance\n3) Monde préhistorique\n4) Monde futuriste")
         self.interface.attendre_reponse(self.choisir_monde)
@@ -700,7 +701,14 @@ class InterfaceTk:
         self.root.configure(bg="#8B5A2B")
         self.root.attributes("-fullscreen", True)
         self.root.update_idletasks()
-
+        largeur_ecran = self.root.winfo_screenwidth()
+        hauteur_ecran = self.root.winfo_screenheight()
+        centre_x = largeur_ecran // 2
+        centre_y = hauteur_ecran // 2.5
+        
+        
+        
+            
         image_originale_inventaire = tk.PhotoImage(file="assets/chest.png")
         self.img_inventaire = image_originale_inventaire.subsample(4, 4)
 
@@ -709,7 +717,29 @@ class InterfaceTk:
 
         self.root.bind("<Escape>", lambda e: self.root.attributes("-fullscreen", False))
         self.root.title("Aventure Textuelle")
-        self.zone = tk.Text(self.root, wrap="word", state="disabled", bg="#fdf5e6", fg="#5b3a29", font=("Papyrus", 14))
+        # =================================================================
+        self.canvas_livre = tk.Canvas(self.root, bg="#1e1e1e", highlightthickness=0)
+        image_source = tk.PhotoImage(file="assets/livre_fond.png")
+        self.img_livre = image_source.zoom(4, 4)
+        self.livre_id = self.canvas_livre.create_image(
+            self.root.winfo_screenwidth() // 2, 
+            self.root.winfo_screenheight() // 2.5, 
+            image=self.img_livre
+        )
+        self.texte_livre_id = self.canvas_livre.create_text(
+            0, 0,
+            text="", 
+            font=("Papyrus", 12, "bold"),
+            fill="#5b3a29",
+            anchor="nw",
+            justify="left"
+        )
+        self.root.after(200, self.repositionner_grimoire)
+        
+        
+        
+        
+        # =================================================================
         
 
         self.root.bind("<Escape>", lambda e: self.root.attributes("-fullscreen", False))
@@ -742,7 +772,7 @@ class InterfaceTk:
         frame.pack(side="bottom", fill="x", padx=50, pady=20)
         self.entree.pack(side="left", fill="x", expand=True, padx=(0, 10), ipady=12)
         self.bouton_envoyer.pack(side="left", ipady=5, ipadx=10)
-        self.zone.pack(fill="both", expand=True, padx=20, pady=(20, 0))
+        self.canvas_livre.pack(fill="both", expand=True)
         
         self.bouton_inventaire = tk.Button(frame,
                                         image=self.img_inventaire ,
@@ -777,27 +807,81 @@ class InterfaceTk:
     def desactiver_bouton_medieval(self):
         self.bouton_inventaire.pack_forget()
         self.bouton_sort.pack_forget()
+        
+    def repositionner_grimoire(self):
+        """ Aligne le texte sur la page de gauche (Position basse pour le début) """
+        self.root.update_idletasks()
+        
+        largeur_c = self.canvas_livre.winfo_width() if self.canvas_livre.winfo_width() > 1 else self.root.winfo_screenwidth()
+        hauteur_c = self.canvas_livre.winfo_height() if self.canvas_livre.winfo_height() > 1 else self.root.winfo_screenheight()
+        
+        largeur_l = self.img_livre.width()
+        hauteur_l = self.img_livre.height()
+
+        centre_x = largeur_c // 2
+        centre_y = hauteur_c // 2.5
+        x_texte = centre_x - (largeur_l // 3.6)
+        y_texte = centre_y - (hauteur_l // 20 ) 
+        
+        largeur_utile = int(largeur_l * 0.28)
+
+        self.canvas_livre.coords(self.texte_livre_id, x_texte, y_texte)
+        self.canvas_livre.itemconfig(
+            self.texte_livre_id, 
+            width=largeur_utile, 
+            font=("Papyrus", 13, "bold"),
+            anchor="nw"
+        )
+        
+    def remonter_texte_histoire(self):
+        """ Remonte le point de départ du texte à // 3 pour l'histoire """
+        coords = self.canvas_livre.coords(self.texte_livre_id)
+        if not coords: return
+
+        hauteur_c = self.canvas_livre.winfo_height() if self.canvas_livre.winfo_height() > 1 else self.root.winfo_screenheight()
+        hauteur_l = self.img_livre.height()
+        centre_y = hauteur_c // 2.5
+        y_haut = centre_y - (hauteur_l // 4)
+        self.canvas_livre.coords(self.texte_livre_id, coords[0], y_haut)
+    
+    
+    
+    
+    def simuler_animation_page(self):
+        """ Simule une page qui tourne en faisant clignoter le texte """
+        couleur_encre = "#5b3a29" 
+        self.canvas_livre.itemconfig(self.texte_livre_id, fill="")
+        self.root.after(150, lambda: self.canvas_livre.itemconfig(self.texte_livre_id, fill=couleur_encre))
+
+    
 
     def afficher(self, message):
-        #
-        # Affiche les messages
-        #
-        self.zone.config(state="normal")
-        self.zone.insert(tk.END, message + "\n")
-        self.zone.config(state="disabled")
-        self.zone.see(tk.END)
+        texte_actuel = self.canvas_livre.itemcget(self.texte_livre_id, "text")
+        nouveau_texte = texte_actuel + "\n" + message
+        lignes = nouveau_texte.split('\n')
+        if len(lignes) > 35:
+            nouveau_texte = "... " + "\n".join(lignes[-35:])
+        self.canvas_livre.itemconfig(self.texte_livre_id, text=nouveau_texte)
+        self.simuler_animation_page()
+    
 
-    def afficherItalique(self,message):
-        #
-        # Affichage en italique
-        #
-        self.italique_font = font.Font(self.zone, self.zone.cget("font"))
-        self.italique_font.configure(slant="italic")
-        self.zone.config(state="normal")
-        self.zone.insert(tk.END, message + "\n", "italique")
-        self.zone.config(state="disabled")
-        self.zone.see(tk.END)
-        self.zone.tag_configure("italique", font=self.italique_font)
+    def afficherItalique(self, message):
+        """ Affiche le message sur le livre en utilisant une police italique """
+        try:
+            texte_actuel = self.canvas_livre.itemcget(self.texte_livre_id, "text")
+            nouveau_texte = texte_actuel + "\n" + message
+
+            lignes = nouveau_texte.split('\n')
+            if len(lignes) > 35:
+                nouveau_texte = "... " + "\n".join(lignes[-35:])
+            self.canvas_livre.itemconfig(
+                self.texte_livre_id, 
+                text=nouveau_texte,
+                font=("Papyrus", 9, "bold italic") 
+            )
+            self.simuler_animation_page()
+        except:
+            self.root.after(50, lambda: self.afficherItalique(message))
 
     def attendre_reponse(self, callback):
         self.callback = callback
@@ -805,6 +889,7 @@ class InterfaceTk:
     def envoyer(self, event=None):
         texte = self.entree.get()
         self.entree.delete(0, tk.END)
+        self.canvas_livre.itemconfig(self.texte_livre_id, text="")
         self.afficher(f"> {texte}")
 
         if texte.lower() == "save":
