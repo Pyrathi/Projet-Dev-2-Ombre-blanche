@@ -41,6 +41,24 @@ def marche_generator():
         ]
         while True:
             yield random.choice(evenements)
+#décorateur romance
+def valider_choix_romance(min, max):
+    def decorateur(func):
+        def wrapper(self, choix):
+            try:
+                choix = int(choix)
+            except ValueError:
+                self.interface.afficher("Entrée invalide.")
+                return func(self, None)
+
+            if choix < min or choix > max:
+                self.interface.afficher("Choix hors limite.")
+                return func(self, None)
+
+            return func(self, choix)
+        return wrapper
+    return decorateur
+
 
 class MondeErreur(Exception):
     """Exception personnalisée pour les erreurs."""
@@ -287,23 +305,18 @@ class Jeu:
         self.interface.afficher("2) Vous prenez votre courage à deux mains et vous vous approchez d'elle")
         self.interface.attendre_reponse(self.premierchoix)
 
-
+    @valider_choix_romance(1,2)
     def premierchoix(self, choix):
-        try:
-            choix = int(choix)
-        except ValueError:
-            self.interface.afficher("Entrée invalide.")
+        if choix is None:
             return self.romance1()
-        
-        
-        if int(choix) == 1:
+        if choix == 1:
             self.choix_choisis_romance.append(1)
             self.romfin1()
-        elif int(choix) == 2:
+        elif choix == 2:
             self.choix_choisis_romance.append(2)
             self.rompremiermot()    
-        else:
-            self.romance1()
+       
+        
 
 
     def romfin1(self):
@@ -324,17 +337,12 @@ class Jeu:
         self.interface.afficher("2) Vous décidez d'entamer la dicussion  " + "\n-Vous : Hello")
         self.interface.attendre_reponse(self.choixabordage)
 
-
+    @valider_choix_romance(1, 2)
     def choixabordage(self, choix):
-        try:
-            choix = int(choix)
-        except ValueError:
-            self.interface.afficher("Entrée invalide.")
-            return self.romance1()
+        if choix is None:
+            return self.rompremiermot()
         
-        
-
-        if int(choix) == 1:
+        if choix == 1:
             try:
                 self.affection.valeur -= 5
             except MondeErreur:
@@ -345,15 +353,13 @@ class Jeu:
             for num in self.choix_choisis_romance:
                 texte = self.choix_romance_recap_dico.get(num, f"(Choix {num} non défini)")
                 self.interface.afficher(f"{num}. {texte}")
-        elif int(choix) == 2:
+        elif choix == 2:
             self.choix_choisis_romance.append(4)
             self.approcheToi()
             self.affection.valeur += 5
             for num in self.choix_choisis_romance:
                 texte = self.choix_romance_recap_dico.get(num, f"(Choix {num} non défini)")
                 self.interface.afficher(f"{num}. {texte}")
-        else:
-            self.rompremiermot()
         
 
 
@@ -382,10 +388,9 @@ class Jeu:
         self.interface.afficher("2) Lui faire un petit compliment")
         self.interface.attendre_reponse(self.romance_S2_reponse)
 
+    @valider_choix_romance(1, 2)
     def romance_S2_reponse(self, choix):
-        try:
-            choix = int(choix)
-        except ValueError:
+        if choix is None:
             return self.romance_S2()
 
         if choix == 1:
@@ -401,11 +406,9 @@ class Jeu:
             self.affection.valeur += 0
             self.a_demande_si_ca_va = False #aura conséquence pour le prochain choix
             self.interface.afficher(self.format_aff(self.affection.valeur))
-            self.choix_choisis_romance.append(6) 
+            self.choix_choisis_romance.append(6)
 
-        else:
-            return self.romance_S2()
-
+        self.interface.afficher("Tu te sens " + ("super confiant !" if self.affection.valeur >= 50 else "un peu nerveux"))
         return self.romance_S2bis()
 
 
@@ -417,10 +420,9 @@ class Jeu:
         self.interface.afficher("2) Lui demander si elle veut rentrer ensemble\n")
         self.interface.attendre_reponse(self.romance_S2bis_reponse)
 
+    @valider_choix_romance(1, 2)
     def romance_S2bis_reponse(self, choix):
-        try:
-            choix = int(choix)
-        except ValueError:
+        if choix is None:
             return self.romance_S2bis()
 
         if choix == 1:
@@ -441,8 +443,7 @@ class Jeu:
             self.choix_choisis_romance.append(8) 
             #return self.romance_S3_rentrer()
 
-        else:
-            return self.romance_S2bis()
+    
 
 
 
