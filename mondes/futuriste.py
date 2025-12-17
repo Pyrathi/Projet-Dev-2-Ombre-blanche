@@ -95,7 +95,7 @@ class MondeFuturiste:
         return self._cledecrypt
 
     @cledecrypt.setter
-    def set_cledecrypt(self, valeur):
+    def cledecrypt(self, valeur):
         if valeur >= 0 and valeur <=1:
             self._cledecrypt = valeur
         else:
@@ -318,7 +318,8 @@ class MondeFuturiste:
             return
 
         if int(choix) == 1:
-            self.interface.afficher("Tu lances immédiatement le décryptage du message.")
+            self.interface.afficher("Tu lances immédiatement le décryptage du message et tu obtiens une clef de décryptage inconnue.")
+            self.cledecrypt = 1
             self.fut3a()
             
         elif int(choix) == 2:
@@ -413,6 +414,10 @@ class MondeFuturiste:
 
     
     def fut3a(self):
+        if self._cledecrypt == 0:
+            self.interface.afficher("Pas de chance! Tu ne peux pas exploiter le flux complètement car tu n’as de la clé de décryptage nécessaire.")
+            self.fut3c()
+            return
         self.ajouter_historique ("3A")
         self.interface.afficher("Tu décides d’agir sans attendre, poussant tes systèmes au-delà de leurs limites.")
         self.interface.afficher("Tu es prêt à forcer la vérité, quel qu’en soit le prix.")
