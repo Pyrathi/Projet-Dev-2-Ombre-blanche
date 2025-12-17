@@ -697,6 +697,7 @@ class InterfaceTk:
     def __init__(self,jeu):
         self.jeu = jeu
         self.root = tk.Tk()
+        self.root.configure(bg="#8B5A2B")
         self.root.attributes("-fullscreen", True)
         self.root.update_idletasks()
 
@@ -708,18 +709,20 @@ class InterfaceTk:
 
         self.root.bind("<Escape>", lambda e: self.root.attributes("-fullscreen", False))
         self.root.title("Aventure Textuelle")
-        self.zone = tk.Text(self.root, wrap="word", state="disabled", bg="#111", fg="#eee")
-        self.zone.pack(fill="both", expand=True, padx=40, pady=20)
+        self.zone = tk.Text(self.root, wrap="word", state="disabled", bg="#fdf5e6", fg="#5b3a29", font=("Papyrus", 14))
+        self.zone.pack(fill="both", expand=True, padx=20, pady=20)
 
         self.root.bind("<Escape>", lambda e: self.root.attributes("-fullscreen", False))
         frame = tk.Frame(self.root, bg="#1e1e1e")
         frame.pack(side="bottom", pady=15)
 
-        self.entree = tk.Entry(frame, width=40)
+        self.entree = tk.Entry(frame, width=40, font=("Papyrus",14,"italic"), bg="#fdf5e6", fg="#5b3a29", insertbackground="#5b3a29", relief="flat", bd=5)
+
         self.entree.pack(side="left", padx=(0, 5))
         self.entree.bind("<Return>", self.envoyer)
 
-        self.bouton_envoyer = tk.Button(frame, text="Envoyer", command=self.envoyer)
+        self.bouton_envoyer = tk.Button(frame, text="Envoyer", command=self.envoyer, font=("Papyrus",12,"bold italic"), bg="#f5deb3", fg="#5b3a29", activebackground="#e6d5a5", activeforeground="#5b3a29", relief="raised", bd=3, cursor="hand2")
+
         self.bouton_envoyer.pack(side="left", padx=(0, 5))
         self.bouton_inventaire = tk.Button(frame,
                                         image=self.img_inventaire ,
