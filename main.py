@@ -140,6 +140,8 @@ class Jeu:
     # Préhistorique: modifier la faim du joueur
     def modifier_faim(self, quantite):
         self.faim = max(0, min(100, self.faim + quantite))
+        if isinstance(self.interface, InterfaceTk):
+            self.interface.mettre_a_jour_faim()
         return self.faim
 
     @property
@@ -237,7 +239,7 @@ class Jeu:
         #
         # Lance la partie et attends que l'utilisateur donne son nom
         #
-        self.interface.root.after(300, lambda: self.interface.afficher("Bonjour aventurier, quel est ton nom ?"))
+        self.interface.afficher("Bonjour aventurier, quel est ton nom ?")
         self.interface.attendre_reponse(self.set_nom)
     
     
@@ -259,22 +261,26 @@ class Jeu:
         if choix == "1":
             self.monde = "medieval"
             self.interface.activer_bouton_medieval()
+            self.interface.desactiver_bouton_prehistorique()
             self.interface.afficher("Tu as choisi le monde médiéval...")
             self.monde_actuel = MondeMedieval(self)
             self.monde_actuel.medieval1()
         elif choix == "2":
             self.monde = "romance"
             self.interface.desactiver_bouton_medieval()
+            self.interface.desactiver_bouton_prehistorique()
             self.interface.afficher("Tu as choisi la romance")
             self.romance1()
         elif choix == "3":
             self.monde = "prehistorique"
             self.interface.desactiver_bouton_medieval()
+            self.interface.activer_bouton_prehistorique()
             self.interface.afficher("Tu as choisi le monde préhistorique...")
             self.prehistoire1()
         elif choix == "4":
             self.monde = "futuriste"
             self.interface.desactiver_bouton_medieval()
+            self.interface.desactiver_bouton_prehistorique()
             self.interface.afficher("Tu as choisi le monde futuriste...")
             self.monde_actuel = MondeFuturiste(self)
             self.monde_actuel.fut0()
@@ -688,7 +694,9 @@ class InterfaceConsole:
 
     def desactiver_bouton_medieval(self):
         pass
-
+    
+    def remonter_texte_histoire(self):
+        pass
 
 
 class InterfaceTk:
@@ -762,7 +770,23 @@ class InterfaceTk:
             bd=10 
         )
 
+        # Bouton objets
+        self.bouton_objets = tk.Button(
+            frame,
+            text="Objets",
+            font=("Papyrus", 12, "bold"),
+            command=self.afficher_objets_prehisto,
+            bg="#f5deb3",
+            fg="#5b3a29",
+            relief="raised",
+            cursor="hand2"
+        )
         
+        # Barre de faim
+        self.barre_faim_label = tk.Label(frame, text=f"Faim : {self.jeu.faim}/100", 
+                                 font=("Papyrus", 12, "bold"),
+                                 bg="#8B5A2B", fg="white")
+        self.barre_faim_label.pack(side="right", padx=10)
         
 
         self.entree.bind("<Return>", self.envoyer)
@@ -975,6 +999,24 @@ class InterfaceTk:
             justify="center"      
         )
 
+    def mettre_a_jour_faim(self):
+        self.barre_faim_label.config(text=f"Faim : {self.jeu.faim}/100")
+
+    def afficher_objets_prehisto(self):
+        objets = self.jeu.objet_animaux
+
+        if not objets:
+            messagebox.showinfo("Objets", "Il n'y a rien ici.")
+        else:
+            texte = "\n".join(f"- {obj}" for obj in objets)
+            messagebox.showinfo("Objets", texte)
+
+    def activer_bouton_prehistorique(self):
+        self.bouton_objets.pack(side="left", padx=5)
+
+    def desactiver_bouton_prehistorique(self):
+        self.bouton_objets.pack_forget()
+
     def lancer(self):
         self.root.mainloop()
 
@@ -989,13 +1031,32 @@ if __name__ == "__main__":
         jeu = Jeu(None)
         interface = InterfaceTk(jeu)
         jeu.interface = interface
-        jeu.lancement()
-        interface.lancer()
+
+        def choix_sauvegarde(rep):
+            if rep == "1":
+                jeu.charger_partie()
+            else:
+                jeu.lancement()
 
         if os.path.exists(jeu.fichier_save):
             interface.afficher("Une sauvegarde existe.")
             interface.afficher("1) Continuer la partie")
             interface.afficher("2) Nouvelle partie")
+            interface.attendre_reponse(choix_sauvegarde)
+        else:
+            jeu.lancement()
+
+        interface.lancer()
+
+    else:
+        jeu = Jeu(None)
+        interface = InterfaceConsole(jeu)
+        jeu.interface = interface
+
+        if os.path.exists(jeu.fichier_save):
+            print("Une sauvegarde existe.")
+            print("1) Continuer la partie")
+            print("2) Nouvelle partie")
             rep = input("> ")
 
             if rep == "1":
@@ -1004,23 +1065,3 @@ if __name__ == "__main__":
                 jeu.lancement()
         else:
             jeu.lancement()
-
-        interface.lancer()
-        
-    else:
-        jeu = Jeu(None)
-        interface = InterfaceConsole(jeu)
-        jeu.interface = interface
-    
-    if os.path.exists(jeu.fichier_save):
-        print("Une sauvegarde existe.")
-        print("1) Continuer la partie")
-        print("2) Nouvelle partie")
-        rep = input("> ")
-
-        if rep == "1":
-            jeu.charger_partie()
-        else:
-            jeu.lancement()
-    else:
-        jeu.lancement()
