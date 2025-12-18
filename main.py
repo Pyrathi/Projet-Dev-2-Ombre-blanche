@@ -786,7 +786,7 @@ class InterfaceTk:
         self.barre_faim_label = tk.Label(frame, text=f"Faim : {self.jeu.faim}/100", 
                                  font=("Papyrus", 12, "bold"),
                                  bg="#8B5A2B", fg="white")
-        self.barre_faim_label.pack(side="right", padx=10)
+       
         
 
         self.entree.bind("<Return>", self.envoyer)
@@ -1013,9 +1013,13 @@ class InterfaceTk:
 
     def activer_bouton_prehistorique(self):
         self.bouton_objets.pack(side="left", padx=5)
+        self.barre_faim_label.pack(side="right", padx=10)
 
     def desactiver_bouton_prehistorique(self):
         self.bouton_objets.pack_forget()
+        self.barre_faim_label.pack_forget()
+
+
 
     def lancer(self):
         self.root.mainloop()
