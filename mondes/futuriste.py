@@ -57,7 +57,7 @@ class MondeFuturiste:
                     time.sleep(0.005)
                 print("") # Saut de ligne à la fin
 
-        # On remplace la méthode de l'interface par notre version intelligente
+        # On remplace la méthode de l'interface
         self.interface.afficher = afficher_adaptatif
 
 # --- --- --- --- ---EXCEPTION --- --- --- --- --- #
@@ -316,7 +316,7 @@ class MondeFuturiste:
         choix = self.verifier_nombre(reponse, self.choix2b)
         if choix is None:
             return
-
+#--- --- Clé de décryptage --- ---#
         if int(choix) == 1:
             self.interface.afficher("Tu lances immédiatement le décryptage du message et tu obtiens une clef de décryptage inconnue.")
             self.cledecrypt = 1
@@ -412,7 +412,7 @@ class MondeFuturiste:
                     break
 #--- --- --- Step3 --- --- ---#
 
-    
+#--- --- Clé de décryptage --- ---#
     def fut3a(self):
         if self._cledecrypt == 0:
             self.interface.afficher("Pas de chance! Tu ne peux pas exploiter le flux complètement car tu n’as de la clé de décryptage nécessaire.")
