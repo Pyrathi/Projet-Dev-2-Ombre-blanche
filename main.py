@@ -251,6 +251,7 @@ class Jeu:
         self.nom = nom
         self.interface.remonter_texte_histoire()
         self.interface.afficher(f"Bienvenue, {self.nom}.")
+        self.interface.afficher("Pour sauvegarder ta partie à tout moment, tape 'save'.")
         self.interface.afficher("Choisis ton monde :\n1) Monde médiéval\n2) Romance\n3) Monde préhistorique\n4) Monde futuriste")
         self.interface.attendre_reponse(self.choisir_monde)
 
