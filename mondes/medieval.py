@@ -42,10 +42,18 @@ class MondeMedieval:
     @property
     def inventaire(self):
         return self.jeu.inventaire
+    
+    @inventaire.setter
+    def inventaire(self, nouvelle_liste):
+        self.jeu.inventaire = nouvelle_liste
 
     @property
     def sort(self):
         return self.jeu.sort
+    
+    @sort.setter
+    def sort(self, nouvelle_liste_sorts):
+        self.jeu.sort = nouvelle_liste_sorts
     
     @property
     def mana(self):
@@ -53,7 +61,7 @@ class MondeMedieval:
     
     @mana.setter    
     def mana(self,valeur):
-        self.mana=valeur
+        self.jeu.mana=valeur
     
     #---------------------
     #Histoire
