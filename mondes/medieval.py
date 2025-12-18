@@ -1,6 +1,15 @@
 import re
 import random
 import sys
+class MedievalError(Exception):
+    """Classe de base pour les exceptions du jeu."""
+    pass
+
+class ManaInsuffisantError(MedievalError):
+    """Levée quand le joueur n'a pas assez de mana pour un sort."""
+    def __init__(self, mana_actuel, mana_requis):
+        self.message = f"Mana insuffisant : {mana_actuel}/{mana_requis}"
+        super().__init__(self.message)
 
 def extraire_numero(texte):
     #---------
@@ -62,6 +71,17 @@ class MondeMedieval:
     @mana.setter    
     def mana(self,valeur):
         self.jeu.mana=valeur
+        
+        
+    def apprendre_sort_soin(self):
+        mana_requis = 20
+        if self.mana < mana_requis:
+            # On déclenche l'exception personnalisée
+            raise ManaInsuffisantError(self.mana, mana_requis)
+        
+        self.mana -= mana_requis
+        self.sort.append("soin")
+        self.interface.afficher("Vous avez utilisé un sort de soin !")
     
     #---------------------
     #Histoire
@@ -70,6 +90,7 @@ class MondeMedieval:
         #
         #début de l'aventure médiévale
         #
+        self.mana=100
         self.interface.afficher("")
         self.inventaire.clear()
         self.sort.clear()
@@ -539,8 +560,10 @@ class MondeMedieval:
         self.interface.afficher("Tu ne saurais l'expliquer mais tu as le sentiment d'être capable d'utiliser un sort magique.")
         self.interface.afficher("tu as toujours pensé que cela était réservé à certaines personnes mais tu comprends aujourd'hui que toi aussi en était capable")
         self.interface.afficher("tu comprends donc que le parchemin contenait un sort permettant de soigné des blessures et qu'en le trouvant, tu as appris ce sort")
-        self.sort.append("soin")
-        self.jeu.mana=100
+        try:
+            self.apprendre_sort_soin()
+        except ManaInsuffisantError as e:
+            self.interface.afficher(f"Action impossible : {e}")
         self.interface.afficher("Le coffre n'ayant plus rien à offrir, tu décides de ressortir et de continuer ton chemin")
         self.mari_blesse()
 
