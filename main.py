@@ -204,16 +204,19 @@ class Jeu:
         if self.monde == "medieval":
             self.monde_actuel = MondeMedieval(self)
             self.interface.activer_bouton_medieval()
+            self.interface.desactiver_bouton_prehistorique()
             self.mana = data.get("mana", 0)
             self.inventaire = data.get("inventaire", [])
             self.monde_actuel.medieval1()
 
         elif self.monde == "romance":
             self.interface.desactiver_bouton_medieval()
+            self.interface.desactiver_bouton_prehistorique()
             self.romance1()
 
         elif self.monde == "prehistorique":
             self.interface.desactiver_bouton_medieval()
+            self.interface.activer_bouton_prehistorique()
             self.faim = data.get("faim", 100)
             self.objet_animaux = data.get("objet_animaux", [])
             self.prehistoire1()
@@ -221,6 +224,7 @@ class Jeu:
         elif self.monde == "futuriste":
             self.monde_actuel = MondeFuturiste(self)
             self.interface.desactiver_bouton_medieval()
+            self.interface.desactiver_bouton_prehistorique()
             self.monde_actuel.futuriste1()
 
         else:
