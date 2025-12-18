@@ -702,6 +702,10 @@ class InterfaceConsole:
     
     def remonter_texte_histoire(self):
         pass
+    def activer_bouton_prehistorique(self):
+        pass
+    def desactiver_bouton_prehistorique(self):
+        pass
 
 
 class InterfaceTk:
