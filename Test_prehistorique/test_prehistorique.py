@@ -41,7 +41,10 @@ class TestMondePrehistorique(unittest.TestCase):
         self.jeu.objet_animaux = []
 
     def test_objets_prehistoriques(self):
-        """Vérifie que les objets préhistoriques sont bien ajoutés à l'inventaire."""
+        """
+        PRE: les objets (pierre, peau de tigre) ne sont pas dans l'inventaire
+        POST les objets (pierre, peau de tigre) sont ajoutés dans l'inventaire
+        """
         self.jeu.objet_animaux.append("pierre")
         self.jeu.objet_animaux.append("peau du tigre")
 
@@ -51,7 +54,13 @@ class TestMondePrehistorique(unittest.TestCase):
         self.assertNotIn("griffe", self.jeu.objet_animaux)
 
     def test_modification_faim(self):
-        """Vérifie que la faim est correctement modifiée."""
+        """
+        PRE: la barre de faim (santé) est à 100
+        POST:
+        -si la barre est diminué de 30, elle descend à 70
+        -si la barre est augmenté de 50 elle augmente mais sans dépassé 100
+        -si la barre est diminué de 200, elle ne doit pas descendre en-dessous de 0
+        """
         self.jeu.modifier_faim(-30)
         self.assertEqual(self.jeu.faim, 70)
 
