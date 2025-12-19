@@ -16,10 +16,7 @@ class MondeFuturiste:
         
 
         self._cledecrypt=0
-        self.infos_hack = {
-            "niveau": 1,
-            "reput": "Débutant"
-        }
+   
         
 # --- --- --- --- --- CONTAINER (LISTE) --- --- --- --- --- #
 
@@ -106,6 +103,25 @@ class MondeFuturiste:
 #--- --- --- Step0 --- --- ---#
 
     def fut0(self):
+        """
+         PRE :
+        - self.interface est initialisée
+        - self.jeu est init ialisé
+        - self.jeu.nom est une chaîne de caractères
+        - self.historique existe et est une liste
+        - les méthodes suivantes existent :
+            - self.ajouter_historique
+            - self.interface.afficher
+            - self.interface.afficherItalique
+            - self.interface.attendre_reponse
+
+        POST :
+        - "0" est ajouté à l'historique
+        - le texte de la scène futuriste est affiché à l'utilisateur
+        - l'utilisateur est invité à faire un choix
+        - la méthode pour gérer le choix du joueur est appelée
+        """
+
         self.ajouter_historique ("0")
         self.interface.afficher("Bienvenue dans le monde futuriste")
         self.interface.afficher("Tu avances dans une ruelle étroite, éclairée par des lampes froides qui jettent des reflets métalliques sur le bitume.")
@@ -121,7 +137,7 @@ class MondeFuturiste:
 
         # Choix 3 aléatoire
         chance = random.random()
-        if chance > 0:
+        if chance > 0.5:
             self.interface.afficher("3) Lancer un petit programme automatique pour interagir avec le flux sans t’exposer")
             self.interface.attendre_reponse(self.choixfut0)
         else:
@@ -129,7 +145,26 @@ class MondeFuturiste:
     
         
     def choixfut0(self, reponse):
-        
+        """
+        PRE :
+        - reponse est une chaîne de caractères représentant une entrée utilisateur
+        - self.verifier_nombre existe et retourne soit :
+            - None si l'entrée est invalide
+            - un nombre valide sinon
+        - les méthodes suivantes existent :
+            - self.fut1a
+            - self.fut1b
+            - self.fut1c
+            - self.interface.afficher
+            - self.interface.attendre_reponse
+
+        POST :
+        - si l'entrée est invalide, le joueur doit refaire un choix
+        - si l'entrée est valide :
+            - 1 → fut1a est appelée
+            - 2 → fut1b est appelée
+            - 3 → fut1c est appelée
+        """       
         choix = self.verifier_nombre(reponse, self.choixfut0)
         if choix is None:
             return
@@ -319,7 +354,11 @@ class MondeFuturiste:
 #--- --- Clé de décryptage --- ---#
         if int(choix) == 1:
             self.interface.afficher("Tu lances immédiatement le décryptage du message et tu obtiens une clef de décryptage inconnue.")
-            self.cledecrypt = 1
+            try:
+                self.cledecrypt = 1  # Setter
+            except ErreurCle as e:
+                 # Attrape exception
+                self.interface.afficher(f"Erreur inattendue : {e}")
             self.fut3a()
             
         elif int(choix) == 2:
