@@ -82,7 +82,9 @@ class BarreAffection:
         if v < 0:
             raise MondeErreur("L'affection ne peut pas être négative")
         if v > 100:
-            raise MondeErreur("L'affection ne peut pas dépasser 100")
+            v=100
+            
+
        
         self._valeur = v
         if isinstance(self.jeu.interface, InterfaceTk):
@@ -299,6 +301,7 @@ class Jeu:
 
    
     def finjeu(self, _=None):
+        self.interface.desactiver_barre_romance()
         self.interface.afficher("Partie terminée !")
         self.lancement()
    
@@ -419,7 +422,7 @@ class Jeu:
         elif choix == 2:
             self.interface.afficher("— Aube : Oh… euh… merci.")
             self.interface.afficher("Elle rougit légèrement malgré elle.")
-            self.affection.valeur += 0
+            self.affection.valeur += 10
             self.a_demande_si_ca_va = False #aura conséquence pour le prochain choix
             self.interface.afficher(self.format_aff(self.affection.valeur))
             self.choix_choisis_romance.append(6)
@@ -447,20 +450,255 @@ class Jeu:
                 return self.romance_S2bis()
             else :
                 self.interface.afficher("— Aube : Ah… si tu veux. Merci.\n")
-                self.affection.valeur += 10
-                self.interface.afficher(self.format_aff(self.affection.valeur))
+                self.affection.valeur += 20
+                
                 self.choix_choisis_romance.append(7) 
-                #return self.romance_S3_aider()
+                return self.romance_S3_aider()
 
         elif choix == 2:
             self.interface.afficher("— Aube : Hein ? Non désolé.\n")
             self.affection.valeur -= 5
-            self.interface.afficher(self.format_aff(self.affection.valeur))
+            
             self.choix_choisis_romance.append(8) 
-            #return self.romance_S3_rentrer()
+            return self.romance_S3_rentrer()
 
+    def romance_S3_aider(self):
+        self.interface.afficher("\nVous vous penchez pour l'aider à ranger ses affaires.")
+        self.interface.afficher("Vos mains se frôlent accidentellement.")
+        self.interface.afficher("Aube relève les yeux vers toi, un peu gênée.")
+        self.interface.afficher("1) Retirer rapidement ta main")
+        self.interface.afficher("2) Lui sourire pour détendre l'atmosphère")
+        self.interface.attendre_reponse(self.romance_S3_aider_reponse)
+
+
+    @valider_choix_romance(1, 2)
+    def romance_S3_aider_reponse(self, choix):
+        if choix is None:
+            return self.romance_S3_aider()
+
+        if choix == 1:
+            self.interface.afficher("Tu retires ta main, un peu embarrassé.")
+            self.affection.valeur += 0
+            self.choix_choisis_romance.append(9)
+
+        elif choix == 2:
+            self.interface.afficher("Tu lui souris. Elle hésite, puis te rend ton sourire.")
+            self.affection.valeur += 10
+            self.choix_choisis_romance.append(10)
+
+        return self.romance_S4()
     
+    def romance_S3_rentrer(self):
+        self.interface.afficher("\nUn silence gêné s'installe après sa réponse.")
+        self.interface.afficher("Aube semble hésiter à dire quelque chose.")
+        self.interface.afficher("1) T'excuser pour ta proposition")
+        self.interface.afficher("2) Faire comme si de rien n'était")
+        self.interface.attendre_reponse(self.romance_S3_rentrer_reponse)
 
+
+    @valider_choix_romance(1, 2)
+    def romance_S3_rentrer_reponse(self, choix):
+        if choix is None:
+            return self.romance_S3_rentrer()
+
+        if choix == 1:
+            self.interface.afficher("— Toi : Désolé… j'ai été un peu direct.")
+            self.interface.afficher("— Aube : Ce n'est rien.")
+            self.affection.valeur += 5
+            self.choix_choisis_romance.append(11)
+
+        elif choix == 2:
+            self.interface.afficher("Tu détournes le regard, laissant le silence s'installer.")
+            self.affection.valeur +=0
+            self.choix_choisis_romance.append(12)
+
+        return self.romance_S4()
+    
+    def romance_S4(self):
+        self.interface.afficher("\nLa cloche du lycée retentit au loin.")
+        self.interface.afficher("Aube attrape son sac et se lève.")
+        self.interface.afficher("— Aube : Je vais y aller…")
+        self.interface.afficher("1) Lui souhaiter bonne soirée")
+        self.interface.afficher("2) Lui demander si tu peux la revoir")
+        self.interface.attendre_reponse(self.romance_S4_reponse)
+
+
+    @valider_choix_romance(1, 2)
+    def romance_S4_reponse(self, choix):
+        if choix is None:
+            return self.romance_S4()
+
+        if choix == 1:
+            self.interface.afficher("— Aube : Bonne soirée à toi aussi.")
+            self.affection.valeur += 0
+            self.choix_choisis_romance.append(13)
+            self.interface.afficher("\n\nVous et Aube vous laissez, même si votre tentative ne l'a pas dérangée, ce n'était pas assez convaincant")
+            self.choix_choisis_romance.clear()
+            self.affection.valeur=5
+            self.interface.afficher("Fin.")
+            self.interface.afficher("1) Rejouer")
+            self.interface.afficher("2) Quitter")
+            self.supprmier_sauvegarde()
+            self.interface.attendre_reponse(self.finjeu)
+
+        elif choix == 2:
+            if self.affection.valeur >= 20:
+                self.interface.afficher("Aube hésite, puis hoche doucement la tête.")
+                self.interface.afficher("— Aube : Oui… pourquoi pas.")
+                self.affection.valeur += 10
+                self.choix_choisis_romance.append(14)
+                return self.romance_rencontre2()
+            else:
+                self.interface.afficher("— Aube : Désolée… je préfère rentrer seule.")
+                self.affection.valeur -= 5
+                self.choix_choisis_romance.append(15)
+                self.interface.afficher("Vous n'avez pas su conquérir son coeur !")
+                self.choix_choisis_romance.clear()
+                self.affection.valeur=5
+                self.interface.afficher("Fin.")
+                self.interface.afficher("1) Rejouer")
+                self.interface.afficher("2) Quitter")
+                self.supprmier_sauvegarde()
+                self.interface.attendre_reponse(self.finjeu)
+                
+    def romance_rencontre2(self):
+        self.interface.afficher("\n--- Quelques jours plus tard ---\n")
+        self.interface.afficher("Tu retrouves Aube dans la cour du lycée.")
+        self.interface.afficher("Elle semble t'avoir remarqué avant toi.")
+        self.interface.afficher("— Aube : Salut.")
+        self.interface.afficher("1) Lui sourire et lui demander comment elle va")
+        self.interface.afficher("2) Faire une remarque osée sur sa tenue.")
+        self.interface.attendre_reponse(self.romance_rencontre2_reponse)
+
+    @valider_choix_romance(1, 2)
+    def romance_rencontre2_reponse(self, choix):
+        if choix is None:
+            return self.romance_rencontre2()
+
+        if choix == 1:
+            self.interface.afficher("Aube semble rassurée par ton attitude.")
+            self.interface.afficher("— Aube : Ça va… merci de demander.")
+            self.affection.valeur += 10
+            self.choix_choisis_romance.append(16)
+
+        elif choix == 2:
+            self.interface.afficher("Aube te regarde, un peu mal à l'aise.")
+            self.interface.afficher("— Aube : Ah…euhh d'accord.")
+            self.affection.valeur -= 10
+            self.choix_choisis_romance.append(17)
+        return self.romance_rencontre2bis()
+
+    def romance_rencontre2bis(self):
+        self.interface.afficher("\nUn silence s'installe entre vous.")
+        self.interface.afficher("Aube joue avec la lanière de son sac.")
+        self.interface.afficher("1) Lui proposer de s'asseoir ensemble")
+        self.interface.afficher("2) Lui dire que tu es content de la revoir")
+        self.interface.attendre_reponse(self.romance_rencontre2bis_reponse)
+
+    @valider_choix_romance(1, 2)
+    def romance_rencontre2bis_reponse(self, choix):
+        if choix is None:
+            return self.romance_rencontre2bis()
+
+        if choix == 1:
+            if self.affection.valeur < 30:
+                self.interface.afficher("Aube hésite, puis refuse poliment.")
+                self.affection.valeur -= 5
+                self.choix_choisis_romance.append(18)
+                return self.romance_chapitre2_fin()
+            else:
+                self.interface.afficher("— Aube : Oui… d'accord.")
+                self.affection.valeur += 10
+                self.choix_choisis_romance.append(19)
+                return self.romance_scene_banc()
+
+        elif choix == 2:
+            self.interface.afficher("Aube détourne le regard, mais sourit légèrement.")
+            self.affection.valeur += 5
+            self.choix_choisis_romance.append(20)
+        return self.romance_chapitre2_fin()
+
+    def romance_scene_banc(self):
+        if self.affection.valeur>= 50:
+            self.interface.afficher("Vous êtes assis à coté de Aube sur un banc dans la cour")
+            self.interface.afficher("Aube vous regarde et souris se rapprochant légèrement")
+            self.interface.afficher("Soudainement, Aube attrape votre main et mêle ses doigts aux vôtres")
+            return self.romance_chapitre2_fin()
+        else:
+            self.interface.afficher("Vous êtes assis à coté de Aube sur un banc dans la cour")
+            self.interface.afficher("Vous gardez tous les deux vos distances mais il n'y a pas de gêne")
+            return self.romance_chapitre2_fin()
+    
+    def romance_chapitre2_fin(self):
+        self.interface.afficher("\nLa sonnerie retentit à nouveau.")
+        self.interface.afficher("Cette fois, vous partez côte à côte.")
+        return self.romance_chapitre_final()
+    
+    def romance_chapitre_final(self):
+        self.interface.afficher("La nuit commence à tomber.")
+        self.interface.afficher("Vous marchez ensemble en dehors du lycée.")
+        self.interface.afficher("1) Lui parler de ce que tu ressens")
+        self.interface.afficher("2) Rester silencieux")
+        self.interface.attendre_reponse(self.romance_chapitre_final_choix1)
+
+    @valider_choix_romance(1, 2)
+    def romance_chapitre_final_choix1(self, choix):
+        if choix is None:
+            return self.romance_chapitre_final()
+
+        if choix == 1:
+            self.interface.afficher("Tu prends une grande inspiration.")
+            self.interface.afficher("— Toi : J'aime vraiment passer du temps avec toi.")
+            self.affection.valeur += 20
+            self.choix_choisis_romance.append(21)
+
+        elif choix == 2:
+            self.interface.afficher("Le silence s'étire, inconfortable.")
+            self.affection.valeur -= 10
+            self.choix_choisis_romance.append(22)
+
+        return self.romance_chapitre_final_choix2()
+
+    def romance_chapitre_final_choix2(self):
+        if self.affection.valeur < 55:
+            self.interface.afficher("Aube s'arrête brusquement.")
+            self.interface.afficher("\n— Aube : Je crois qu'on ferait mieux d'en rester là.")
+            self.choix_choisis_romance.clear()
+            self.affection.valeur=5
+            self.interface.afficher("Fin.")
+            self.interface.afficher("1) Rejouer")
+            self.interface.afficher("2) Quitter")
+            self.supprmier_sauvegarde()
+            self.interface.attendre_reponse(self.finjeu)
+
+        self.interface.afficher("\nAube ralentit le pas.")
+        self.interface.afficher("— Aube : Tu es quelqu'un d'important pour moi.")
+        self.interface.afficher("1) Lui avouer clairement tes sentiments")
+        self.interface.afficher("2) Détourner la discussion")
+        self.interface.attendre_reponse(self.romance_chapitre_final_choix2_reponse)
+
+    @valider_choix_romance(1, 2)
+    def romance_chapitre_final_choix2_reponse(self, choix):
+        if choix is None:
+            return self.romance_chapitre_final_choix2()
+
+        if choix == 1:
+            self.interface.afficher("— Toi : Je crois que je suis amoureux de toi.")
+            self.affection.valeur += 15
+            self.choix_choisis_romance.append(23)
+
+        elif choix == 2:
+            self.interface.afficher("— Toi : On devrait peut-être rentrer.")
+            self.affection.valeur -= 20
+            self.choix_choisis_romance.append(24)
+            self.interface.afficher("Si près du but ! Un peu de courage bon sang !")
+            self.choix_choisis_romance.clear()
+            self.affection.valeur=5
+            self.interface.afficher("Fin.")
+            self.interface.afficher("1) Rejouer")
+            self.interface.afficher("2) Quitter")
+            self.supprmier_sauvegarde()
+            self.interface.attendre_reponse(self.finjeu)
 
 
 
@@ -468,7 +706,13 @@ class Jeu:
 
     def event100(self):
         self.interface.afficher("\nAube pose ses mains sur tes joues, et elle t'embrasse")
-        self.interface.afficher(self.format_aff(self.affection.valeur))
+        self.interface.afficher("\nFélicitations ! Vous avez réussi a conquérir le coeur d'Aube !")
+        self.choix_choisis_romance.clear()
+        self.interface.afficher("Fin.")
+        self.interface.afficher("1) Rejouer")
+        self.interface.afficher("2) Quitter")
+        self.supprmier_sauvegarde()
+        self.interface.attendre_reponse(self.finjeu)
 
 
 # ------------------------------
@@ -684,6 +928,8 @@ class InterfaceConsole:
     def afficher(self, texte):
         print(texte)
 
+    def activer_barre_romance(self):
+        pass
     def afficherItalique(self, texte):
         #
         # Affichage en italique
