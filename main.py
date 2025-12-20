@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import ttk
 from tkinter import font, messagebox
 import json
 import os
@@ -84,6 +85,8 @@ class BarreAffection:
             raise MondeErreur("L'affection ne peut pas dépasser 100")
        
         self._valeur = v
+        if isinstance(self.jeu.interface, InterfaceTk):
+            self.jeu.interface.mettre_a_jour_affection()
     
         if self._valeur == 100:
             self.jeu.event100()
@@ -274,6 +277,7 @@ class Jeu:
             self.monde = "romance"
             self.interface.desactiver_bouton_medieval()
             self.interface.desactiver_bouton_prehistorique()
+            self.interface.activer_barre_romance()
             self.interface.afficher("Tu as choisi la romance")
             self.romance1()
         elif choix == "3":
@@ -832,7 +836,43 @@ class InterfaceTk:
         
         
         self.callback = None
-    
+        ###############################################
+        ####Barre affection#################
+        self.barre_affection = ttk.Progressbar(
+            frame,
+            orient="horizontal",
+            length=200,
+            mode="determinate",
+            maximum=100
+        )
+
+        self.label_affection = tk.Label(
+            frame,
+            text="Affection : 0/100",
+            font=("Papyrus", 12, "bold"),
+            bg="#8B5A2B",
+            fg="white"
+        )
+
+    def activer_barre_romance(self):
+        self.barre_affection["value"] = self.jeu.affection.valeur
+        self.label_affection.config(
+            text=f"Affection : {self.jeu.affection.valeur}/100"
+        )
+        self.label_affection.pack(side="right", padx=10)
+        self.barre_affection.pack(side="right")
+
+    def desactiver_barre_romance(self):
+        self.barre_affection.pack_forget()
+        self.label_affection.pack_forget()
+
+    def mettre_a_jour_affection(self):
+        self.barre_affection["value"] = self.jeu.affection.valeur
+        self.label_affection.config(
+            text=f"Affection : {self.jeu.affection.valeur}/100"
+    )
+##################################
+
     def activer_bouton_medieval(self):
         self.bouton_inventaire.pack(side="left",padx=5)
         self.bouton_sort.pack(side="left")
