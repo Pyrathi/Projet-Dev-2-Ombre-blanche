@@ -104,16 +104,43 @@ class Jeu:
         self.affection = BarreAffection(self)
         self.format_aff = lambda v: f"Affection actuelle : {v}/100" #fonction lambda affichage affection
         self.choix_choisis_romance=[] #permettra d'affiché les choix sélectionnés
-        self.choix_romance_recap_dico= {
-            1: "Vous partez de la classe sans lui adresser la parole",
-            2: "Vous vous approchez d'Aube pour la première fois",
-            3: "Vous êtes resté silencieux en face d'elle",
-            4: "Vous engagez la conversation et dites 'Hello'",
-            5: "Vous lui demandez si ca va",
-            6: "Vous la complimentez",
-            7: "Vous lui proposez de ranger ses affaires",
-            8: "Vous lui proposez de la racompagner"
+        self.choix_romance_recap_dico = {
+            1: "Partir sans parler à Aube",
+            2: "S'approcher d'Aube",
+
+            3: "Rester silencieux devant Aube",
+            4: "Dire bonjour à Aube",
+
+            5: "Demander si tout va bien",
+            6: "Faire un compliment",
+
+            7: "Proposer d'aider Aube à ranger ses affaires",
+            8: "Proposer de rentrer ensemble",
+
+            9: "Retirer rapidement sa main",
+            10: "Sourire pour détendre l'atmosphère",
+
+            11: "S'excuser après un moment gênant",
+            12: "Faire comme si de rien n'était",
+
+            13: "Souhaiter bonne soirée à Aube",
+            14: "Demander à revoir Aube",
+            15: "Insister malgré un refus",
+
+            16: "Demander comment elle va lors de la deuxième rencontre",
+            17: "Faire une remarque osée sur sa tenue",
+
+            18: "Proposer de s'asseoir ensemble (refus)",
+            19: "S'asseoir ensemble avec Aube",
+            20: "Dire que tu es content de la revoir",
+
+            21: "Avouer apprécier passer du temps avec elle",
+            22: "Rester silencieux pendant la marche",
+
+            23: "Avouer clairement ses sentiments",
+            24: "Éviter la discussion au moment clé"
         }
+
         self.a_demande_si_ca_va = False
         self.nom=""
         self.inventaire=[]
@@ -369,16 +396,10 @@ class Jeu:
 
             self.choix_choisis_romance.append(3)   
             self.approcheSilence()
-            for num in self.choix_choisis_romance:
-                texte = self.choix_romance_recap_dico.get(num, f"(Choix {num} non défini)")
-                self.interface.afficher(f"{num}. {texte}")
         elif choix == 2:
             self.choix_choisis_romance.append(4)
             self.approcheToi()
             self.affection.valeur += 5
-            for num in self.choix_choisis_romance:
-                texte = self.choix_romance_recap_dico.get(num, f"(Choix {num} non défini)")
-                self.interface.afficher(f"{num}. {texte}")
         
 
 
@@ -533,9 +554,13 @@ class Jeu:
             self.affection.valeur += 0
             self.choix_choisis_romance.append(13)
             self.interface.afficher("\n\nVous et Aube vous laissez, même si votre tentative ne l'a pas dérangée, ce n'était pas assez convaincant")
-            self.choix_choisis_romance.clear()
+            
             self.affection.valeur=5
             self.interface.afficher("Fin.")
+            for num in self.choix_choisis_romance:
+                texte = self.choix_romance_recap_dico.get(num, f"(Choix {num} non défini)")
+                self.interface.afficher(f"{num}. {texte}")
+            self.choix_choisis_romance.clear()
             self.interface.afficher("1) Rejouer")
             self.interface.afficher("2) Quitter")
             self.supprmier_sauvegarde()
@@ -553,8 +578,12 @@ class Jeu:
                 self.affection.valeur -= 5
                 self.choix_choisis_romance.append(15)
                 self.interface.afficher("Vous n'avez pas su conquérir son coeur !")
-                self.choix_choisis_romance.clear()
+                
                 self.affection.valeur=5
+                for num in self.choix_choisis_romance:
+                    texte = self.choix_romance_recap_dico.get(num, f"(Choix {num} non défini)")
+                    self.interface.afficher(f"{num}. {texte}")
+                self.choix_choisis_romance.clear()
                 self.interface.afficher("Fin.")
                 self.interface.afficher("1) Rejouer")
                 self.interface.afficher("2) Quitter")
@@ -663,8 +692,12 @@ class Jeu:
         if self.affection.valeur < 55:
             self.interface.afficher("Aube s'arrête brusquement.")
             self.interface.afficher("\n— Aube : Je crois qu'on ferait mieux d'en rester là.")
-            self.choix_choisis_romance.clear()
+            
             self.affection.valeur=5
+            for num in self.choix_choisis_romance:
+                texte = self.choix_romance_recap_dico.get(num, f"(Choix {num} non défini)")
+                self.interface.afficher(f"{num}. {texte}")
+            self.choix_choisis_romance.clear()
             self.interface.afficher("Fin.")
             self.interface.afficher("1) Rejouer")
             self.interface.afficher("2) Quitter")
@@ -692,9 +725,13 @@ class Jeu:
             self.affection.valeur -= 20
             self.choix_choisis_romance.append(24)
             self.interface.afficher("Si près du but ! Un peu de courage bon sang !")
-            self.choix_choisis_romance.clear()
+            
             self.affection.valeur=5
             self.interface.afficher("Fin.")
+            for num in self.choix_choisis_romance:
+                texte = self.choix_romance_recap_dico.get(num, f"(Choix {num} non défini)")
+                self.interface.afficher(f"{num}. {texte}")
+            self.choix_choisis_romance.clear()
             self.interface.afficher("1) Rejouer")
             self.interface.afficher("2) Quitter")
             self.supprmier_sauvegarde()
@@ -707,8 +744,12 @@ class Jeu:
     def event100(self):
         self.interface.afficher("\nAube pose ses mains sur tes joues, et elle t'embrasse")
         self.interface.afficher("\nFélicitations ! Vous avez réussi a conquérir le coeur d'Aube !")
-        self.choix_choisis_romance.clear()
+        
         self.interface.afficher("Fin.")
+        for num in self.choix_choisis_romance:
+            texte = self.choix_romance_recap_dico.get(num, f"(Choix {num} non défini)")
+            self.interface.afficher(f"{num}. {texte}")
+        self.choix_choisis_romance.clear()
         self.interface.afficher("1) Rejouer")
         self.interface.afficher("2) Quitter")
         self.supprmier_sauvegarde()
@@ -929,6 +970,8 @@ class InterfaceConsole:
         print(texte)
 
     def activer_barre_romance(self):
+        pass
+    def desactiver_barre_romance(self):
         pass
     def afficherItalique(self, texte):
         #
