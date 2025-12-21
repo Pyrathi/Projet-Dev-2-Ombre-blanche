@@ -732,12 +732,12 @@ class Jeu:
             self.interface.afficher("2) Quitter")
             self.supprmier_sauvegarde()
             self.interface.attendre_reponse(self.finjeu)
-
-        self.interface.afficher("\nAube ralentit le pas.")
-        self.interface.afficher("— Aube : Tu es quelqu'un d'important pour moi.")
-        self.interface.afficher("1) Lui avouer clairement tes sentiments")
-        self.interface.afficher("2) Détourner la discussion")
-        self.interface.attendre_reponse(self.romance_chapitre_final_choix2_reponse)
+        else:
+            self.interface.afficher("\nAube ralentit le pas.")
+            self.interface.afficher("— Aube : Tu es quelqu'un d'important pour moi.")
+            self.interface.afficher("1) Lui avouer clairement tes sentiments")
+            self.interface.afficher("2) Détourner la discussion")
+            self.interface.attendre_reponse(self.romance_chapitre_final_choix2_reponse)
 
     @valider_choix_romance(1, 2)
     def romance_chapitre_final_choix2_reponse(self, choix):
