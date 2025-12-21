@@ -211,10 +211,15 @@ class Jeu:
         if self.monde == "medieval":
             data["mana"] = self.mana
             data["inventaire"] = self.inventaire
+
         if self.monde == "romance":
             data["affection"] = self.affection.valeur
             data["choix_choisis_romance"] = self.choix_choisis_romance
             data["a_demande_si_ca_va"] = self.a_demande_si_ca_va
+
+        if self.monde == "futuriste":
+            data["historique"] = self.monde_actuel.historique
+            data["cledecrypt"] = self.monde_actuel.cledecrypt
 
         with open(self.fichier_save, "w", encoding="utf-8") as sauvegarde:
             json.dump(data, sauvegarde, indent= 4, ensure_ascii=False)
@@ -267,7 +272,9 @@ class Jeu:
             self.monde_actuel = MondeFuturiste(self)
             self.interface.desactiver_bouton_medieval()
             self.interface.desactiver_bouton_prehistorique()
-            self.monde_actuel.futuriste1()
+            self.monde_actuel.historique = data.get("historique", [])
+            self.monde_actuel.cledecrypt = data.get("cledecrypt", 0)
+            self.monde_actuel.fut0()
 
         else:
             self.interface.afficher("Monde inconnu dans la sauvegarde.")
