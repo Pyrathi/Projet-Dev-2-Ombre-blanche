@@ -577,7 +577,7 @@ class MondeFuturiste:
         self.interface.afficher(f"Voici ton parcours : {self.historique}")
         self.interface.afficher("1) Rejouer")
         self.interface.afficher("2) Quitter")
-        self.interface.attendre_reponse(self.jeu.finjeu)
+        self.interface.attendre_reponse(self.finjeu)
 
 
     def futfin2(self):
@@ -589,7 +589,7 @@ class MondeFuturiste:
         self.interface.afficher(f"Voici ton parcours : {self.historique}")    
         self.interface.afficher("1) Rejouer")
         self.interface.afficher("2) Quitter")
-        self.interface.attendre_reponse(self.jeu.finjeu)
+        self.interface.attendre_reponse(self.finjeu)
 
 
     def futfin3(self):
@@ -600,18 +600,19 @@ class MondeFuturiste:
         self.interface.afficher(f"Voici ton parcours : {self.historique}")  
         self.interface.afficher("1) Rejouer")
         self.interface.afficher("2) Quitter")
-        self.interface.attendre_reponse(self.jeu.finjeu)
+        self.interface.attendre_reponse(self.finjeu)
 
        
 
 
-    def finjeu(self, reponse):
-        if reponse == 1:
+    def finjeu(self, choix):
+        if int(choix) == 1:
             # Redémarre le jeu
             self.interface.afficher("Redémarrage du jeu...")
-            self.jeu.commencer()  
-        elif reponse == 2:
+            self.jeu.lancement()  
+        elif int(choix) == 2:
             self.interface.afficher("Merci d’avoir joué. À bientôt !")
             exit()  
+        else:
             self.interface.afficher("Choix invalide, veuillez réessayer.")
             self.interface.attendre_reponse(self.finjeu)
