@@ -1,0 +1,115 @@
+@startuml
+title  Diagramme de Classes - Jeu d'Aventure Ombre Blanche
+
+' ======================
+' Classe  Jeu
+' ======================
+
+class Jeu {
+    - interface : Interface
+    - affection : BarreAffection
+    - nom : String
+    - monde : String
+    - monde_actuel : Object
+    - inventaire : List
+    - objet_animaux : List
+    - faim : int
+    - mana : int
+    - fichier_save : String
+    --
+    + lancement()
+    + set_nom(nom)
+    + choisir_monde(choix)
+    + sauvegarder()
+    + charger_partie()
+    + modifier_faim(quantite)
+    + romance1()
+    + prehistoire1()
+}
+
+class BarreAffection {
+    - _valeur : int
+    --
+    + valeur <<property>>
+    + valeur(v) <<setter>>
+}
+
+' ======================
+' Autres Classes de Monde 
+' ======================
+
+class MondeMedieval {
+    - jeu : Jeu
+    - interface : Interface
+    --
+    + medieval1()
+    + quete_loup()
+    + apprendre_sort_soin()
+    + combat_sorcier()
+}
+
+class MondeFuturiste {
+    - jeu : Jeu
+    - interface : Interface
+    - _cledecrypt : int
+    - historique : List
+    --
+    + __init__(jeu : Jeu) 
+    + fut0() << pour chaque étape >>
+    + cledecrypt <<property>>
+    + verifier_nombre(choix, func)
+ 
+
+}
+
+' ======================
+' Interfaces Utilisateur
+' ======================
+
+interface Interface {
+    + afficher(message)
+    + afficherItalique(message)
+    + attendre_reponse(callback)
+}
+
+class InterfaceConsole implements Interface {
+    --
+    + afficher(texte)
+    + attendre_reponse(callback)
+}
+
+class InterfaceTk implements Interface {
+    - root : tk.Tk
+    - canvas_livre : tk.Canvas
+    - entree : tk.Entry
+    - barre_affection : ttk.Progressbar
+    - barre_faim_label : tk.Label
+    --
+    + mettre_a_jour_affection()
+    + mettre_a_jour_faim()
+    + envoyer(event)
+    + afficher_inventaire()
+}
+
+' ======================
+'  Exceptions Personnalisées
+' ======================
+
+class MondeErreur << (E,#FF7700) Exception >>
+class ErreurCle << (E,#FF7700) Exception >>
+class ManaInsuffisantError << (E,#FF7700) Exception >>
+
+' ======================
+'  Relations
+' ======================
+
+Jeu "1" *-- "1" BarreAffection : possède
+Jeu "1" o-- "1" MondeMedieval : instancie
+Jeu "1" o-- "1" MondeFuturiste : instancie
+Jeu "1" --> "1" Interface : utilise
+
+MondeMedieval ..> ManaInsuffisantError : lève
+MondeFuturiste ..> ErreurCle : lève
+Jeu ..> MondeErreur : lève
+
+@enduml
