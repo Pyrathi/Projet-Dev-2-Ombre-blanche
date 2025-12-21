@@ -447,8 +447,7 @@ class Jeu:
             self.a_demande_si_ca_va = False #aura conséquence pour le prochain choix
             self.interface.afficher(self.format_aff(self.affection.valeur))
             self.choix_choisis_romance.append(6)
-
-        self.interface.afficher("Tu te sens " + ("super confiant !" if self.affection.valeur >= 50 else "un peu nerveux"))
+        self.interface.afficher("Tu te sens " + ("super confiant !" if self.affection.valeur >= 10 else "un peu nerveux"))
         return self.romance_S2bis()
 
 
