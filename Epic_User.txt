@@ -27,3 +27,9 @@ Epic 6: Monde préhistorique
 US6.1 : En tant que joueur, je veux pouvoir choisir le dialogue afin de diversifier mes aventures.
 US6.2 : En tant que joueur, je veux posséder et utiliser des objets primitifs afin de bénéficer d'avantages pour survivre.
 US6.3 : En tant que joueur, je veux voir mon niveau de santé afin de ne pas mourir prématurément.
+
+Epic 7: Monde Futuriste
+US7.1 : En tant que joueur, je veux pouvoir choisir le dialogue afin de diversifier mes aventures.
+US7.2 : En tant que joueur, je peux posséder ou non une clé de décryptage qui me permet d'accéder à une nouvelle fin.
+US7.3 : En tant que joueur, je veux obtenir à la fin mon parcours complet dans l'histoire.
+US7.4 : En tant que joueur, au début je veux pouvoir avoir un choix aléatoire.
