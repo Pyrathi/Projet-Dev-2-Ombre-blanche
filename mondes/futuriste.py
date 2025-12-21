@@ -33,18 +33,32 @@ class MondeFuturiste:
             
             # --- CAS 1 : mode GRAPHIQUE (Tkinter) ---
             # On vérifie si l'interface a une 'zone' de texte
-            if hasattr(self.interface, 'zone'):
-                zone = self.interface.zone
+            if hasattr(self.interface, 'canvas_livre'):
+                canvas = self.interface.canvas_livre
+                text_id = self.interface.texte_livre_id
                 root = self.interface.root
                 
-                zone.config(state="normal") # On déverrouille
+                # 1. Préparation du texte (on récupère l'existant)
+                texte_base = canvas.itemcget(text_id, "text")
+                if texte_base:
+                    texte_base += "\n"
+                    
+                # Gestion de la limite des 35 lignes pour ne pas déborder du livre
+                lignes = (texte_base + str(message)).split('\n')
+                if len(lignes) > 35:
+                    texte_base = "... " + "\n".join(lignes[-35:-len(str(message).split('\n'))])
+                    if texte_base and not texte_base.endswith('\n'):
+                        texte_base += '\n'
+
+                # 2. Effet machine à écrire
+                texte_cumule = texte_base
                 for char in str(message):
-                    zone.insert("end", char)
-                    zone.see("end")
-                    root.update()   # Force l'affichage graphique
+                    texte_cumule += char
+                    canvas.itemconfig(text_id, text=texte_cumule)
+                    root.update()  # Force l'affichage du caractère sur le livre
                     time.sleep(0.007)
-                zone.insert("end", "\n")
-                zone.config(state="disabled") # On reverrouille
+                    
+                
 
             # --- CAS 2 : mode TERMINAL (Console) ---
             else:
