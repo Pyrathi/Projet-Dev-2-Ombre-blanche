@@ -477,10 +477,16 @@ class Jeu:
 
         elif choix == 2:
             self.interface.afficher("— Aube : Hein ? Non désolé.\n")
-            self.affection.valeur -= 5
-            
+            try:
+                self.affection.valeur -= 5
+                if self.affection.valeur < 0:
+                    raise MondeErreur
+            except MondeErreur:
+                self.affection.valeur = 0
+
             self.choix_choisis_romance.append(8) 
             return self.romance_S3_rentrer()
+
 
     def romance_S3_aider(self):
         self.interface.afficher("\nVous vous penchez pour l'aider à ranger ses affaires.")
@@ -574,9 +580,16 @@ class Jeu:
                 return self.romance_rencontre2()
             else:
                 self.interface.afficher("— Aube : Désolée… je préfère rentrer seule.")
-                self.affection.valeur -= 5
+                try:
+                    self.affection.valeur -= 5
+                    if self.affection.valeur < 0:
+                        raise MondeErreur("Affection négative")
+                except MondeErreur:
+                    self.affection.valeur = 0
+
                 self.choix_choisis_romance.append(15)
                 self.interface.afficher("Vous n'avez pas su conquérir son coeur !")
+
                 
                 self.affection.valeur=5
                 for num in self.choix_choisis_romance:
@@ -716,7 +729,7 @@ class Jeu:
 
         if choix == 1:
             self.interface.afficher("— Toi : Je crois que je suis amoureux de toi.")
-            self.affection.valeur += 15
+            self.affection.valeur += 30
             self.choix_choisis_romance.append(23)
 
         elif choix == 2:
