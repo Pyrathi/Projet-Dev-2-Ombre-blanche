@@ -211,6 +211,10 @@ class Jeu:
         if self.monde == "medieval":
             data["mana"] = self.mana
             data["inventaire"] = self.inventaire
+        if self.monde == "romance":
+            data["affection"] = self.affection.valeur
+            data["choix_choisis_romance"] = self.choix_choisis_romance
+            data["a_demande_si_ca_va"] = self.a_demande_si_ca_va
 
         with open(self.fichier_save, "w", encoding="utf-8") as sauvegarde:
             json.dump(data, sauvegarde, indent= 4, ensure_ascii=False)
@@ -244,7 +248,13 @@ class Jeu:
         elif self.monde == "romance":
             self.interface.desactiver_bouton_medieval()
             self.interface.desactiver_bouton_prehistorique()
+            self.interface.activer_barre_romance()
+
+            self.affection.valeur = data.get("affection", 5)
+            self.choix_choisis_romance = data.get("choix_choisis_romance", [])
+            self.a_demande_si_ca_va = data.get("a_demande_si_ca_va", False)
             self.romance1()
+
 
         elif self.monde == "prehistorique":
             self.interface.desactiver_bouton_medieval()
