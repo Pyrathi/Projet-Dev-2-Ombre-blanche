@@ -22,3 +22,8 @@ US4.3 : En tant que joueur, je veux être averti quand ma partie est bien sauveg
 Epic 5: Interface utilisateur
 US5.1 : En tant que joueur, je veux choisir si je joue dans le terminal ou dans une fenêtre Tkinter.
 US5.2 : En tant que joueur, je veux voir le texte de l’histoire s’afficher de manière lisible.
+
+Epic 6: Monde préhistorique
+US6.1 : En tant que joueur, je veux pouvoir choisir le dialogue afin de diversifier mes aventures.
+US6.2 : En tant que joueur, je veux posséder et utiliser des objets primitifs afin de bénéficer d'avantages pour survivre.
+US6.3 : En tant que joueur, je veux voir mon niveau de santé afin de ne pas mourir prématurément.
