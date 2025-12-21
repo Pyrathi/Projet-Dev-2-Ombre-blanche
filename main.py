@@ -746,7 +746,7 @@ class Jeu:
 
         if choix == 1:
             self.interface.afficher("— Toi : Je crois que je suis amoureux de toi.")
-            self.affection.valeur += 30
+            self.affection.valeur += 45
             self.choix_choisis_romance.append(23)
 
         elif choix == 2:
